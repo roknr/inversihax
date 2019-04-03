@@ -1,0 +1,14 @@
+{
+    "name": "types-haxframework-core",
+    "description": "The Haxball headless API TypeScript framework core.",
+    "version": "1.0.0",
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
+    "devDependencies": {
+        "tslint": "^5.14.0",
+        "typescript": "^3.4.1"
+    },
+    "dependencies": {
+        "types-haxball-headless-api": "file:../HeadlessAPI"
+    }
+}

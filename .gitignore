@@ -1,0 +1,7 @@
+# Node modules
+node_modules
+
+# Output / transpiled
+out
+dist
+lib
