@@ -12,12 +12,155 @@ import { TypedEvent } from "types-haxframework-core";
 @injectable()
 export class Room implements IRoom {
 
-    //#region Private members
+    //#region Protected members
 
     /**
      * The base Headless API room object.
      */
-    private readonly mRoom: IRoomObject;
+    protected readonly mRoom: IRoomObject;
+
+    /**
+     * The base Headless API room object's configuration.
+     */
+    protected readonly mRoomConfig: IRoomConfigObject;
+
+    /**
+     * Indicates whether the room has been initialized.
+     */
+    protected get isInitialized() {
+        // Room is initialized if the base Headless API room object is defined
+        return this.mRoom != null;
+    }
+
+    //#endregion
+
+    //#region Public members
+
+    //#region Events
+
+    /**
+     * The event that gets fired when a player joins the room.
+     * @param player The player that joined.
+     */
+    public onPlayerJoin: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when a player leaves the room.
+     * @param player The player that left.
+     */
+    public onPlayerLeave: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when a team wins.
+     * @param scores The scores object.
+     */
+    public onTeamVictory: TypedEvent<(scores: IScoresObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when a player sends a message.
+     *
+     * The event function can return false in order to filter the chat message. This prevents
+     * the chat message from reaching other players in the room.
+     * @param player The player that sent the message.
+     * @param message The message.
+     */
+    public onPlayerChat: (player: IPlayerObject, message: string) => boolean;
+
+    /**
+     * The event that gets fired when a player kicks the ball.
+     * @param player The player that kicked the ball.
+     */
+    public onPlayerBallKick: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when a team scores a goal.
+     * @param team The ID of the team that scores the goal.
+     */
+    public onTeamGoal: TypedEvent<(team: TeamID) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when the game is started.
+     * @param byPlayer The player that started the game (can be null if the event wasn't caused by a player).
+     */
+    public onGameStart: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when the game is stopped.
+     * @param byPlayer The player that stopped the game (can be null if the event wasn't caused by a player).
+     */
+    public onGameStop: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when the player's admin rights change.
+     * @param changedPlayer The player whose rights changed.
+     * @param byPlayer The player who changed the rights (can be null if the event wasn't caused by a player).
+     */
+    public onPlayerAdminChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets fired when the player is moved to a different team.
+     * @param changedPlayer The player whose team changed.
+     * @param byPlayer The player who changed the other player's team (can be null if the event wasn't caused by a player).
+     */
+    public onPlayerTeamChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets raised when a player is kicked or banned. This is always called after the onPlayerLeave event.
+     * @param kickedPlayer The player that was kicked/banned.
+     * @param reason The reason for the kick/ban.
+     * @param ban True if it was a ban, false if it was a kick.
+     * @param byPlayer The player that kicked/banned the other player (can be null if the event wasn't caused by a player).
+     */
+    public onPlayerKicked: TypedEvent<(kickedPlayer: IPlayerObject, reason: string, ban: boolean, byPlayer: IPlayerObject) => void>
+        = new TypedEvent();
+
+    /**
+     * The event that gets raised once for every game tick (happens 60 times per second).
+     *
+     * This event is not called if the game is paused or stopped.
+     */
+    public onGameTick: TypedEvent<() => void> = new TypedEvent();
+
+    /**
+     * The event that gets raised when the game is paused.
+     * @param byPlayer The player that paused the game.
+     */
+    public onGamePause: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets raised when the game is paused.
+     *
+     * After this event there's a timer before the game is fully un-paused,
+     * to detect when the game has really resumed you can listen for the first onGameTick event after this event is called.
+     * @param byPlayer The player that un-paused the game.
+     */
+    public onGameUnpause: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets raised when the players and ball positions are reset after a goal happens.
+     */
+    public onPositionsReset: TypedEvent<() => void> = new TypedEvent();
+
+    /**
+     * The event that gets raised when a player provides an activity, such as key press.
+     * @param player The player that gave the activity.
+     */
+    public onPlayerActivity: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets raised when a player changes the stadium.
+     * @param newStadiumName The new stadium name.
+     * @param byPlayer The player that changed the stadium.
+     */
+    public onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: IPlayerObject) => void> = new TypedEvent();
+
+    /**
+     * The event that gets raised when the room link is obtained.
+     * @param url The room link.
+     */
+    public onRoomLink: TypedEvent<(url: string) => void> = new TypedEvent();
+
+    //#endregion
 
     //#endregion
 
@@ -30,8 +173,10 @@ export class Room implements IRoom {
     public constructor(
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
     ) {
-        // Initialize the room via Headless API
-        this.mRoom = HBInit(roomConfig);
+        this.mRoomConfig = roomConfig;
+
+        // Initialize the room
+        this.mRoom = this.initializeRoom();
 
         // Link the events of the Headless API room object
         this.configureEvents();
@@ -47,7 +192,7 @@ export class Room implements IRoom {
      * Sends a chat message using the host player. If targetId is defined the message is sent only to the player with a matching id.
      * @param message The message to send.
      */
-    sendChat(message: string, targetId?: number): void {
+    public sendChat(message: string, targetId?: number): void {
         this.mRoom.sendChat(message, targetId);
     }
 
@@ -56,7 +201,7 @@ export class Room implements IRoom {
      * @param playerID The id of the player whose admin status to change.
      * @param admin The admin status to set.
      */
-    setPlayerAdmin(playerID: number, admin: boolean): void {
+    public setPlayerAdmin(playerID: number, admin: boolean): void {
         this.mRoom.setPlayerAdmin(playerID, admin);
     }
 
@@ -65,7 +210,7 @@ export class Room implements IRoom {
      * @param playerID The id of the player whose team to change.
      * @param team The team in which to move the player to.
      */
-    setPlayerTeam(playerID: number, team: number): void {
+    public setPlayerTeam(playerID: number, team: number): void {
         this.mRoom.setPlayerTeam(playerID, team);
     }
 
@@ -75,7 +220,7 @@ export class Room implements IRoom {
      * @param reason The reason.
      * @param ban Specifies if the player should also be banned.
      */
-    kickPlayer(playerID: number, reason: string, ban: boolean): void {
+    public kickPlayer(playerID: number, reason: string, ban: boolean): void {
         this.mRoom.kickPlayer(playerID, reason, ban);
     }
 
@@ -83,14 +228,14 @@ export class Room implements IRoom {
      * Clears the ban for a playerId that belonged to a player that was previously banned.
      * @param playerId The id of the player to un-ban.
      */
-    clearBan(playerID: number): void {
+    public clearBan(playerID: number): void {
         this.mRoom.clearBan(playerID);
     }
 
     /**
      * Clears the list of banned players.
      */
-    clearBans(): void {
+    public clearBans(): void {
         this.mRoom.clearBans();
     }
 
@@ -98,7 +243,7 @@ export class Room implements IRoom {
      * Sets the score limit of the room (If a game is in progress this method does nothing).
      * @param limit The score limit.
      */
-    setScoreLimit(limit: number): void {
+    public setScoreLimit(limit: number): void {
         this.mRoom.setScoreLimit(limit);
     }
 
@@ -107,7 +252,7 @@ export class Room implements IRoom {
      * (If a game is in progress this method does nothing).
      * @param limitInMinutes The time limit in minutes.
      */
-    setTimeLimit(limitInMinutes: number): void {
+    public setTimeLimit(limitInMinutes: number): void {
         this.mRoom.setTimeLimit(limitInMinutes);
     }
 
@@ -117,7 +262,7 @@ export class Room implements IRoom {
      * There must not be a game in progress, If a game is in progress this method does nothing.
      * @param stadiumFileContents The stadium file contents.
      */
-    setCustomStadium(stadiumFileContents: string): void {
+    public setCustomStadium(stadiumFileContents: string): void {
         this.mRoom.setCustomStadium(stadiumFileContents);
     }
 
@@ -127,7 +272,7 @@ export class Room implements IRoom {
      * There must not be a game in progress, If a game is in progress this method does nothing.
      * @param stadiumName The name of the stadium.
      */
-    setDefaultStadium(stadiumName: string): void {
+    public setDefaultStadium(stadiumName: string): void {
         this.mRoom.setDefaultStadium(stadiumName);
     }
 
@@ -135,7 +280,7 @@ export class Room implements IRoom {
      *  Sets the teams lock. When teams are locked players are not able to change team unless they are moved by an admin.
      * @param locked True to lock, false to unlock.
      */
-    setTeamsLock(locked: boolean): void {
+    public setTeamsLock(locked: boolean): void {
         this.mRoom.setTeamsLock(locked);
     }
 
@@ -150,21 +295,21 @@ export class Room implements IRoom {
      * @param textColor The color of the player avatars.
      * @param colors The colors.
      */
-    setTeamColors(team: TeamID, angle: number, textColor: number, colors: Int32Array): void {
+    public setTeamColors(team: TeamID, angle: number, textColor: number, colors: Int32Array): void {
         this.mRoom.setTeamColors(team, angle, textColor, colors);
     }
 
     /**
      * Starts the game, if a game is already in progress this method does nothing.
      */
-    startGame(): void {
+    public startGame(): void {
         this.mRoom.startGame();
     }
 
     /**
      * Stops the game, if no game is in progress this method does nothing.
      */
-    stopGame(): void {
+    public stopGame(): void {
         this.mRoom.stopGame();
     }
 
@@ -172,28 +317,28 @@ export class Room implements IRoom {
      * Sets the pause state of the game.
      * @param pauseState True to pause, false to unpause.
      */
-    pauseGame(pauseState: boolean): void {
+    public pauseGame(pauseState: boolean): void {
         this.mRoom.pauseGame(pauseState);
     }
 
     /**
      * Returns the current list of players.
      */
-    getPlayerList(): IPlayerObject[] {
+    public getPlayerList(): IPlayerObject[] {
         return this.mRoom.getPlayerList();
     }
 
     /**
      * If a game is in progress it returns the current score information, otherwise it returns null.
      */
-    getScores(): IScoresObject {
+    public getScores(): IScoresObject {
         return this.mRoom.getScores();
     }
 
     /**
      * Returns the ball's position in the field or null if no game is in progress.
      */
-    getBallPosition(): IPosition {
+    public getBallPosition(): IPosition {
         return this.mRoom.getBallPosition();
     }
 
@@ -202,7 +347,7 @@ export class Room implements IRoom {
      *
      * Don't forget to call stop recording or it will cause a memory leak.
      */
-    startRecording(): void {
+    public startRecording(): void {
         this.mRoom.startRecording();
     }
 
@@ -211,7 +356,7 @@ export class Room implements IRoom {
      *
      * Returns null if recording was not started or had already been stopped.
      */
-    stopRecording(): Uint8Array {
+    public stopRecording(): Uint8Array {
         return this.mRoom.stopRecording();
     }
 
@@ -219,129 +364,22 @@ export class Room implements IRoom {
 
     //#endregion
 
-    //#region Events
+    //#region Protected methods
 
     /**
-     * The event that gets fired when a player joins the room.
-     * @param player The player that joined.
+     * Initializes the room by calling the HBInit Headless API method and returns the IRoomObject, if not already initialized.
+     * IMPORTANT:
+     * ---
+     * Can be overridden to implement custom room initialization, but do this only for testing purposes (e.g. unit testing).
      */
-    onPlayerJoin: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+    protected initializeRoom(): IRoomObject {
+        // Room can only be initialized once
+        if (this.isInitialized) {
+            return null;
+        }
 
-    /**
-     * The event that gets fired when a player leaves the room.
-     * @param player The player that left.
-     */
-    onPlayerLeave: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets fired when a team wins.
-     * @param scores The scores object.
-     */
-    onTeamVictory: TypedEvent<(scores: IScoresObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets fired when a player sends a message.
-     *
-     * The event function can return false in order to filter the chat message. This prevents
-     * the chat message from reaching other players in the room.
-     * @param player The player that sent the message.
-     * @param message The message.
-     */
-    onPlayerChat: (player: IPlayerObject, message: string) => boolean;
-
-    /**
-     * The event that gets fired when a player kicks the ball.
-     * @param player The player that kicked the ball.
-     */
-    onPlayerBallKick: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets fired when a team scores a goal.
-     * @param team The ID of the team that scores the goal.
-     */
-    onTeamGoal: TypedEvent<(team: TeamID) => void> = new TypedEvent();
-
-    /**
-     * The event that gets fired when the game is started.
-     * @param byPlayer The player that started the game (can be null if the event wasn't caused by a player).
-     */
-    onGameStart: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets fired when the game is stopped.
-     * @param byPlayer The player that stopped the game (can be null if the event wasn't caused by a player).
-     */
-    onGameStop: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets fired when the player's admin rights change.
-     * @param changedPlayer The player whose rights changed.
-     * @param byPlayer The player who changed the rights (can be null if the event wasn't caused by a player).
-     */
-    onPlayerAdminChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets fired when the player is moved to a different team.
-     * @param changedPlayer The player whose team changed.
-     * @param byPlayer The player who changed the other player's team (can be null if the event wasn't caused by a player).
-     */
-    onPlayerTeamChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets raised when a player is kicked or banned. This is always called after the onPlayerLeave event.
-     * @param kickedPlayer The player that was kicked/banned.
-     * @param reason The reason for the kick/ban.
-     * @param ban True if it was a ban, false if it was a kick.
-     * @param byPlayer The player that kicked/banned the other player (can be null if the event wasn't caused by a player).
-     */
-    onPlayerKicked: TypedEvent<(kickedPlayer: IPlayerObject, reason: string, ban: boolean, byPlayer: IPlayerObject) => void>
-        = new TypedEvent();
-
-    /**
-     * The event that gets raised once for every game tick (happens 60 times per second).
-     *
-     * This event is not called if the game is paused or stopped.
-     */
-    onGameTick: TypedEvent<() => void> = new TypedEvent();
-
-    /**
-     * The event that gets raised when the game is paused.
-     * @param byPlayer The player that paused the game.
-     */
-    onGamePause: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets raised when the game is paused.
-     *
-     * After this event there's a timer before the game is fully un-paused,
-     * to detect when the game has really resumed you can listen for the first onGameTick event after this event is called.
-     * @param byPlayer The player that un-paused the game.
-     */
-    onGameUnpause: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets raised when the players and ball positions are reset after a goal happens.
-     */
-    onPositionsReset: TypedEvent<() => void> = new TypedEvent();
-
-    /**
-     * The event that gets raised when a player provides an activity, such as key press.
-     * @param player The player that gave the activity.
-     */
-    onPlayerActivity: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets raised when a player changes the stadium.
-     * @param newStadiumName The new stadium name.
-     * @param byPlayer The player that changed the stadium.
-     */
-    onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: IPlayerObject) => void> = new TypedEvent();
-
-    /**
-     * The event that gets raised when the room link is obtained.
-     * @param url The room link.
-     */
-    onRoomLink: TypedEvent<(url: string) => void> = new TypedEvent();
+        return HBInit(this.mRoomConfig);
+    }
 
     //#endregion
 

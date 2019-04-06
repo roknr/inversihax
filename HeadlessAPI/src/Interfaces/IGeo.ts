@@ -1,6 +1,6 @@
 /**
-* The Geo interface.
-*/
+ * The Geo interface.
+ */
 export interface IGeo {
 
     /**

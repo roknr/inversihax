@@ -1,6 +1,6 @@
 /**
-* The scores object interface.
-*/
+ * The scores object interface.
+ */
 export interface IScoresObject {
 
     /**

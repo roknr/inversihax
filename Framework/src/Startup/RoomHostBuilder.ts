@@ -1,6 +1,5 @@
 import { Container } from "inversify";
 import { IRoom, Types } from "types-haxframework-core";
-import { Room } from "../Room/Room";
 import { StartupBase } from "./StartupBase";
 
 /**
@@ -13,7 +12,18 @@ export class RoomHostBuilder {
     /**
      * The room's dependency injection container.
      */
-    private mContainer: Container = new Container();
+    private readonly mContainer: Container = new Container();
+
+    //#endregion
+
+    //#region Public properties
+
+    /**
+     * The room's dependency injection container.
+     */
+    public get container(): Container {
+        return this.mContainer;
+    }
 
     //#endregion
 
@@ -33,22 +43,23 @@ export class RoomHostBuilder {
     /**
      * Builds and starts hosting the room.
      * @param startupType The Startup class type to use when configuring the room.
+     * @param roomType The Room type to use.
      */
-    public buildAndRun<TStartup extends StartupBase>(startupType: { new(...args: any[]): TStartup }): void {
+    public buildAndRun<TStartup extends StartupBase>(
+        startupType: { new(...args: any[]): TStartup },
+        roomType: { new(...args: any[]): IRoom },
+    ): void {
         // Bind the specified startup class to the room's DI container
         this.mContainer.bind<TStartup>(Types.Startup).to(startupType);
 
         // Bind the room to specific type
-        this.mContainer.bind<IRoom>(Types.IRoom).to(Room).inSingletonScope();
+        this.mContainer.bind<IRoom>(Types.IRoom).to(roomType).inSingletonScope();
 
         // Use the container to create the specified startup type, so that it can get all dependencies via DI
         const startup = this.mContainer.get<TStartup>(Types.Startup);
 
         // Configure the room using the startup class
         startup.configure();
-
-        // TODO
-        // return this.mContainer.get<IRoom>(Types.IRoom);
     }
 
     //#endregion

@@ -1,39 +1,12 @@
 {
     "rules": {
-        "member-access": {
-            "severity": "error",
-            "options": [
-                "check-accessor",
-                "check-constructor",
-                "check-parameter-property"
-            ]
-        },
-        "member-ordering": {
-            "severity": "error",
-            "options": {
-                "order": [
-                    "private-static-field",
-                    "protected-static-field",
-                    "public-static-field",
-                    "private-instance-field",
-                    "protected-instance-field",
-                    "public-instance-field",
-                    "constructor",
-                    "public-static-method",
-                    "protected-static-method",
-                    "private-static-method",
-                    "public-instance-method",
-                    "protected-instance-method",
-                    "private-instance-method"
-                ]
-            }
-        },
         "no-use-before-declare": true,
         "no-consecutive-blank-lines": true,
         "array-type": [
             true,
             "array-simple"
         ],
+        "max-line-length": [ true, 140 ],
         "arrow-parens": true,
         "no-var-keyword": true,
         "ordered-imports": [

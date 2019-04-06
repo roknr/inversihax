@@ -8,6 +8,9 @@
         },
         {
             "path": "Framework"
+        },
+        {
+            "path": "Test"
         }
     ],
     "settings": {
@@ -17,7 +20,8 @@
             "haxframework",
             "injectable",
             "inversify",
-            "recaptcha"
+            "recaptcha",
+            "typemoq"
         ],
         "typescript.tsdk": "Framework\\node_modules\\typescript\\lib"
     }

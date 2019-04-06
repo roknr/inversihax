@@ -1,6 +1,6 @@
 /**
-* The position interface.
-*/
+ * The position interface.
+ */
 export interface IPosition {
 
     /**

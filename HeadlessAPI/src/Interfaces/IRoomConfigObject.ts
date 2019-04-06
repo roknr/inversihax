@@ -1,8 +1,8 @@
 import { IGeo } from "./IGeo";
 
 /**
-* The room configuration object interface.
-*/
+ * The room configuration object interface.
+ */
 export interface IRoomConfigObject {
 
     /**
