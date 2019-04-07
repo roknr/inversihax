@@ -21,7 +21,10 @@
             "injectable",
             "inversify",
             "recaptcha",
-            "typemoq"
+            "transpiled",
+            "tsify",
+            "typemoq",
+            "uglifyjs"
         ],
         "typescript.tsdk": "Framework\\node_modules\\typescript\\lib"
     }

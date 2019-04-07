@@ -28,6 +28,7 @@
                 ]
             }
         },
+        "interface-name": true,
         "no-use-before-declare": true,
         "no-consecutive-blank-lines": true,
         "array-type": [
@@ -50,7 +51,9 @@
                 "singleline": "never"
             }
         ],
-        "class-name": true,
+        "class-name": {
+            "severity": "error"
+        },
         "comment-format": [
             true,
             "check-space"
@@ -101,7 +104,20 @@
             "check-operator",
             "check-separator",
             "check-type"
-        ]
+        ],
+        "completed-docs": {
+            "options": [
+                "classes",
+                "enum-members",
+                "enums",
+                "functions",
+                "interfaces",
+                "methods",
+                "properties",
+                "types",
+                "variables"
+            ]
+        }
     },
     "jsRules": {
         "triple-equals": [

@@ -1,5 +1,6 @@
 {
     "rules": {
+        "interface-name": true,
         "no-use-before-declare": true,
         "no-consecutive-blank-lines": true,
         "array-type": [
@@ -23,7 +24,9 @@
                 "singleline": "never"
             }
         ],
-        "class-name": true,
+        "class-name": {
+            "severity": "error"
+        },
         "comment-format": [
             true,
             "check-space"

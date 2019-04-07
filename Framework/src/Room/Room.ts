@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { HBInit, IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
+import { IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
 import { IRoom, Types } from "types-haxframework-core";
 import { TypedEvent } from "types-haxframework-core";
 
@@ -378,7 +378,7 @@ export class Room implements IRoom {
             return null;
         }
 
-        return HBInit(this.mRoomConfig);
+        return window.HBInit(this.mRoomConfig);
     }
 
     //#endregion
