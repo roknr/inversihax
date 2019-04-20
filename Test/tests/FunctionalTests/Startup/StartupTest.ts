@@ -1,17 +1,13 @@
 import { inject } from "inversify";
 import { StartupBase } from "types-haxframework";
-import { IRoom, Types } from "types-haxframework-core";
+import { IRoom, Player, Types } from "types-haxframework-core";
 
-export class StartupTest extends StartupBase {
-
-    private readonly mRoom: IRoom;
+export class StartupTest extends StartupBase<Player> {
 
     constructor(
-        @inject(Types.IRoom) room: IRoom,
+        @inject(Types.IRoom) room: IRoom<Player>,
     ) {
-        super();
-
-        this.mRoom = room;
+        super(room);
     }
 
     configure(): void {

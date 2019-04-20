@@ -1,10 +1,12 @@
-import { IPlayerObject, IPosition, IScoresObject, TeamID } from "types-haxball-headless-api";
+import { IPosition, IScoresObject, TeamID } from "types-haxball-headless-api";
 import { TypedEvent } from "../Events/TypedEvent";
+import { Player } from "../Models/Player";
 
 /**
  * Defines the room abstraction functionality.
+ * @type {TPlayer} The type of player to use with the room.
  */
-export interface IRoom {
+export interface IRoom<TPlayer extends Player> {
 
     //#region Members
 
@@ -14,13 +16,13 @@ export interface IRoom {
      * The event that gets fired when a player joins the room.
      * @param player The player that joined.
      */
-    onPlayerJoin: TypedEvent<(player: IPlayerObject) => void>;
+    onPlayerJoin: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets fired when a player leaves the room.
      * @param player The player that left.
      */
-    onPlayerLeave: TypedEvent<(player: IPlayerObject) => void>;
+    onPlayerLeave: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets fired when a team wins.
@@ -36,13 +38,13 @@ export interface IRoom {
      * @param player The player that sent the message.
      * @param message The message.
      */
-    onPlayerChat: (player: IPlayerObject, message: string) => boolean;
+    onPlayerChat: (player: TPlayer, message: string) => boolean;
 
     /**
      * The event that gets fired when a player kicks the ball.
      * @param player The player that kicked the ball.
      */
-    onPlayerBallKick: TypedEvent<(player: IPlayerObject) => void>;
+    onPlayerBallKick: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets fired when a team scores a goal.
@@ -54,27 +56,27 @@ export interface IRoom {
      * The event that gets fired when the game is started.
      * @param byPlayer The player that started the game (can be null if the event wasn't caused by a player).
      */
-    onGameStart: TypedEvent<(byPlayer: IPlayerObject) => void>;
+    onGameStart: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets fired when the game is stopped.
      * @param byPlayer The player that stopped the game (can be null if the event wasn't caused by a player).
      */
-    onGameStop: TypedEvent<(byPlayer: IPlayerObject) => void>;
+    onGameStop: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets fired when the player's admin rights change.
      * @param changedPlayer The player whose rights changed.
      * @param byPlayer The player who changed the rights (can be null if the event wasn't caused by a player).
      */
-    onPlayerAdminChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void>;
+    onPlayerAdminChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets fired when the player is moved to a different team.
      * @param changedPlayer The player whose team changed.
      * @param byPlayer The player who changed the other player's team (can be null if the event wasn't caused by a player).
      */
-    onPlayerTeamChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void>;
+    onPlayerTeamChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when a player is kicked or banned. This is always called after the onPlayerLeave event.
@@ -83,7 +85,7 @@ export interface IRoom {
      * @param ban True if it was a ban, false if it was a kick.
      * @param byPlayer The player that kicked/banned the other player (can be null if the event wasn't caused by a player).
      */
-    onPlayerKicked: TypedEvent<(kickedPlayer: IPlayerObject, reason: string, ban: boolean, byPlayer: IPlayerObject) => void>;
+    onPlayerKicked: TypedEvent<(kickedPlayer: TPlayer, reason: string, ban: boolean, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised once for every game tick (happens 60 times per second).
@@ -96,7 +98,7 @@ export interface IRoom {
      * The event that gets raised when the game is paused.
      * @param byPlayer The player that paused the game.
      */
-    onGamePause: TypedEvent<(byPlayer: IPlayerObject) => void>;
+    onGamePause: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when the game is paused.
@@ -105,7 +107,7 @@ export interface IRoom {
      * to detect when the game has really resumed you can listen for the first onGameTick event after this event is called.
      * @param byPlayer The player that un-paused the game.
      */
-    onGameUnpause: TypedEvent<(byPlayer: IPlayerObject) => void>;
+    onGameUnpause: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when the players and ball positions are reset after a goal happens.
@@ -116,14 +118,14 @@ export interface IRoom {
      * The event that gets raised when a player provides an activity, such as key press.
      * @param player The player that gave the activity.
      */
-    onPlayerActivity: TypedEvent<(player: IPlayerObject) => void>;
+    onPlayerActivity: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets raised when a player changes the stadium.
      * @param newStadiumName The new stadium name.
      * @param byPlayer The player that changed the stadium.
      */
-    onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: IPlayerObject) => void>;
+    onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when the room link is obtained.
@@ -241,9 +243,15 @@ export interface IRoom {
     pauseGame(pauseState: boolean): void;
 
     /**
+     * Returns the player with the specified id. Returns null if the player doesn't exist.
+     * @param playerId The id of the player to get.
+     */
+    getPlayer(playerId: number): TPlayer;
+
+    /**
      * Returns the current list of players.
      */
-    getPlayerList(): IPlayerObject[];
+    getPlayerList(): TPlayer[];
 
     /**
      * If a game is in progress it returns the current score information, otherwise it returns null.

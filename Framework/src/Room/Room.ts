@@ -1,16 +1,17 @@
 import { inject, injectable } from "inversify";
 import { IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
-import { IRoom, Types } from "types-haxframework-core";
+import { Constants, IPlayerManager, IRoom, Player, Types } from "types-haxframework-core";
 import { TypedEvent } from "types-haxframework-core";
 
 /**
- * The room abstraction. Provides all of the functionality that the base Headless API room object provides, along with multiple
- * event handlers.
+ * The room abstraction. Provides all of the functionality that the base Headless API room object provides, along with
+ * events that support multiple handlers.
  *
  * Is injectable.
+ * @type {TPlayer} The type of player to use with the room.
  */
 @injectable()
-export class Room implements IRoom {
+export class Room<TPlayer extends Player> implements IRoom<TPlayer> {
 
     //#region Protected members
 
@@ -23,6 +24,11 @@ export class Room implements IRoom {
      * The base Headless API room object's configuration.
      */
     protected readonly mRoomConfig: IRoomConfigObject;
+
+    /**
+     * The room's player manager.
+     */
+    protected readonly mPlayerManager: IPlayerManager<TPlayer>;
 
     /**
      * Indicates whether the room has been initialized.
@@ -42,13 +48,13 @@ export class Room implements IRoom {
      * The event that gets fired when a player joins the room.
      * @param player The player that joined.
      */
-    public onPlayerJoin: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+    public onPlayerJoin: TypedEvent<(player: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets fired when a player leaves the room.
      * @param player The player that left.
      */
-    public onPlayerLeave: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+    public onPlayerLeave: TypedEvent<(player: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets fired when a team wins.
@@ -64,13 +70,13 @@ export class Room implements IRoom {
      * @param player The player that sent the message.
      * @param message The message.
      */
-    public onPlayerChat: (player: IPlayerObject, message: string) => boolean;
+    public onPlayerChat: (player: TPlayer, message: string) => boolean;
 
     /**
      * The event that gets fired when a player kicks the ball.
      * @param player The player that kicked the ball.
      */
-    public onPlayerBallKick: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+    public onPlayerBallKick: TypedEvent<(player: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets fired when a team scores a goal.
@@ -82,27 +88,27 @@ export class Room implements IRoom {
      * The event that gets fired when the game is started.
      * @param byPlayer The player that started the game (can be null if the event wasn't caused by a player).
      */
-    public onGameStart: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+    public onGameStart: TypedEvent<(byPlayer: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets fired when the game is stopped.
      * @param byPlayer The player that stopped the game (can be null if the event wasn't caused by a player).
      */
-    public onGameStop: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+    public onGameStop: TypedEvent<(byPlayer: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets fired when the player's admin rights change.
      * @param changedPlayer The player whose rights changed.
      * @param byPlayer The player who changed the rights (can be null if the event wasn't caused by a player).
      */
-    public onPlayerAdminChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void> = new TypedEvent();
+    public onPlayerAdminChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets fired when the player is moved to a different team.
      * @param changedPlayer The player whose team changed.
      * @param byPlayer The player who changed the other player's team (can be null if the event wasn't caused by a player).
      */
-    public onPlayerTeamChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void> = new TypedEvent();
+    public onPlayerTeamChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets raised when a player is kicked or banned. This is always called after the onPlayerLeave event.
@@ -111,7 +117,7 @@ export class Room implements IRoom {
      * @param ban True if it was a ban, false if it was a kick.
      * @param byPlayer The player that kicked/banned the other player (can be null if the event wasn't caused by a player).
      */
-    public onPlayerKicked: TypedEvent<(kickedPlayer: IPlayerObject, reason: string, ban: boolean, byPlayer: IPlayerObject) => void>
+    public onPlayerKicked: TypedEvent<(kickedPlayer: TPlayer, reason: string, ban: boolean, byPlayer: TPlayer) => void>
         = new TypedEvent();
 
     /**
@@ -125,7 +131,7 @@ export class Room implements IRoom {
      * The event that gets raised when the game is paused.
      * @param byPlayer The player that paused the game.
      */
-    public onGamePause: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+    public onGamePause: TypedEvent<(byPlayer: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets raised when the game is paused.
@@ -134,7 +140,7 @@ export class Room implements IRoom {
      * to detect when the game has really resumed you can listen for the first onGameTick event after this event is called.
      * @param byPlayer The player that un-paused the game.
      */
-    public onGameUnpause: TypedEvent<(byPlayer: IPlayerObject) => void> = new TypedEvent();
+    public onGameUnpause: TypedEvent<(byPlayer: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets raised when the players and ball positions are reset after a goal happens.
@@ -145,14 +151,14 @@ export class Room implements IRoom {
      * The event that gets raised when a player provides an activity, such as key press.
      * @param player The player that gave the activity.
      */
-    public onPlayerActivity: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
+    public onPlayerActivity: TypedEvent<(player: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets raised when a player changes the stadium.
      * @param newStadiumName The new stadium name.
      * @param byPlayer The player that changed the stadium.
      */
-    public onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: IPlayerObject) => void> = new TypedEvent();
+    public onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: TPlayer) => void> = new TypedEvent();
 
     /**
      * The event that gets raised when the room link is obtained.
@@ -172,8 +178,10 @@ export class Room implements IRoom {
      */
     public constructor(
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
+        @inject(Types.IPlayerManager) playerManager: IPlayerManager<TPlayer>,
     ) {
         this.mRoomConfig = roomConfig;
+        this.mPlayerManager = playerManager;
 
         // Initialize the room
         this.mRoom = this.initializeRoom();
@@ -218,9 +226,9 @@ export class Room implements IRoom {
      * Kicks the specified player from the room.
      * @param playerID The player to kick.
      * @param reason The reason.
-     * @param ban Specifies if the player should also be banned.
+     * @param ban Specifies if the player should also be banned. False by default.
      */
-    public kickPlayer(playerID: number, reason: string, ban: boolean): void {
+    public kickPlayer(playerID: number, reason: string, ban: boolean = false): void {
         this.mRoom.kickPlayer(playerID, reason, ban);
     }
 
@@ -322,10 +330,28 @@ export class Room implements IRoom {
     }
 
     /**
+     * Returns the player with the specified id. Returns null if the player doesn't exist.
+     * @param playerId The id of the player to get. If not specified, returns the room's host player.
+     */
+    public getPlayer(playerId: number = Constants.HostPlayerId): TPlayer {
+        // Get the base player object, cast it into the correct player type and return it
+        const playerBase = this.mRoom.getPlayer(playerId);
+        const player = this.mPlayerManager.cast(playerBase);
+
+        return player;
+    }
+
+    /**
      * Returns the current list of players.
      */
-    public getPlayerList(): IPlayerObject[] {
-        return this.mRoom.getPlayerList();
+    public getPlayerList(): TPlayer[] {
+        // Get the base player objects, cast them to the correct player types and return them
+        const playersBase = this.mRoom.getPlayerList();
+        const players = playersBase.map((playerBase) => {
+            return this.mPlayerManager.cast(playerBase);
+        }, this);
+
+        return players;
     }
 
     /**
@@ -390,11 +416,13 @@ export class Room implements IRoom {
      */
     private configureEvents(): void {
         this.mRoom.onPlayerJoin = (player: IPlayerObject) => {
-            this.onPlayerJoin.invoke([player]);
+            const typedPlayer = this.mPlayerManager.cast(player);
+            this.onPlayerJoin.invoke([typedPlayer]);
         };
 
         this.mRoom.onPlayerLeave = (player: IPlayerObject) => {
-            this.onPlayerLeave.invoke([player]);
+            const typedPlayer = this.mPlayerManager.cast(player);
+            this.onPlayerLeave.invoke([typedPlayer]);
         };
 
         this.mRoom.onTeamVictory = (scores: IScoresObject) => {
@@ -404,7 +432,9 @@ export class Room implements IRoom {
         this.mRoom.onPlayerChat = (player: IPlayerObject, message: string) => {
             // Invoke the onPlayerChat handler if it exists and return its result
             if (this.onPlayerChat) {
-                return this.onPlayerChat(player, message);
+                const typedPlayer = this.mPlayerManager.cast(player);
+
+                return this.onPlayerChat(typedPlayer, message);
             }
 
             // Otherwise just broadcast forward
@@ -412,7 +442,9 @@ export class Room implements IRoom {
         };
 
         this.mRoom.onPlayerBallKick = (player: IPlayerObject) => {
-            this.onPlayerBallKick.invoke([player]);
+            const typedPlayer = this.mPlayerManager.cast(player);
+
+            this.onPlayerBallKick.invoke([typedPlayer]);
         };
 
         this.mRoom.onTeamGoal = (team: TeamID) => {
@@ -420,23 +452,36 @@ export class Room implements IRoom {
         };
 
         this.mRoom.onGameStart = (player: IPlayerObject) => {
-            this.onGameStart.invoke([player]);
+            const typedPlayer = this.mPlayerManager.cast(player);
+
+            this.onGameStart.invoke([typedPlayer]);
         };
 
         this.mRoom.onGameStop = (player: IPlayerObject) => {
-            this.onGameStop.invoke([player]);
+            const typedPlayer = this.mPlayerManager.cast(player);
+
+            this.onGameStop.invoke([typedPlayer]);
         };
 
         this.mRoom.onPlayerAdminChange = (changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => {
-            this.onPlayerAdminChange.invoke([changedPlayer, byPlayer]);
+            const typedChangedPlayer = this.mPlayerManager.cast(changedPlayer);
+            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+
+            this.onPlayerAdminChange.invoke([typedChangedPlayer, typedByPlayer]);
         };
 
         this.mRoom.onPlayerTeamChange = (changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => {
-            this.onPlayerTeamChange.invoke([changedPlayer, byPlayer]);
+            const typedChangedPlayer = this.mPlayerManager.cast(changedPlayer);
+            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+
+            this.onPlayerTeamChange.invoke([typedChangedPlayer, typedByPlayer]);
         };
 
         this.mRoom.onPlayerKicked = (kickedPlayer: IPlayerObject, reason: string, ban: boolean, byPlayer: IPlayerObject) => {
-            this.onPlayerKicked.invoke([kickedPlayer, reason, ban, byPlayer]);
+            const typedKickedPlayer = this.mPlayerManager.cast(kickedPlayer);
+            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+
+            this.onPlayerKicked.invoke([typedKickedPlayer, reason, ban, typedByPlayer]);
         };
 
         this.mRoom.onGameTick = () => {
@@ -444,11 +489,15 @@ export class Room implements IRoom {
         };
 
         this.mRoom.onGamePause = (byPlayer: IPlayerObject) => {
-            this.onGamePause.invoke([byPlayer]);
+            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+
+            this.onGamePause.invoke([typedByPlayer]);
         };
 
         this.mRoom.onGameUnpause = (byPlayer: IPlayerObject) => {
-            this.onGameUnpause.invoke([byPlayer]);
+            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+
+            this.onGameUnpause.invoke([typedByPlayer]);
         };
 
         this.mRoom.onPositionsReset = () => {
@@ -456,11 +505,15 @@ export class Room implements IRoom {
         };
 
         this.mRoom.onPlayerActivity = (player: IPlayerObject) => {
-            this.onPlayerActivity.invoke([player]);
+            const typedPlayer = this.mPlayerManager.cast(player);
+
+            this.onPlayerActivity.invoke([typedPlayer]);
         };
 
         this.mRoom.onStadiumChange = (newStadiumName: string, byPlayer: IPlayerObject) => {
-            this.onStadiumChange.invoke([newStadiumName, byPlayer]);
+            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+
+            this.onStadiumChange.invoke([newStadiumName, typedByPlayer]);
         };
     }
 
