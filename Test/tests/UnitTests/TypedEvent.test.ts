@@ -81,7 +81,7 @@ describe("TypedEvent", function () {
             event.addHandler(handler);
             const removed = event.removeHandler(handler);
 
-            expect(removed).to.equal(true);
+            expect(removed).to.be.true;
         });
     });
 

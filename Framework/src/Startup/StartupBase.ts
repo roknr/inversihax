@@ -12,14 +12,14 @@ import { IRoom, Player } from "types-haxframework-core";
  * @type {TPlayer} The type of player to use with the room.
  */
 @injectable()
-export abstract class StartupBase<TPlayer extends Player> {
+export abstract class StartupBase {
 
     //#region Protected members
 
     /**
      * The room.
      */
-    protected readonly mRoom: IRoom<TPlayer>;
+    protected readonly mRoom: IRoom<Player>;
 
     //#endregion
 
@@ -29,7 +29,7 @@ export abstract class StartupBase<TPlayer extends Player> {
      * Initializes a new instance of the StartupBase class.
      * @param room The room.
      */
-    public constructor(room: IRoom<TPlayer>) {
+    public constructor(room: IRoom<Player>) {
         this.mRoom = room;
     }
 

@@ -1,16 +1,46 @@
 import { expect } from "chai";
+import { inject } from "inversify";
 import "mocha";
 import "reflect-metadata";
-import { IRoomConfigObject } from "types-haxball-headless-api";
-import { PlayerManager, RoomHostBuilder, StartupBase } from "types-haxframework";
+import { IRoomConfigObject, IRoomObject } from "types-haxball-headless-api";
+import { PlayerManager, Room, RoomHostBuilder, StartupBase } from "types-haxframework";
 import { IPlayerManager, IRoom, Player, Types } from "types-haxframework-core";
-import { StartupTest } from "./StartupTest";
-import { TestRoom } from "./TestRoom";
 
 // TODO: improve this test...
 
+/**
+ * Extend the base room to override the room initialization process.
+ */
+export class TestRoom extends Room<Player> {
+
+    /**
+     * Override for the initialize room method, so that we can use a mock room object, since HBInit only exists in the browser.
+     */
+    protected initializeRoom(): IRoomObject {
+        return {} as any;
+    }
+}
+
+export class StartupTest extends StartupBase {
+
+    constructor(
+        @inject(Types.IRoom) room: IRoom<Player>,
+    ) {
+        super(room);
+    }
+
+    configure(): void {
+        this.mRoom.onPlayerChat = (player, message) => {
+            if (player.id === 3) {
+                return true;
+            }
+            return false;
+        };
+    }
+}
+
 // Create a test room, bind a mock room config object and start it
-const builder = new RoomHostBuilder<StartupBase<Player>, Player>(StartupTest, TestRoom);
+const builder = new RoomHostBuilder<StartupBase, Player>(StartupTest, TestRoom);
 builder.setConfigureServicesAction((container) => {
     container.bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({});
     container.bind<IPlayerManager<Player>>(Types.IPlayerManager).to(PlayerManager).inSingletonScope();

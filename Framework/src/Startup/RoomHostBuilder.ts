@@ -1,5 +1,9 @@
 import { Container } from "inversify";
-import { IRoom, Player, Types } from "types-haxframework-core";
+import {
+    CommandBase, CommandOptions, Constants, DecoratorsHelper, Errors, ICommandManager, ICommandMetadata, IRoom, MetadataKeys, Player,
+    Types,
+} from "types-haxframework-core";
+import { CommandManager } from "../Managers/CommandManager";
 import { StartupBase } from "./StartupBase";
 
 /**
@@ -15,7 +19,7 @@ import { StartupBase } from "./StartupBase";
  *  - make a base builder and a derived one for the default room
  *  - use interfaces instead of strictly typed builder class
  */
-export class RoomHostBuilder<TStartup extends StartupBase<TPlayer>, TPlayer extends Player> {
+export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Player> {
 
     //#region Private members
 
@@ -79,11 +83,24 @@ export class RoomHostBuilder<TStartup extends StartupBase<TPlayer>, TPlayer exte
 
     /**
      * Configures the room to use commands.
-     * @param commandPrefix The prefix to use for commands.
-     * @param commands The list of predefined commands that are supported out-of-the-box by the framework to use.
+     * @param prefix The command prefix to use. If not specified, uses the framework default which is '!'.
+     * @param commands The list of predefined commands that are supported out-of-the-box by the framework to use. If not specified, uses
+     * no default framework commands.
      */
-    public useCommands(commandPrefix: string, commands?: string[]): RoomHostBuilder<TStartup, TPlayer> {
-        // TODO
+    public useCommands(prefix: string = Constants.DefaultCommandPrefix, commands?: string[]): RoomHostBuilder<TStartup, TPlayer> {
+        // Bind commands to the container
+        const namesToCommands = this.bindCommands();
+
+        // Setup the command options and bind them to the container
+        const commandOptions = <CommandOptions>{
+            namesToCommands: namesToCommands,
+            prefix: prefix,
+        };
+
+        this.container.bind<CommandOptions>(Types.CommandOptions).toConstantValue(commandOptions);
+
+        // Also bind the command manager
+        this.container.bind<ICommandManager>(Types.ICommandManager).to(CommandManager).inSingletonScope();
 
         // Return this for chaining
         return this;
@@ -117,6 +134,65 @@ export class RoomHostBuilder<TStartup extends StartupBase<TPlayer>, TPlayer exte
 
         // Configure the room using the startup class
         startup.configure();
+    }
+
+    //#endregion
+
+    //#region Private helpers
+
+    /**
+     * Binds commands to the container and returns the name to command mapping.
+     */
+    private bindCommands(): Map<string, string> {
+        // Get all of the classes' constructors that were decorated with the @CommandDecorator
+        const commandConstructors = DecoratorsHelper.getCommandsFromMetadata();
+
+        // Prepare the names to commands map
+        const namesToCommands = new Map<string, string>();
+
+        // Go through all the command constructors
+        commandConstructors.forEach((constructor) => {
+            const commandName = constructor.constructor.name;
+
+            // Check and don't allow duplicate command names
+            if (this.container.isBoundNamed(Types.ICommand, commandName)) {
+                throw new Error(Errors.DuplicateCommand(commandName));
+            }
+
+            // Check and don't allow commands to not inherit from CommandBase class
+            if (constructor.prototype instanceof CommandBase === false) {
+                throw new Error(Errors.InvalidCommandType(constructor.name));
+            }
+
+            // Get the metadata for the command
+            const commandMetadata = DecoratorsHelper.getMetadata<ICommandMetadata>(MetadataKeys.Command, constructor);
+
+            // Check and don't allow using commands with no names
+            if (commandMetadata.names == null || commandMetadata.names.length === 0) {
+                throw new Error(Errors.MissingCommandNames(commandName));
+            }
+
+            // Go through all the names of the command
+            commandMetadata.names.forEach((name) => {
+                // Only allow unique command names/identifiers (different to the above check, that's the actual class name)
+                if (namesToCommands.has(name)) {
+                    throw new Error(Errors.DuplicateCommandName(name));
+                }
+
+                // Create a map between the command name and the command (name of the command class)
+                namesToCommands.set(name, commandName);
+            });
+
+            // Bind the command's constructor to its name; NOTE - cast to 'any' as type 'Function' is not assignable to type
+            // 'new (...args: any[]) => {}', but it's the constructor so it's fine to ignore the type error
+            this.container.bind(Types.ICommand)
+                .to(constructor as any)
+                .inRequestScope()
+                .whenTargetNamed(commandName);
+        });
+
+        // Return the name-command mapping
+        return namesToCommands;
     }
 
     //#endregion

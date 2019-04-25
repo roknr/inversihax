@@ -1,5 +1,5 @@
 import { IPlayerObject } from "types-haxball-headless-api";
-import { Player } from "../Models/Player";
+import { Player } from "../../Models/Player";
 
 /**
  * Defines functionality for dealing with player management.
