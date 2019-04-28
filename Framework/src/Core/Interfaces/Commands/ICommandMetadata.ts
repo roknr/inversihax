@@ -15,7 +15,7 @@ export interface ICommandMetadata {
 export interface ICommandMetadataInternal extends ICommandMetadata {
 
     /**
-     * The target for which this metadata is for.
+     * The target for which this metadata is for. Expected to be a constructor.
      */
     target: Function;
 }

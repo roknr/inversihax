@@ -1,7 +1,11 @@
 import { inject, injectable } from "inversify";
 import { IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
-import { Constants, IPlayerManager, IRoom, Player, Types } from "types-haxframework-core";
-import { TypedEvent } from "types-haxframework-core";
+import { IRoom } from "../../Core/Interfaces/IRoom";
+import { IPlayerManager } from "../../Core/Interfaces/Managers/IPlayerManager";
+import { Player } from "../../Core/Models/Player";
+import { Constants } from "../../Core/Utility/Constants";
+import { TypedEvent } from "../../Core/Utility/TypedEvent";
+import { Types } from "../../Core/Utility/Types";
 
 /**
  * The room abstraction. Provides all of the functionality that the base Headless API room object provides, along with

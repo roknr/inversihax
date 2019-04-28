@@ -4,9 +4,6 @@
             "path": "HeadlessAPI"
         },
         {
-            "path": "Core"
-        },
-        {
             "path": "Framework"
         },
         {

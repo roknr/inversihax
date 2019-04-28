@@ -1,5 +1,6 @@
 import { injectable } from "inversify";
-import { IRoom, Player } from "types-haxframework-core";
+import { IRoom } from "../../Core/Interfaces/IRoom";
+import { Player } from "../../Core/Models/Player";
 
 /**
  * The base startup class. Derive from this class to inject any dependencies, configured in the RoomHostBuilder

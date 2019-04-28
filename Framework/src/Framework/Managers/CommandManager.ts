@@ -1,5 +1,7 @@
 import { inject, injectable } from "inversify";
-import { CommandOptions, ICommandManager, Types } from "types-haxframework-core";
+import { ICommandManager } from "../../Core/Interfaces/Managers/ICommandManager";
+import { CommandOptions } from "../../Core/Models/CommandOptions";
+import { Types } from "../../Core/Utility/Types";
 
 /**
  * The command manager. Provides functionality for dealing with commands.

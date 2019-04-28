@@ -1,7 +1,7 @@
 import { Player } from "../../Models/Player";
 
 /**
- * Defines the command.
+ * Defines a command.
  * @type {TPlayer} The type of player to use with the command.
  */
 export interface ICommand<TPlayer extends Player> {

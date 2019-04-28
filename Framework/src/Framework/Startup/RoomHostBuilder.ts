@@ -1,8 +1,12 @@
 import { Container } from "inversify";
-import {
-    CommandBase, CommandOptions, Constants, DecoratorsHelper, Errors, ICommandManager, ICommandMetadata, IRoom, MetadataKeys, Player,
-    Types,
-} from "types-haxframework-core";
+import { CommandBase } from "../../Core/Commands/CommandBase";
+import { IRoom } from "../../Core/Interfaces/IRoom";
+import { ICommandManager } from "../../Core/Interfaces/Managers/ICommandManager";
+import { CommandOptions } from "../../Core/Models/CommandOptions";
+import { Player } from "../../Core/Models/Player";
+import { Constants, Errors } from "../../Core/Utility/Constants";
+import { DecoratorsHelper } from "../../Core/Utility/Helpers/DecoratorsHelper";
+import { Types } from "../../Core/Utility/Types";
 import { CommandManager } from "../Managers/CommandManager";
 import { StartupBase } from "./StartupBase";
 
@@ -144,31 +148,27 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
      * Binds commands to the container and returns the name to command mapping.
      */
     private bindCommands(): Map<string, string> {
-        // Get all of the classes' constructors that were decorated with the @CommandDecorator
-        const commandConstructors = DecoratorsHelper.getCommandsFromMetadata();
+        // Get all registered command metadata for classes decorated with @CommandDecorator
+        const commands = DecoratorsHelper.getCommandsMetadata();
 
         // Prepare the names to commands map
         const namesToCommands = new Map<string, string>();
 
         // Go through all the command constructors
-        commandConstructors.forEach((constructor) => {
-            const commandName = constructor.constructor.name;
+        commands.forEach((commandMetadata) => {
+            const commandName = commandMetadata.target.constructor.name;
 
-            // Check and don't allow duplicate command names
+            // Validate for:
+            // - duplicate command-class names (not allowed)
+            // - inheritance from CommandBase (must inherit)
+            // - no provided names (not allowed, must have at least 1)
             if (this.container.isBoundNamed(Types.ICommand, commandName)) {
                 throw new Error(Errors.DuplicateCommand(commandName));
             }
-
-            // Check and don't allow commands to not inherit from CommandBase class
-            if (constructor.prototype instanceof CommandBase === false) {
-                throw new Error(Errors.InvalidCommandType(constructor.name));
+            else if (commandMetadata.target.prototype instanceof CommandBase === false) {
+                throw new Error(Errors.InvalidCommandType(commandMetadata.target.name));
             }
-
-            // Get the metadata for the command
-            const commandMetadata = DecoratorsHelper.getMetadata<ICommandMetadata>(MetadataKeys.Command, constructor);
-
-            // Check and don't allow using commands with no names
-            if (commandMetadata.names == null || commandMetadata.names.length === 0) {
+            else if (commandMetadata.names == null || commandMetadata.names.length === 0) {
                 throw new Error(Errors.MissingCommandNames(commandName));
             }
 
@@ -186,7 +186,7 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
             // Bind the command's constructor to its name; NOTE - cast to 'any' as type 'Function' is not assignable to type
             // 'new (...args: any[]) => {}', but it's the constructor so it's fine to ignore the type error
             this.container.bind(Types.ICommand)
-                .to(constructor as any)
+                .to(commandMetadata.target as any)
                 .inRequestScope()
                 .whenTargetNamed(commandName);
         });

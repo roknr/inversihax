@@ -1,30 +1,5 @@
 /**
- * Provides constant values related to the framework.
- */
-export class Constants {
-
-    //#region Public properties
-
-    /**
-     * The id of the room's host player.
-     */
-    public static readonly HostPlayerId: number = 0;
-
-    /**
-     * The default command prefix.
-     */
-    public static readonly DefaultCommandPrefix: string = "!";
-
-    //#endregion
-
-    /**
-     * Private constructor, so the class cannot be instantiated and can act as a static class.
-     */
-    private constructor() { }
-}
-
-/**
- * The metadata keys. Used internally for accessing metadata through the Reflect API.
+ * The metadata keys. Used for accessing metadata through the Reflect API.
  */
 export const MetadataKeys = {
     Command: Symbol.for("hax-framework:command"),
@@ -38,4 +13,19 @@ export const Errors = {
     DuplicateCommandName: (name: string) => `Duplicate command name ${name}. Command names must be unique.`,
     MissingCommandNames: (commandName: string) => `Missing names for command ${commandName}. A command must have at least one name.`,
     InvalidCommandType: (commandType: string) => `Invalid command type ${commandType}. All commands must inherit from CommandBase class.`,
+};
+
+/**
+ * Constants related to the framework.
+ */
+export const Constants = {
+    /**
+     * The id of the player hosting the room.
+     */
+    HostPlayerId: 0,
+
+    /**
+     * The default prefix for commands.
+     */
+    DefaultCommandPrefix: "!",
 };

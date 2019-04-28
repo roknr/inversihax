@@ -1,6 +1,6 @@
 import { IPosition, IScoresObject, TeamID } from "types-haxball-headless-api";
-import { TypedEvent } from "../Events/TypedEvent";
 import { Player } from "../Models/Player";
+import { TypedEvent } from "../Utility/TypedEvent";
 
 /**
  * Defines the room abstraction functionality.

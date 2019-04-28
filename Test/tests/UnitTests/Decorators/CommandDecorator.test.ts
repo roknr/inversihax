@@ -2,10 +2,12 @@ import { expect } from "chai";
 import { Container } from "inversify";
 import "mocha";
 import "reflect-metadata";
-import {
-    CommandBase, CommandDecorator, DecoratorsHelper, ICommand, ICommandMetadataInternal, MetadataKeys, Player, Types,
-} from "types-haxframework-core";
-const Constants = {
+import { CommandBase, CommandDecorator, ICommand, Player, Types } from "types-haxframework";
+import { ICommandMetadataInternal } from "types-haxframework/lib/Core/Interfaces/Commands/ICommandMetadata";
+import { MetadataKeys } from "types-haxframework/lib/Core/Utility/Constants";
+import { DecoratorsHelper } from "types-haxframework/lib/Core/Utility/Helpers/DecoratorsHelper";
+
+const ConstantsLocal = {
     CommandName1: "test",
     CommandName2: "t",
     CommandName3: "testCommand",
@@ -21,20 +23,20 @@ describe("CommandDecorator", function () {
 
     it("Should attach command metadata to the object being decorated with the @CommandDecorator", function () {
         @CommandDecorator({
-            names: [Constants.CommandName1, Constants.CommandName2, Constants.CommandName3],
+            names: [ConstantsLocal.CommandName1, ConstantsLocal.CommandName2, ConstantsLocal.CommandName3],
         })
         class TestCommand extends CommandBase<Player> {
 
             public execute(player: Player, args: string[]): void { }
 
-            public canExecute(player: Player, args: string[]): boolean {
+            public canExecute(player: Player): boolean {
                 return true;
             }
         }
 
         const metadata = DecoratorsHelper.getMetadata<ICommandMetadataInternal>(MetadataKeys.Command, TestCommand);
 
-        expect(metadata.names).to.have.all.members([Constants.CommandName1, Constants.CommandName2, Constants.CommandName3]);
+        expect(metadata.names).to.have.all.members([ConstantsLocal.CommandName1, ConstantsLocal.CommandName2, ConstantsLocal.CommandName3]);
         expect(metadata.target).to.equal(TestCommand);
     });
 
@@ -42,7 +44,7 @@ describe("CommandDecorator", function () {
         //#region Test commands
 
         @CommandDecorator({
-            names: [Constants.CommandName1, Constants.CommandName2],
+            names: [ConstantsLocal.CommandName1, ConstantsLocal.CommandName2],
         })
         class TestCommand1 extends CommandBase<Player> {
 
@@ -50,13 +52,13 @@ describe("CommandDecorator", function () {
                 throw new Error();
             }
 
-            public canExecute(player: Player, args: string[]): boolean {
+            public canExecute(player: Player): boolean {
                 return true;
             }
         }
 
         @CommandDecorator({
-            names: [Constants.CommandName3],
+            names: [ConstantsLocal.CommandName3],
         })
         class TestCommand2 extends CommandBase<Player> {
 
@@ -64,7 +66,7 @@ describe("CommandDecorator", function () {
                 throw new Error();
             }
 
-            public canExecute(player: Player, args: string[]): boolean {
+            public canExecute(player: Player): boolean {
                 return true;
             }
         }
@@ -73,19 +75,19 @@ describe("CommandDecorator", function () {
 
         const container = new Container();
 
-        const commandConstructors = DecoratorsHelper.getCommandsFromMetadata();
+        const commandsMetadata = DecoratorsHelper.getCommandsMetadata();
 
-        commandConstructors.forEach((constructor) => {
-            const commandName = constructor.name;
-            container.bind<ICommand<Player>>(Types.ICommand).to(constructor as any).whenTargetNamed(commandName);
+        commandsMetadata.forEach((commandMetadata) => {
+            const commandName = commandMetadata.target.name;
+            container.bind<ICommand<Player>>(Types.ICommand).to(commandMetadata.target as any).whenTargetNamed(commandName);
 
             // Assert that the commands are of type CommandBase
-            expect(constructor.prototype).to.be.an.instanceOf(CommandBase);
+            expect(commandMetadata.target.prototype).to.be.an.instanceOf(CommandBase);
 
             const command = container.getNamed<ICommand<Player>>(Types.ICommand, commandName);
 
             // Assert that canExecute returns true and execute throws an error, like defined in the commands
-            expect(command.canExecute(null, null)).to.be.true;
+            expect(command.canExecute(null)).to.be.true;
             expect(function () { command.execute(null, null); }).to.throw();
         });
     });

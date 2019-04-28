@@ -3,8 +3,7 @@ import { inject } from "inversify";
 import "mocha";
 import "reflect-metadata";
 import { IRoomConfigObject, IRoomObject } from "types-haxball-headless-api";
-import { PlayerManager, Room, RoomHostBuilder, StartupBase } from "types-haxframework";
-import { IPlayerManager, IRoom, Player, Types } from "types-haxframework-core";
+import { IPlayerManager, IRoom, Player, PlayerManager, Room, RoomHostBuilder, StartupBase, Types } from "types-haxframework";
 
 // TODO: improve this test...
 

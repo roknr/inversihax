@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import { IPlayerObject } from "types-haxball-headless-api";
-import { IPlayerManager, Player } from "types-haxframework-core";
+import { IPlayerManager } from "../../Core/Interfaces/Managers/IPlayerManager";
+import { Player } from "../../Core/Models/Player";
 
 /**
  * The default player manager. Provides functionality for dealing with default player types.

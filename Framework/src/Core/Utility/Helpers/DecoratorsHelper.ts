@@ -28,14 +28,10 @@ export class DecoratorsHelper {
     }
 
     /**
-     * Gets the commands (their constructors) from the commands metadata.
+     * Gets all registered command metadata from the global Reflect object or an empty array if no registered metadata exists.
      */
-    public static getCommandsFromMetadata(): Function[] {
-        // Get all of the commands' metadata
-        const commandsMetadata = this.getMetadata<ICommandMetadataInternal[]>(MetadataKeys.Command, Reflect) || [];
-
-        // Return their targets/constructors
-        return commandsMetadata.map((commandsMetadata) => commandsMetadata.target);
+    public static getCommandsMetadata(): ICommandMetadataInternal[] {
+        return this.getMetadata<ICommandMetadataInternal[]>(MetadataKeys.Command, Reflect) || [];
     }
 
     //#endregion
