@@ -16,7 +16,6 @@
     "dependencies": {
         "inversify": "^5.0.1",
         "reflect-metadata": "^0.1.13",
-        "types-haxball-headless-api": "file:../HeadlessAPI",
-        "types-haxframework-core": "file:../Core"
+        "types-haxball-headless-api": "file:../HeadlessAPI"
     }
 }
