@@ -1,0 +1,21 @@
+{
+    "name": "types-haxframework",
+    "description": "The Haxball headless API TypeScript framework.",
+    "version": "1.0.0",
+    "scripts": {
+        "lint": "tslint --project .",
+        "build": "tsc",
+        "build-watch": "tsc --watch"
+    },
+    "main": "./lib/index.js",
+    "types": "./lib/index.d.ts",
+    "devDependencies": {
+        "tslint": "^5.14.0",
+        "typescript": "^3.4.1"
+    },
+    "dependencies": {
+        "inversify": "^5.0.1",
+        "reflect-metadata": "^0.1.13",
+        "types-haxball-headless-api": "file:../HeadlessAPI"
+    }
+}
