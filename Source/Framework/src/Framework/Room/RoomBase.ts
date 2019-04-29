@@ -1,21 +1,22 @@
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
 import { IRoom } from "../../Core/Interfaces/IRoom";
 import { IPlayerManager } from "../../Core/Interfaces/Managers/IPlayerManager";
 import { Player } from "../../Core/Models/Player";
 import { Constants } from "../../Core/Utility/Constants";
 import { TypedEvent } from "../../Core/Utility/TypedEvent";
-import { Types } from "../../Core/Utility/Types";
 
 /**
- * The room abstraction. Provides all of the functionality that the base Headless API room object provides, along with
+ * The base room abstraction. Provides all of the functionality that the base Headless API room object provides, along with
  * events that support multiple handlers.
+ * NOTE: you must inject the IRoomConfigObject and IPlayerManager<TPlayer> class to the derived class and pass it manually
+ * to the base's constructor.
  *
  * Is injectable.
  * @type {TPlayer} The type of player to use with the room.
  */
 @injectable()
-export class Room<TPlayer extends Player> implements IRoom<TPlayer> {
+export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer> {
 
     //#region Protected members
 
@@ -180,10 +181,7 @@ export class Room<TPlayer extends Player> implements IRoom<TPlayer> {
      * Initializes a new instance of the Room class.
      * @param roomConfig The base Headless API room object's configuration.
      */
-    public constructor(
-        @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
-        @inject(Types.IPlayerManager) playerManager: IPlayerManager<TPlayer>,
-    ) {
+    public constructor(roomConfig: IRoomConfigObject, playerManager: IPlayerManager<TPlayer>) {
         this.mRoomConfig = roomConfig;
         this.mPlayerManager = playerManager;
 

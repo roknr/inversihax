@@ -30,7 +30,7 @@ export { CommandDecorator } from "./Core/Utility/Decorators/CommandDecorator";
 export { StartupBase } from "./Framework/Startup/StartupBase";
 export { RoomHostBuilder } from "./Framework/Startup/RoomHostBuilder";
 // -Room
-export { Room } from "./Framework/Room/Room";
+export { RoomBase } from "./Framework/Room/RoomBase";
 // -Managers
 export { PlayerManager } from "./Framework/Managers/PlayerManager";
 export { CommandManager } from "./Framework/Managers/CommandManager";

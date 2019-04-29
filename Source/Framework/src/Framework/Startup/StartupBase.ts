@@ -9,8 +9,6 @@ import { Player } from "../../Core/Models/Player";
  * Inject needed dependencies through the constructor and configure the room in the configure method.
  *
  * NOTE: you must inject the IRoom<TPlayer> class to the derived class and pass it manually to the base's constructor.
- *
- * @type {TPlayer} The type of player to use with the room.
  */
 @injectable()
 export abstract class StartupBase {

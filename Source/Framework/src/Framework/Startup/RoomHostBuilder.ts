@@ -14,7 +14,6 @@ import { StartupBase } from "./StartupBase";
  * The room builder.
  *
  * @type {TStartup} The room's startup type.
- * @type {TPlayer} The type of player to use with the room.
  *
  * @todo Make this more generic, e.g. so that no special container bindings will be needed by the user to use the default room, maybe only
  * method calls with configuration lambdas etc.
@@ -23,7 +22,7 @@ import { StartupBase } from "./StartupBase";
  *  - make a base builder and a derived one for the default room
  *  - use interfaces instead of strictly typed builder class
  */
-export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Player> {
+export class RoomHostBuilder<TStartup extends StartupBase> {
 
     //#region Private members
 
@@ -35,7 +34,7 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
     /**
      * The room class type.
      */
-    private readonly mRoomType: { new(...args: any[]): IRoom<TPlayer> };
+    private readonly mRoomType: { new(...args: any[]): IRoom<Player> };
 
     /**
      * The configure services action.
@@ -62,7 +61,7 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
      */
     public constructor(
         startupType: { new(...args: any[]): TStartup },
-        roomType: { new(...args: any[]): IRoom<TPlayer> },
+        roomType: { new(...args: any[]): IRoom<Player> },
     ) {
         this.mStartupType = startupType;
         this.mRoomType = roomType;
@@ -77,7 +76,7 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
      * IRoomConfigObject, so that it can get injected into the IRoom.
      * @param configureServicesAction The action to configure the services.
      */
-    public setConfigureServicesAction(configureServicesAction: (container: Container) => void): RoomHostBuilder<TStartup, TPlayer> {
+    public setConfigureServicesAction(configureServicesAction: (container: Container) => void): RoomHostBuilder<TStartup> {
         // Set the configure services action
         this.mConfigureServicesAction = configureServicesAction;
 
@@ -91,7 +90,7 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
      * @param commands The list of predefined commands that are supported out-of-the-box by the framework to use. If not specified, uses
      * no default framework commands.
      */
-    public useCommands(prefix: string = Constants.DefaultCommandPrefix, commands?: string[]): RoomHostBuilder<TStartup, TPlayer> {
+    public useCommands(prefix: string = Constants.DefaultCommandPrefix, commands?: string[]): RoomHostBuilder<TStartup> {
         // Bind commands to the container
         const namesToCommands = this.bindCommands();
 
@@ -113,7 +112,7 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
     /**
      * Configures the room to use behaviors.
      */
-    public useBehaviors(): RoomHostBuilder<TStartup, TPlayer> {
+    public useBehaviors(): RoomHostBuilder<TStartup> {
         // TODO
 
         // Return this for chaining
@@ -131,7 +130,7 @@ export class RoomHostBuilder<TStartup extends StartupBase, TPlayer extends Playe
 
         // Bind the specified startup and room to the room's DI container
         this.container.bind<TStartup>(Types.Startup).to(this.mStartupType);
-        this.container.bind<IRoom<TPlayer>>(Types.IRoom).to(this.mRoomType).inSingletonScope();
+        this.container.bind<IRoom<Player>>(Types.IRoom).to(this.mRoomType).inSingletonScope();
 
         // Use the container to create the specified startup type, so that it can get all dependencies via DI
         const startup = this.container.get<TStartup>(Types.Startup);
