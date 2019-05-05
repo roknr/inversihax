@@ -6,9 +6,12 @@ export const Types = {
     IRoom: Symbol.for("IRoom"),
     IRoomConfigObject: Symbol.for("IRoomConfigObject"),
     ICommand: Symbol.for("ICommand"),
+    IChatMessageInterceptor: Symbol.for("IChatMessageInterceptor"),
 
     IPlayerManager: Symbol.for("IPlayerManager"),
     ICommandManager: Symbol.for("ICommandManager"),
 
     CommandOptions: Symbol.for("CommandOptions"),
+
+    Container: Symbol.for("Container"),
 };

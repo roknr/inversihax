@@ -1,4 +1,4 @@
-import { inject } from "inversify";
+import { inject, Container } from "inversify";
 import { IRoomConfigObject, IRoomObject } from "types-haxball-headless-api";
 import { IPlayerManager, IRoom, Player, RoomBase, Types } from "types-haxframework";
 
@@ -23,8 +23,9 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
     public constructor(
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
         @inject(Types.IPlayerManager) playerManager: IPlayerManager<Player>,
+        @inject(Types.Container) container: Container,
     ) {
-        super(roomConfig, playerManager);
+        super(roomConfig, playerManager, container);
 
         this.onGameStart.addHandler((byPlayer) => {
             this.mIsGameInProgress = true;

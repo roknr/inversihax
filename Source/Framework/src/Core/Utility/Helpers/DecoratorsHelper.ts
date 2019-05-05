@@ -1,4 +1,4 @@
-import { ICommandMetadataInternal } from "../../Interfaces/Commands/ICommandMetadata";
+import { ICommandMetadataInternal } from "../../Interfaces/Metadata/ICommandMetadata";
 import { MetadataKeys } from "../../Utility/Constants";
 
 /**

@@ -87,10 +87,8 @@ export class RoomHostBuilder<TStartup extends StartupBase> {
     /**
      * Configures the room to use commands.
      * @param prefix The command prefix to use. If not specified, uses the framework default which is '!'.
-     * @param commands The list of predefined commands that are supported out-of-the-box by the framework to use. If not specified, uses
-     * no default framework commands.
      */
-    public useCommands(prefix: string = Constants.DefaultCommandPrefix, commands?: string[]): RoomHostBuilder<TStartup> {
+    public useCommands(prefix: string = Constants.DefaultCommandPrefix): RoomHostBuilder<TStartup> {
         // Bind commands to the container
         const namesToCommands = this.bindCommands();
 
@@ -127,6 +125,9 @@ export class RoomHostBuilder<TStartup extends StartupBase> {
         if (this.mConfigureServicesAction != null) {
             this.mConfigureServicesAction(this.container);
         }
+
+        // Bind the container itself
+        this.container.bind<Container>(Types.Container).toConstantValue(this.container);
 
         // Bind the specified startup and room to the room's DI container
         this.container.bind<TStartup>(Types.Startup).to(this.mStartupType);
@@ -167,12 +168,12 @@ export class RoomHostBuilder<TStartup extends StartupBase> {
             else if (commandMetadata.target.prototype instanceof CommandBase === false) {
                 throw new Error(Errors.InvalidCommandType(commandMetadata.target.name));
             }
-            else if (commandMetadata.names == null || commandMetadata.names.length === 0) {
+            else if (commandMetadata.metadata.names == null || commandMetadata.metadata.names.length === 0) {
                 throw new Error(Errors.MissingCommandNames(commandName));
             }
 
             // Go through all the names of the command
-            commandMetadata.names.forEach((name) => {
+            commandMetadata.metadata.names.forEach((name) => {
                 // Only allow unique command names/identifiers (different to the above check, that's the actual class name)
                 if (namesToCommands.has(name)) {
                     throw new Error(Errors.DuplicateCommandName(name));

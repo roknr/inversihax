@@ -7,15 +7,20 @@ export { CommandBase } from "./Core/Commands/CommandBase";
 export { IRoom } from "./Core/Interfaces/IRoom";
 //  --Commands
 export { ICommand } from "./Core/Interfaces/Commands/ICommand";
-export { ICommandMetadata } from "./Core/Interfaces/Commands/ICommandMetadata";
+//  --Interceptors
+export { IChatMessageInterceptor } from "./Core/Interfaces/Interceptors/IChatMessageInterceptor";
 //  --Managers
 export { ICommandManager } from "./Core/Interfaces/Managers/ICommandManager";
 export { IPlayerManager } from "./Core/Interfaces/Managers/IPlayerManager";
+//  --Metadata
+export { ICommandMetadata } from "./Core/Interfaces/Metadata/ICommandMetadata";
 //  --Services
 export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
+
 // -Models
 export { CommandOptions } from "./Core/Models/CommandOptions";
 export { Player } from "./Core/Models/Player";
+export { ChatMessage } from "./Core/Models/ChatMessage";
 // -Utility
 export { TypedEvent } from "./Core/Utility/TypedEvent";
 export { Types } from "./Core/Utility/Types";
