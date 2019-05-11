@@ -6,11 +6,10 @@ import { Player } from "../../Core/Models/Player";
 import { Types } from "../../Core/Utility/Types";
 
 /**
- * The default chat message interceptor that always gets invoked (first in the chat message interceptor chain) and sets up the chat message
- * based on startup configuration.
+ * The command chat message interceptor that always gets invoked and sets up the chat message's command.
  */
 @injectable()
-export default class DefaultChatMessageInterceptor implements IChatMessageInterceptor<ChatMessage<Player>> {
+export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage<Player>> {
 
     /**
      * The room's command manager.
@@ -35,7 +34,7 @@ export default class DefaultChatMessageInterceptor implements IChatMessageInterc
         // Handle command data
         this.setCommand(message);
 
-        // Always invoke the next interceptor in the chain as this is the first interceptor that is invoked and just sets up the message
+        // Always invoke the next interceptor in the chain
         return true;
     }
 

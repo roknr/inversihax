@@ -1,9 +1,9 @@
-import { inject, injectable, Container } from "inversify";
+import { inject, injectable } from "inversify";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
 import { ICommandManager } from "../../Core/Interfaces/Managers/ICommandManager";
 import { CommandOptions } from "../../Core/Models/CommandOptions";
 import { Player } from "../../Core/Models/Player";
-import { Types } from "../../Core/Utility/Types";
+import { ICommandFactoryType, Types } from "../../Core/Utility/Types";
 
 /**
  * The command manager. Provides functionality for dealing with commands.
@@ -13,15 +13,21 @@ import { Types } from "../../Core/Utility/Types";
 @injectable()
 export class CommandManager implements ICommandManager {
 
+    //#region Private members
+
     /**
-     * The dependency injection container.
+     * The command factory.
      */
-    private readonly mContainer: Container;
+    private readonly mCommandFactory: ICommandFactoryType;
 
     /**
      * The room's command options.
      */
     private readonly options: CommandOptions;
+
+    //#endregion
+
+    //#region Constructor
 
     /**
      * Initializes a new instance of the CommandManager class.
@@ -30,11 +36,15 @@ export class CommandManager implements ICommandManager {
      */
     public constructor(
         @inject(Types.CommandOptions) options: CommandOptions,
-        @inject(Types.Container) container: Container,
+        @inject(Types.ICommandFactory) commandFactory: ICommandFactoryType,
     ) {
         this.options = options;
-        this.mContainer = container;
+        this.mCommandFactory = commandFactory;
     }
+
+    //#endregion
+
+    //#region Public methods
 
     /**
      * Returns true if the specified word indicates a command, false otherwise (and in the case the commands have not been configured).
@@ -43,8 +53,8 @@ export class CommandManager implements ICommandManager {
      * @param word The word to check.
      */
     public isCommand(word: string): boolean {
-        // If not configured to use commands (prefix not set) or the word doesn't start with the correct prefix, it's not a command
-        if (this.options.prefix == null || !word.startsWith(this.options.prefix)) {
+        // If the word doesn't start with the correct prefix, it's not a command
+        if (!word.startsWith(this.options.prefix)) {
             return false;
         }
 
@@ -70,9 +80,10 @@ export class CommandManager implements ICommandManager {
             return undefined;
         }
 
-        // Otherwise a command with the name exists so get it from the container and return it
-        const command = this.mContainer.getNamed<ICommand<Player>>(Types.ICommand, commandName);
-
+        // Otherwise a command with the name exists so get it from the factory and return it
+        const command = this.mCommandFactory(commandName);
         return command;
     }
+
+    //#endregion
 }

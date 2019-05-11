@@ -1,18 +1,18 @@
-import { injectable, Container } from "inversify";
+import { injectable } from "inversify";
 import { IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
 import { IRoom } from "../../Core/Interfaces/IRoom";
-import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
 import { IPlayerManager } from "../../Core/Interfaces/Managers/IPlayerManager";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { Player } from "../../Core/Models/Player";
 import { Constants } from "../../Core/Utility/Constants";
 import { TypedEvent } from "../../Core/Utility/TypedEvent";
-import { Types } from "../../Core/Utility/Types";
+import { IChatMessageInterceptorFactoryType } from "../../Core/Utility/Types";
 
 /**
  * The base room abstraction. Provides all of the functionality that the base Headless API room object provides, along with
  * events that support multiple handlers.
- * NOTE: you must inject the IRoomConfigObject, IPlayerManager<TPlayer> and the room's DI Container to the derived class and
+ *
+ * NOTE: you must inject the IRoomConfigObject, IPlayerManager<TPlayer> and the IChatMessageInterceptor factory to the derived class and
  * pass it manually to the base's constructor.
  *
  * Is injectable.
@@ -39,9 +39,9 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
     protected readonly mPlayerManager: IPlayerManager<TPlayer>;
 
     /**
-     * The room's dependency injection container.
+     * The chat message interceptor factory.
      */
-    protected readonly mContainer: Container;
+    protected mChatMessageInterceptorFactory: IChatMessageInterceptorFactoryType;
 
     /**
      * Indicates whether the room has been initialized.
@@ -189,16 +189,16 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      * Initializes a new instance of the Room class.
      * @param roomConfig The base Headless API room object's configuration.
      * @param playerManager The player manager.
-     * @param container The room's dependency injection container.
+     * @param chatMessageInterceptorFactory The chat message interceptor factory.
      */
     public constructor(
         roomConfig: IRoomConfigObject,
         playerManager: IPlayerManager<TPlayer>,
-        container: Container,
+        chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
     ) {
         this.mRoomConfig = roomConfig;
         this.mPlayerManager = playerManager;
-        this.mContainer = container;
+        this.mChatMessageInterceptorFactory = chatMessageInterceptorFactory;
 
         // Initialize the room
         this.mRoom = this.initializeRoom();
@@ -536,9 +536,9 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     private onPlayerChatHandler(player: TPlayer, message: string): boolean {
         // Get all the registered chat message interceptors
-        const interceptors = this.mContainer.getAll<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor);
+        const interceptors = this.mChatMessageInterceptorFactory();
 
-        // Create the initial chat message objects
+        // Create the initial chat message object
         let chatMessage = new ChatMessage<TPlayer>(player, message);
 
         // Go through all the interceptors in the order they were registered to the container

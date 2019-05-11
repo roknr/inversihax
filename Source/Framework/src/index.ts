@@ -23,7 +23,12 @@ export { Player } from "./Core/Models/Player";
 export { ChatMessage } from "./Core/Models/ChatMessage";
 // -Utility
 export { TypedEvent } from "./Core/Utility/TypedEvent";
-export { Types } from "./Core/Utility/Types";
+export {
+    ConstructorType,
+    Types,
+    ICommandFactoryType,
+    IChatMessageInterceptorFactoryType,
+} from "./Core/Utility/Types";
 export { Constants } from "./Core/Utility/Constants";
 //  --Decorators
 export { CommandDecorator } from "./Core/Utility/Decorators/CommandDecorator";

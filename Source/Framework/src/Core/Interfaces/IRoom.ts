@@ -16,19 +16,19 @@ export interface IRoom<TPlayer extends Player> {
      * The event that gets fired when a player joins the room.
      * @param player The player that joined.
      */
-    onPlayerJoin: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerJoin: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets fired when a player leaves the room.
      * @param player The player that left.
      */
-    onPlayerLeave: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerLeave: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets fired when a team wins.
      * @param scores The scores object.
      */
-    onTeamVictory: TypedEvent<(scores: IScoresObject) => void>;
+    readonly onTeamVictory: TypedEvent<(scores: IScoresObject) => void>;
 
     /**
      * The event that gets fired when a player sends a message.
@@ -38,45 +38,45 @@ export interface IRoom<TPlayer extends Player> {
      * @param player The player that sent the message.
      * @param message The message.
      */
-    onPlayerChat: (player: TPlayer, message: string) => boolean;
+    readonly onPlayerChat: (player: TPlayer, message: string) => boolean;
 
     /**
      * The event that gets fired when a player kicks the ball.
      * @param player The player that kicked the ball.
      */
-    onPlayerBallKick: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerBallKick: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets fired when a team scores a goal.
      * @param team The ID of the team that scores the goal.
      */
-    onTeamGoal: TypedEvent<(team: TeamID) => void>;
+    readonly onTeamGoal: TypedEvent<(team: TeamID) => void>;
 
     /**
      * The event that gets fired when the game is started.
      * @param byPlayer The player that started the game (can be null if the event wasn't caused by a player).
      */
-    onGameStart: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGameStart: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets fired when the game is stopped.
      * @param byPlayer The player that stopped the game (can be null if the event wasn't caused by a player).
      */
-    onGameStop: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGameStop: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets fired when the player's admin rights change.
      * @param changedPlayer The player whose rights changed.
      * @param byPlayer The player who changed the rights (can be null if the event wasn't caused by a player).
      */
-    onPlayerAdminChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
+    readonly onPlayerAdminChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets fired when the player is moved to a different team.
      * @param changedPlayer The player whose team changed.
      * @param byPlayer The player who changed the other player's team (can be null if the event wasn't caused by a player).
      */
-    onPlayerTeamChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
+    readonly onPlayerTeamChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when a player is kicked or banned. This is always called after the onPlayerLeave event.
@@ -85,20 +85,20 @@ export interface IRoom<TPlayer extends Player> {
      * @param ban True if it was a ban, false if it was a kick.
      * @param byPlayer The player that kicked/banned the other player (can be null if the event wasn't caused by a player).
      */
-    onPlayerKicked: TypedEvent<(kickedPlayer: TPlayer, reason: string, ban: boolean, byPlayer: TPlayer) => void>;
+    readonly onPlayerKicked: TypedEvent<(kickedPlayer: TPlayer, reason: string, ban: boolean, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised once for every game tick (happens 60 times per second).
      *
      * This event is not called if the game is paused or stopped.
      */
-    onGameTick: TypedEvent<() => void>;
+    readonly onGameTick: TypedEvent<() => void>;
 
     /**
      * The event that gets raised when the game is paused.
      * @param byPlayer The player that paused the game.
      */
-    onGamePause: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGamePause: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when the game is paused.
@@ -107,31 +107,31 @@ export interface IRoom<TPlayer extends Player> {
      * to detect when the game has really resumed you can listen for the first onGameTick event after this event is called.
      * @param byPlayer The player that un-paused the game.
      */
-    onGameUnpause: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGameUnpause: TypedEvent<(byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when the players and ball positions are reset after a goal happens.
      */
-    onPositionsReset: TypedEvent<() => void>;
+    readonly onPositionsReset: TypedEvent<() => void>;
 
     /**
      * The event that gets raised when a player provides an activity, such as key press.
      * @param player The player that gave the activity.
      */
-    onPlayerActivity: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerActivity: TypedEvent<(player: TPlayer) => void>;
 
     /**
      * The event that gets raised when a player changes the stadium.
      * @param newStadiumName The new stadium name.
      * @param byPlayer The player that changed the stadium.
      */
-    onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: TPlayer) => void>;
+    readonly onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: TPlayer) => void>;
 
     /**
      * The event that gets raised when the room link is obtained.
      * @param url The room link.
      */
-    onRoomLink: TypedEvent<(url: string) => void>;
+    readonly onRoomLink: TypedEvent<(url: string) => void>;
 
     //#endregion
 
