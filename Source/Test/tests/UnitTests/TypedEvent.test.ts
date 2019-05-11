@@ -12,9 +12,7 @@ describe("TypedEvent", function () {
 
             expect(registered).to.be.true;
         });
-    });
 
-    describe("#addHandler()", function () {
         it("Should support multiple handler registrations", function () {
             const event = new TypedEvent<() => void>();
             const registered = [];
@@ -24,9 +22,7 @@ describe("TypedEvent", function () {
 
             expect(registered).to.have.all.members([true, true]);
         });
-    });
 
-    describe("#addHandler()", function () {
         it("Should not allow multiple same handler registrations", function () {
             const event = new TypedEvent<() => void>();
             const registered = [];
@@ -37,9 +33,7 @@ describe("TypedEvent", function () {
 
             expect(registered).to.have.all.members([true, false]);
         });
-    });
 
-    describe("#addHandler()", function () {
         it("Should support reference handler registrations", function () {
             class TestClass {
                 private readonly TWO = 2;
