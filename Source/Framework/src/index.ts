@@ -11,6 +11,8 @@ export { ICommandMetadata } from "./Core/Interfaces/Commands/ICommandMetadata";
 //  --Managers
 export { ICommandManager } from "./Core/Interfaces/Managers/ICommandManager";
 export { IPlayerManager } from "./Core/Interfaces/Managers/IPlayerManager";
+//  --Services
+export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
 // -Models
 export { CommandOptions } from "./Core/Models/CommandOptions";
 export { Player } from "./Core/Models/Player";
@@ -34,3 +36,5 @@ export { RoomBase } from "./Framework/Room/RoomBase";
 // -Managers
 export { PlayerManager } from "./Framework/Managers/PlayerManager";
 export { CommandManager } from "./Framework/Managers/CommandManager";
+// -Services
+export { EmojiService } from "./Framework/Services/EmojiService";

@@ -42,9 +42,7 @@ describe("DecoratorsHelper", function () {
 
             expect(metadata.testProperty).to.equal(ConstantsLocal.TestSymbol);
         });
-    });
 
-    describe("#getMetadata()", function () {
         it("Should return no metadata (undefined) for an object that has no metadata attached", function () {
             class NoMetadataClass { }
 
@@ -92,9 +90,7 @@ describe("DecoratorsHelper", function () {
 
             expect(commandsMetadata).to.have.all.members([TestCommand1, TestCommand2, TestCommand3]);
         });
-    });
 
-    describe("#getCommandsFromMetadata()", function () {
         it("Should return no commands (empty array) if no commands have been decorated with @CommandDecorator", function () {
             const commandConstructors = DecoratorsHelper.getCommandsMetadata().map((metadata) => metadata.target);
 
