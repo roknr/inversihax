@@ -16,7 +16,6 @@ export { IPlayerManager } from "./Core/Interfaces/Managers/IPlayerManager";
 export { ICommandMetadata } from "./Core/Interfaces/Metadata/ICommandMetadata";
 //  --Services
 export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
-
 // -Models
 export { CommandOptions } from "./Core/Models/CommandOptions";
 export { Player } from "./Core/Models/Player";

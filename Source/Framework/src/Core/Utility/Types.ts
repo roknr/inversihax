@@ -32,12 +32,12 @@ export type ConstructorType<T> = { new(...args: any[]): T };
 //#region Factory types
 
 /**
- * The IChatMessageInterceptor factory type.
+ * The IChatMessageInterceptor factory type. Instantiates all registered IChatMessage interceptors.
  */
 export type IChatMessageInterceptorFactoryType = () => Array<IChatMessageInterceptor<ChatMessage<Player>>>;
 
 /**
- * The ICommand factory type.
+ * The ICommand factory type. Instantiates a command based on the specified name.
  */
 export type ICommandFactoryType = (commandName: string) => ICommand<Player>;
 

@@ -11,6 +11,8 @@ import { Player } from "../../Core/Models/Player";
 import { Constants, Errors } from "../../Core/Utility/Constants";
 import { DecoratorsHelper } from "../../Core/Utility/Helpers/DecoratorsHelper";
 import { ConstructorType, Types } from "../../Core/Utility/Types";
+import { createChatMessageInterceptorFactory } from "../Factories/ChatMessageInterceptorFactory";
+import { createCommandFactory } from "../Factories/CommandFactory";
 import { CommandInterceptor } from "../Interceptors/CommandInterceptor";
 import { CommandManager } from "../Managers/CommandManager";
 import { PlayerManager } from "../Managers/PlayerManager";
@@ -218,12 +220,7 @@ export class RoomHostBuilder {
         this.container
             .bind<interfaces.Factory<Array<IChatMessageInterceptor<ChatMessage<Player>>>>>(Types.IChatMessageInterceptorFactory)
             .toFactory((context: interfaces.Context) => {
-                // Create all registered chat message interceptors
-                return () => {
-                    const interceptors =
-                        context.container.getAll<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor);
-                    return interceptors;
-                };
+                return createChatMessageInterceptorFactory(context);
             });
     }
 
@@ -234,11 +231,7 @@ export class RoomHostBuilder {
         this.container
             .bind<interfaces.Factory<ICommand<Player>>>(Types.ICommandFactory)
             .toFactory((context: interfaces.Context) => {
-                // Create the command that maps to the specified name
-                return (commandName: string) => {
-                    const command = context.container.getNamed<ICommand<Player>>(Types.ICommand, commandName);
-                    return command;
-                };
+                return createCommandFactory(context);
             });
     }
 
