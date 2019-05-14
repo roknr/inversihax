@@ -1,17 +1,17 @@
 import { inject, injectable } from "inversify";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
-import { ICommandManager } from "../../Core/Interfaces/Managers/ICommandManager";
+import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { CommandOptions } from "../../Core/Models/CommandOptions";
 import { Player } from "../../Core/Models/Player";
 import { ICommandFactoryType, Types } from "../../Core/Utility/Types";
 
 /**
- * The command manager. Provides functionality for dealing with commands.
+ * The command service. Provides functionality for dealing with commands.
  *
  * Is injectable.
  */
 @injectable()
-export class CommandManager implements ICommandManager {
+export class CommandService implements ICommandService {
 
     //#region Private members
 
@@ -30,7 +30,7 @@ export class CommandManager implements ICommandManager {
     //#region Constructor
 
     /**
-     * Initializes a new instance of the CommandManager class.
+     * Initializes a new instance of the CommandService class.
      * @param options The command options.
      * @param container The dependency injection container.
      */

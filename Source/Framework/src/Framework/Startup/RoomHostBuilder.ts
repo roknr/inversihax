@@ -1,21 +1,21 @@
 import { interfaces, Container, ContainerModule } from "inversify";
-import { CommandBase } from "../../Core/Commands/CommandBase";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
 import { IRoom } from "../../Core/Interfaces/IRoom";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
-import { ICommandManager } from "../../Core/Interfaces/Managers/ICommandManager";
-import { IPlayerManager } from "../../Core/Interfaces/Managers/IPlayerManager";
+import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
+import { IPlayerService } from "../../Core/Interfaces/Services/IPlayerService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { CommandOptions } from "../../Core/Models/CommandOptions";
 import { Player } from "../../Core/Models/Player";
 import { Constants, Errors } from "../../Core/Utility/Constants";
 import { DecoratorsHelper } from "../../Core/Utility/Helpers/DecoratorsHelper";
 import { ConstructorType, Types } from "../../Core/Utility/Types";
+import { CommandBase } from "../Commands/CommandBase";
 import { createChatMessageInterceptorFactory } from "../Factories/ChatMessageInterceptorFactory";
 import { createCommandFactory } from "../Factories/CommandFactory";
 import { CommandInterceptor } from "../Interceptors/CommandInterceptor";
-import { CommandManager } from "../Managers/CommandManager";
-import { PlayerManager } from "../Managers/PlayerManager";
+import { CommandService } from "../Services/CommandService";
+import { PlayerService } from "../Services/PlayerService";
 import { StartupBase } from "./StartupBase";
 
 /**
@@ -83,12 +83,12 @@ export class RoomHostBuilder {
     /**
      * Configures the room to use commands.
      * @param prefix The command prefix to use. If not specified, uses the framework default which is '!'.
-     * @param customCommandManagerType The custom command manager type to use. If not specified, uses the
-     * framework's default CommandManager type.
+     * @param customCommandServiceType The custom command service type to use. If not specified, uses the
+     * framework's default CommandService type.
      */
     public useCommands(
         prefix: string = Constants.DefaultCommandPrefix,
-        customCommandManagerType?: ConstructorType<ICommandManager>,
+        customCommandServiceType?: ConstructorType<ICommandService>,
     ): RoomHostBuilder {
         // Bind commands and the command factory to the container
         const namesToCommands = this.bindCommands();
@@ -98,9 +98,9 @@ export class RoomHostBuilder {
         const commandOptions = new CommandOptions(prefix, namesToCommands);
         this.container.bind<CommandOptions>(Types.CommandOptions).toConstantValue(commandOptions);
 
-        // Also bind the command manager
-        const commandManagerType = customCommandManagerType == null ? CommandManager : customCommandManagerType;
-        this.container.bind<ICommandManager>(Types.ICommandManager).to(commandManagerType).inSingletonScope();
+        // Also bind the command service
+        const CommandServiceType = customCommandServiceType == null ? CommandService : customCommandServiceType;
+        this.container.bind<ICommandService>(Types.ICommandService).to(CommandServiceType).inSingletonScope();
 
         // And the command interceptor
         this.container.bind<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor).to(CommandInterceptor);
@@ -129,6 +129,9 @@ export class RoomHostBuilder {
 
         // Configure the room using the startup class
         startup.configure();
+
+        // Unbind the Startup type since it is only used for startup
+        this.container.unbind(Types.Startup);
     }
 
     //#endregion
@@ -175,7 +178,7 @@ export class RoomHostBuilder {
             });
 
             // Bind the command's constructor to its name; NOTE - cast to "any" as type "Function" is not assignable to type
-            // "new (...args: any[]) => {}"", but it's the constructor so it's fine to ignore the type error
+            // "new (...args: any[]) => {}", but it's the constructor so it's fine to ignore the type error
             this.container.bind(Types.ICommand)
                 .to(commandMetadata.target as any)
                 .inRequestScope()
@@ -205,9 +208,9 @@ export class RoomHostBuilder {
      * bound by the user but are needed.
      */
     private bindAfterUserServices(): void {
-        // PlayerManager is needed in the Room, so bind it to the framework's default one if user did not
-        if (!this.container.isBound(Types.IPlayerManager)) {
-            this.container.bind<IPlayerManager<Player>>(Types.IPlayerManager).to(PlayerManager);
+        // PlayerService is needed in the Room, so bind it to the framework's default one if user did not
+        if (!this.container.isBound(Types.IPlayerService)) {
+            this.container.bind<IPlayerService<Player>>(Types.IPlayerService).to(PlayerService);
         }
     }
 

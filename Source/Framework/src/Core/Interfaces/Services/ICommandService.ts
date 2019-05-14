@@ -2,9 +2,9 @@ import { Player } from "../../Models/Player";
 import { ICommand } from "../Commands/ICommand";
 
 /**
- * The command manager. Provides functionality for dealing with commands.
+ * Provides functionality for dealing with commands.
  */
-export interface ICommandManager {
+export interface ICommandService {
 
     /**
      * Returns true if the specified word indicates a command, false otherwise (and in the case the commands have not been configured).

@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
 import { IRoom } from "../../Core/Interfaces/IRoom";
-import { IPlayerManager } from "../../Core/Interfaces/Managers/IPlayerManager";
+import { IPlayerService } from "../../Core/Interfaces/Services/IPlayerService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { Player } from "../../Core/Models/Player";
 import { Constants } from "../../Core/Utility/Constants";
@@ -12,7 +12,7 @@ import { IChatMessageInterceptorFactoryType } from "../../Core/Utility/Types";
  * The base room abstraction. Provides all of the functionality that the base Headless API room object provides, along with
  * events that support multiple handlers.
  *
- * NOTE: you must inject the IRoomConfigObject, IPlayerManager<TPlayer> and the IChatMessageInterceptor factory to the derived class and
+ * NOTE: you must inject the IRoomConfigObject, IPlayerService<TPlayer> and the IChatMessageInterceptor factory to the derived class and
  * pass it manually to the base's constructor.
  *
  * Is injectable.
@@ -34,9 +34,9 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
     protected readonly mRoomConfig: IRoomConfigObject;
 
     /**
-     * The room's player manager.
+     * The room's player service.
      */
-    protected readonly mPlayerManager: IPlayerManager<TPlayer>;
+    protected readonly mPlayerService: IPlayerService<TPlayer>;
 
     /**
      * The chat message interceptor factory.
@@ -188,16 +188,16 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
     /**
      * Initializes a new instance of the Room class.
      * @param roomConfig The base Headless API room object's configuration.
-     * @param playerManager The player manager.
+     * @param PlayerService The player service.
      * @param chatMessageInterceptorFactory The chat message interceptor factory.
      */
     public constructor(
         roomConfig: IRoomConfigObject,
-        playerManager: IPlayerManager<TPlayer>,
+        PlayerService: IPlayerService<TPlayer>,
         chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
     ) {
         this.mRoomConfig = roomConfig;
-        this.mPlayerManager = playerManager;
+        this.mPlayerService = PlayerService;
         this.mChatMessageInterceptorFactory = chatMessageInterceptorFactory;
 
         // Initialize the room
@@ -356,7 +356,7 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
     public getPlayer(playerId: number = Constants.HostPlayerId): TPlayer {
         // Get the base player object, cast it into the correct player type and return it
         const playerBase = this.mRoom.getPlayer(playerId);
-        const player = this.mPlayerManager.cast(playerBase);
+        const player = this.mPlayerService.cast(playerBase);
 
         return player;
     }
@@ -368,7 +368,7 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
         // Get the base player objects, cast them to the correct player types and return them
         const playersBase = this.mRoom.getPlayerList();
         const players = playersBase.map((playerBase) => {
-            return this.mPlayerManager.cast(playerBase);
+            return this.mPlayerService.cast(playerBase);
         }, this);
 
         return players;
@@ -436,12 +436,12 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     private configureEvents(): void {
         this.mRoom.onPlayerJoin = (player) => {
-            const typedPlayer = this.mPlayerManager.cast(player);
+            const typedPlayer = this.mPlayerService.cast(player);
             this.onPlayerJoin.invoke([typedPlayer]);
         };
 
         this.mRoom.onPlayerLeave = (player) => {
-            const typedPlayer = this.mPlayerManager.cast(player);
+            const typedPlayer = this.mPlayerService.cast(player);
             this.onPlayerLeave.invoke([typedPlayer]);
         };
 
@@ -450,13 +450,13 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
         };
 
         this.mRoom.onPlayerChat = (player: IPlayerObject, message: string) => {
-            const typedPlayer = this.mPlayerManager.cast(player);
+            const typedPlayer = this.mPlayerService.cast(player);
 
             return this.onPlayerChat(typedPlayer, message);
         };
 
         this.mRoom.onPlayerBallKick = (player) => {
-            const typedPlayer = this.mPlayerManager.cast(player);
+            const typedPlayer = this.mPlayerService.cast(player);
 
             this.onPlayerBallKick.invoke([typedPlayer]);
         };
@@ -466,34 +466,34 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
         };
 
         this.mRoom.onGameStart = (player) => {
-            const typedPlayer = this.mPlayerManager.cast(player);
+            const typedPlayer = this.mPlayerService.cast(player);
 
             this.onGameStart.invoke([typedPlayer]);
         };
 
         this.mRoom.onGameStop = (player) => {
-            const typedPlayer = this.mPlayerManager.cast(player);
+            const typedPlayer = this.mPlayerService.cast(player);
 
             this.onGameStop.invoke([typedPlayer]);
         };
 
         this.mRoom.onPlayerAdminChange = (changedPlayer, byPlayer) => {
-            const typedChangedPlayer = this.mPlayerManager.cast(changedPlayer);
-            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+            const typedChangedPlayer = this.mPlayerService.cast(changedPlayer);
+            const typedByPlayer = this.mPlayerService.cast(byPlayer);
 
             this.onPlayerAdminChange.invoke([typedChangedPlayer, typedByPlayer]);
         };
 
         this.mRoom.onPlayerTeamChange = (changedPlayer, byPlayer) => {
-            const typedChangedPlayer = this.mPlayerManager.cast(changedPlayer);
-            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+            const typedChangedPlayer = this.mPlayerService.cast(changedPlayer);
+            const typedByPlayer = this.mPlayerService.cast(byPlayer);
 
             this.onPlayerTeamChange.invoke([typedChangedPlayer, typedByPlayer]);
         };
 
         this.mRoom.onPlayerKicked = (kickedPlayer, reason, ban, byPlayer) => {
-            const typedKickedPlayer = this.mPlayerManager.cast(kickedPlayer);
-            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+            const typedKickedPlayer = this.mPlayerService.cast(kickedPlayer);
+            const typedByPlayer = this.mPlayerService.cast(byPlayer);
 
             this.onPlayerKicked.invoke([typedKickedPlayer, reason, ban, typedByPlayer]);
         };
@@ -503,13 +503,13 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
         };
 
         this.mRoom.onGamePause = (byPlayer) => {
-            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+            const typedByPlayer = this.mPlayerService.cast(byPlayer);
 
             this.onGamePause.invoke([typedByPlayer]);
         };
 
         this.mRoom.onGameUnpause = (byPlayer) => {
-            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+            const typedByPlayer = this.mPlayerService.cast(byPlayer);
 
             this.onGameUnpause.invoke([typedByPlayer]);
         };
@@ -519,13 +519,13 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
         };
 
         this.mRoom.onPlayerActivity = (player) => {
-            const typedPlayer = this.mPlayerManager.cast(player);
+            const typedPlayer = this.mPlayerService.cast(player);
 
             this.onPlayerActivity.invoke([typedPlayer]);
         };
 
         this.mRoom.onStadiumChange = (newStadiumName, byPlayer) => {
-            const typedByPlayer = this.mPlayerManager.cast(byPlayer);
+            const typedByPlayer = this.mPlayerService.cast(byPlayer);
 
             this.onStadiumChange.invoke([newStadiumName, typedByPlayer]);
         };

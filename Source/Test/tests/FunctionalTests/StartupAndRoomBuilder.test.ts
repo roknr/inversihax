@@ -3,7 +3,7 @@ import { ContainerModule } from "inversify";
 import "mocha";
 import "reflect-metadata";
 import { IRoomConfigObject } from "types-haxball-headless-api";
-import { IPlayerManager, IRoom, Player, PlayerManager, RoomHostBuilder, StartupBase, Types } from "types-haxframework";
+import { IPlayerService, IRoom, Player, PlayerService, RoomHostBuilder, StartupBase, Types } from "types-haxframework";
 import { CustomTestRoom, ICustomTestRoom } from "./Rooms/CustomTestRoom";
 import { StartupTest } from "./Startups/StartupTest";
 
@@ -11,7 +11,7 @@ import { StartupTest } from "./Startups/StartupTest";
 
 const services = new ContainerModule((bind) => {
     bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({});
-    bind<IPlayerManager<Player>>(Types.IPlayerManager).to(PlayerManager).inSingletonScope();
+    bind<IPlayerService<Player>>(Types.IPlayerService).to(PlayerService).inSingletonScope();
 });
 
 describe("RoomHostBuilder", function () {

@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
-import { ICommandManager } from "../../Core/Interfaces/Managers/ICommandManager";
+import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { Player } from "../../Core/Models/Player";
 import { Types } from "../../Core/Utility/Types";
@@ -12,18 +12,18 @@ import { Types } from "../../Core/Utility/Types";
 export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage<Player>> {
 
     /**
-     * The room's command manager.
+     * The room's command service.
      */
-    private readonly mCommandManager: ICommandManager;
+    private readonly mCommandService: ICommandService;
 
     /**
      * Initializes a new instance of the DefaultChatMessageInterceptor class.
-     * @param commandManager The room's command manager.
+     * @param CommandService The room's command service.
      */
     public constructor(
-        @inject(Types.ICommandManager) commandManager: ICommandManager,
+        @inject(Types.ICommandService) CommandService: ICommandService,
     ) {
-        this.mCommandManager = commandManager;
+        this.mCommandService = CommandService;
     }
 
     /**
@@ -44,12 +44,12 @@ export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage<P
      */
     private setCommand(message: ChatMessage<Player>): void {
         // If the message does not represent a command (check by checking the first word of the message), do nothing
-        if (!this.mCommandManager.isCommand(message.words[0])) {
+        if (!this.mCommandService.isCommand(message.words[0])) {
             return;
         }
 
         // Otherwise, try to get the command and set it as the message's command if it exits
-        const command = this.mCommandManager.getCommandByName(message.words[0]);
+        const command = this.mCommandService.getCommandByName(message.words[0]);
 
         if (command != null) {
             message.command = command;

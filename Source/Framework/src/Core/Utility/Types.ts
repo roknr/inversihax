@@ -7,18 +7,23 @@ import { Player } from "../Models/Player";
  * The symbols that identify the corresponding objects (classes, interfaces etc.).
  */
 export const Types = {
+    // Miscellaneous
     Startup: Symbol.for("Startup"),
     IRoom: Symbol.for("IRoom"),
     IRoomConfigObject: Symbol.for("IRoomConfigObject"),
     ICommand: Symbol.for("ICommand"),
     IChatMessageInterceptor: Symbol.for("IChatMessageInterceptor"),
 
-    IPlayerManager: Symbol.for("IPlayerManager"),
-    ICommandManager: Symbol.for("ICommandManager"),
+    // Services
+    IEmojiService: Symbol.for("IEmojiService"),
+    IPlayerService: Symbol.for("IPlayerService"),
+    ICommandService: Symbol.for("ICommandService"),
 
+    // Options
     CommandOptions: Symbol.for("CommandOptions"),
     EmojiOptions: Symbol.for("EmojiOptions"),
 
+    // Factories
     IChatMessageInterceptorFactory: Symbol.for("IChatMessageInterceptorFactory"),
     ICommandFactory: Symbol.for("ICommandFactory"),
 };
