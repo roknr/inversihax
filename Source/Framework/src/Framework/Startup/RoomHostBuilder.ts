@@ -99,8 +99,8 @@ export class RoomHostBuilder {
         this.container.bind<CommandOptions>(Types.CommandOptions).toConstantValue(commandOptions);
 
         // Also bind the command service
-        const CommandServiceType = customCommandServiceType == null ? CommandService : customCommandServiceType;
-        this.container.bind<ICommandService>(Types.ICommandService).to(CommandServiceType).inSingletonScope();
+        const commandServiceType = customCommandServiceType == null ? CommandService : customCommandServiceType;
+        this.container.bind<ICommandService>(Types.ICommandService).to(commandServiceType).inRequestScope();
 
         // And the command interceptor
         this.container.bind<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor).to(CommandInterceptor);
