@@ -59,7 +59,7 @@ export class CommandService implements ICommandService {
         }
 
         // Otherwise it is
-        return false;
+        return true;
     }
 
     /**

@@ -53,6 +53,8 @@ export class RoomHostBuilder {
 
     /**
      * The room's dependency injection container.
+     *
+     * TODO: make this private, no need to publicly expose... tests will have to change
      */
     public readonly container: Container = new Container();
 
@@ -96,14 +98,22 @@ export class RoomHostBuilder {
 
         // Setup the command options and bind them to the container
         const commandOptions = new CommandOptions(prefix, namesToCommands);
-        this.container.bind<CommandOptions>(Types.CommandOptions).toConstantValue(commandOptions);
+        this.container
+            .bind<CommandOptions>(Types.CommandOptions)
+            .toConstantValue(commandOptions);
 
         // Also bind the command service
         const commandServiceType = customCommandServiceType == null ? CommandService : customCommandServiceType;
-        this.container.bind<ICommandService>(Types.ICommandService).to(commandServiceType).inRequestScope();
+        this.container
+            .bind<ICommandService>(Types.ICommandService)
+            .to(commandServiceType)
+            .inRequestScope();
 
         // And the command interceptor
-        this.container.bind<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor).to(CommandInterceptor);
+        this.container
+            .bind<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor)
+            .to(CommandInterceptor)
+            .inRequestScope();
 
         // Return this for chaining
         return this;
@@ -196,8 +206,13 @@ export class RoomHostBuilder {
      */
     private bindBeforeUserServices(): void {
         // Bind the specified startup and room
-        this.container.bind<StartupBase>(Types.Startup).to(this.mStartupType);
-        this.container.bind<IRoom<Player>>(Types.IRoom).to(this.mRoomType).inSingletonScope();
+        this.container
+            .bind<StartupBase>(Types.Startup)
+            .to(this.mStartupType);
+        this.container
+            .bind<IRoom<Player>>(Types.IRoom)
+            .to(this.mRoomType)
+            .inSingletonScope();
 
         // Bind the chat message interceptor factory
         this.bindChatMessageInterceptorFactory();
@@ -210,7 +225,9 @@ export class RoomHostBuilder {
     private bindAfterUserServices(): void {
         // PlayerService is needed in the Room, so bind it to the framework's default one if user did not
         if (!this.container.isBound(Types.IPlayerService)) {
-            this.container.bind<IPlayerService<Player>>(Types.IPlayerService).to(PlayerService);
+            this.container
+                .bind<IPlayerService<Player>>(Types.IPlayerService)
+                .to(PlayerService);
         }
     }
 

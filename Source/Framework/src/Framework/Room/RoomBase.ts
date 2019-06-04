@@ -21,6 +21,15 @@ import { IChatMessageInterceptorFactoryType } from "../../Core/Utility/Types";
 @injectable()
 export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer> {
 
+    //#region Private members
+
+    /**
+     * The chat message interceptor factory.
+     */
+    private readonly mChatMessageInterceptorFactory: IChatMessageInterceptorFactoryType;
+
+    //#endregion
+
     //#region Protected members
 
     /**
@@ -39,14 +48,9 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
     protected readonly mPlayerService: IPlayerService<TPlayer>;
 
     /**
-     * The chat message interceptor factory.
-     */
-    protected mChatMessageInterceptorFactory: IChatMessageInterceptorFactoryType;
-
-    /**
      * Indicates whether the room has been initialized.
      */
-    protected get isInitialized() {
+    protected get isInitialized(): boolean {
         // Room is initialized if the base Headless API room object is defined
         return this.mRoom != null;
     }
@@ -188,20 +192,20 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
     /**
      * Initializes a new instance of the Room class.
      * @param roomConfig The base Headless API room object's configuration.
-     * @param PlayerService The player service.
+     * @param playerService The player service.
      * @param chatMessageInterceptorFactory The chat message interceptor factory.
      */
     public constructor(
         roomConfig: IRoomConfigObject,
-        PlayerService: IPlayerService<TPlayer>,
+        playerService: IPlayerService<TPlayer>,
         chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
     ) {
         this.mRoomConfig = roomConfig;
-        this.mPlayerService = PlayerService;
+        this.mPlayerService = playerService;
         this.mChatMessageInterceptorFactory = chatMessageInterceptorFactory;
 
         // Initialize the room
-        this.mRoom = this.initializeRoom();
+        this.mRoom = this.initialize();
 
         // Link the events of the Headless API room object
         this.configureEvents();
@@ -414,11 +418,36 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
 
     /**
      * Initializes the room by calling the HBInit Headless API method and returns the IRoomObject, if not already initialized.
-     * IMPORTANT:
-     * ---
-     * Can be overridden to implement custom room initialization, but do this only for testing purposes (e.g. unit testing).
+     *
+     * Can be overridden. You can use it to:
+     * - implement custom room initialization. Do this only for testing purposes (e.g. unit testing) - shown in example 1
+     * - implement additional room initialization (e.g. custom services) - shown in example 2
+     *
+```
+// Example 1 - Custom room initialization
+export class TestRoom extends RoomBase<Player> {
+    ...
+    protected initialize(): IRoomObject {
+        return {} as any;
+    }
+    ...
+}
+
+// Example 2 - additional room initialization
+export class CustomRoom extends RoomBase<Player> {
+    ...
+    protected initialize(): IRoomObject {
+        const baseInit = super.initialize();
+
+        // Initialize your things here...
+
+        return baseInit;
+    }
+    ...
+}
+```
      */
-    protected initializeRoom(): IRoomObject {
+    protected initialize(): IRoomObject {
         // Room can only be initialized once
         if (this.isInitialized) {
             return null;

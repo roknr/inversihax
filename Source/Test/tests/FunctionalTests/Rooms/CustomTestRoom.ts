@@ -42,7 +42,7 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
     /**
      * Override for the initialize room method, so that we can use a mock room object, since HBInit only exists in the browser.
      */
-    protected initializeRoom(): IRoomObject {
+    protected initialize(): IRoomObject {
         return {
             startGame: () => { this.onGameStart.invoke(null); },
             pauseGame: () => { this.onGamePause.invoke(null); },

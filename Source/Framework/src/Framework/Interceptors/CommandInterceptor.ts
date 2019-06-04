@@ -18,12 +18,12 @@ export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage<P
 
     /**
      * Initializes a new instance of the DefaultChatMessageInterceptor class.
-     * @param CommandService The room's command service.
+     * @param commandService The room's command service.
      */
     public constructor(
-        @inject(Types.ICommandService) CommandService: ICommandService,
+        @inject(Types.ICommandService) commandService: ICommandService,
     ) {
-        this.mCommandService = CommandService;
+        this.mCommandService = commandService;
     }
 
     /**
