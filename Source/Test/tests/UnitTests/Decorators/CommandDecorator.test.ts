@@ -3,7 +3,7 @@ import { Container } from "inversify";
 import "mocha";
 import "reflect-metadata";
 import { CommandBase, CommandDecorator, ICommand, Player, Types } from "types-haxframework";
-import { ICommandMetadataInternal } from "types-haxframework/lib/Core/Interfaces/Commands/ICommandMetadata";
+import { ICommandMetadataInternal } from "types-haxframework/lib/Core/Interfaces/Metadata/ICommandMetadata";
 import { MetadataKeys } from "types-haxframework/lib/Core/Utility/Constants";
 import { DecoratorsHelper } from "types-haxframework/lib/Core/Utility/Helpers/DecoratorsHelper";
 
@@ -36,7 +36,8 @@ describe("CommandDecorator", function () {
 
         const metadata = DecoratorsHelper.getMetadata<ICommandMetadataInternal>(MetadataKeys.Command, TestCommand);
 
-        expect(metadata.names).to.have.all.members([ConstantsLocal.CommandName1, ConstantsLocal.CommandName2, ConstantsLocal.CommandName3]);
+        expect(metadata.metadata.names)
+            .to.have.all.members([ConstantsLocal.CommandName1, ConstantsLocal.CommandName2, ConstantsLocal.CommandName3]);
         expect(metadata.target).to.equal(TestCommand);
     });
 

@@ -1,24 +1,30 @@
 // ----------------
 // -     CORE     -
 // ----------------
-// -Commands
-export { CommandBase } from "./Core/Commands/CommandBase";
 // -Interfaces
 export { IRoom } from "./Core/Interfaces/IRoom";
 //  --Commands
 export { ICommand } from "./Core/Interfaces/Commands/ICommand";
-export { ICommandMetadata } from "./Core/Interfaces/Commands/ICommandMetadata";
-//  --Managers
-export { ICommandManager } from "./Core/Interfaces/Managers/ICommandManager";
-export { IPlayerManager } from "./Core/Interfaces/Managers/IPlayerManager";
+//  --Interceptors
+export { IChatMessageInterceptor } from "./Core/Interfaces/Interceptors/IChatMessageInterceptor";
+//  --Metadata
+export { ICommandMetadata } from "./Core/Interfaces/Metadata/ICommandMetadata";
 //  --Services
+export { ICommandService } from "./Core/Interfaces/Services/ICommandService";
 export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
+export { IPlayerService } from "./Core/Interfaces/Services/IPlayerService";
 // -Models
 export { CommandOptions } from "./Core/Models/CommandOptions";
 export { Player } from "./Core/Models/Player";
+export { ChatMessage } from "./Core/Models/ChatMessage";
 // -Utility
 export { TypedEvent } from "./Core/Utility/TypedEvent";
-export { Types } from "./Core/Utility/Types";
+export {
+    ConstructorType,
+    Types,
+    ICommandFactoryType,
+    IChatMessageInterceptorFactoryType,
+} from "./Core/Utility/Types";
 export { Constants } from "./Core/Utility/Constants";
 //  --Decorators
 export { CommandDecorator } from "./Core/Utility/Decorators/CommandDecorator";
@@ -28,13 +34,14 @@ export { CommandDecorator } from "./Core/Utility/Decorators/CommandDecorator";
 // ----------------
 // -   FRAMEWORK  -
 // ----------------
+// -Commands
+export { CommandBase } from "./Framework/Commands/CommandBase";
 // -Startup
 export { StartupBase } from "./Framework/Startup/StartupBase";
 export { RoomHostBuilder } from "./Framework/Startup/RoomHostBuilder";
 // -Room
 export { RoomBase } from "./Framework/Room/RoomBase";
-// -Managers
-export { PlayerManager } from "./Framework/Managers/PlayerManager";
-export { CommandManager } from "./Framework/Managers/CommandManager";
 // -Services
+export { CommandService } from "./Framework/Services/CommandService";
 export { EmojiService } from "./Framework/Services/EmojiService";
+export { PlayerService } from "./Framework/Services/PlayerService";

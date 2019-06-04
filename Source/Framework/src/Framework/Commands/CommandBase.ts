@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { ICommand } from "../Interfaces/Commands/ICommand";
-import { Player } from "../Models/Player";
+import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
+import { Player } from "../../Core/Models/Player";
 
 /**
  * The base command class.

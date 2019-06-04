@@ -1,6 +1,7 @@
 import { inject } from "inversify";
 import { IRoomConfigObject, IRoomObject } from "types-haxball-headless-api";
-import { IPlayerManager, IRoom, Player, RoomBase, Types } from "types-haxframework";
+import { IPlayerService, IRoom, Player, RoomBase, Types } from "types-haxframework";
+import { IChatMessageInterceptorFactoryType } from "types-haxframework/lib/Core/Utility/Types";
 
 /**
  * Custom IRoom interface.
@@ -22,9 +23,10 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
 
     public constructor(
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
-        @inject(Types.IPlayerManager) playerManager: IPlayerManager<Player>,
+        @inject(Types.IPlayerService) PlayerService: IPlayerService<Player>,
+        @inject(Types.IChatMessageInterceptorFactory) chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
     ) {
-        super(roomConfig, playerManager);
+        super(roomConfig, PlayerService, chatMessageInterceptorFactory);
 
         this.onGameStart.addHandler((byPlayer) => {
             this.mIsGameInProgress = true;
@@ -40,7 +42,7 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
     /**
      * Override for the initialize room method, so that we can use a mock room object, since HBInit only exists in the browser.
      */
-    protected initializeRoom(): IRoomObject {
+    protected initialize(): IRoomObject {
         return {
             startGame: () => { this.onGameStart.invoke(null); },
             pauseGame: () => { this.onGamePause.invoke(null); },

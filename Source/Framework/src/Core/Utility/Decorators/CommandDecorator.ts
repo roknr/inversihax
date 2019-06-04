@@ -1,15 +1,17 @@
-import { ICommandMetadata, ICommandMetadataInternal } from "../../Interfaces/Commands/ICommandMetadata";
+import { ICommandMetadata, ICommandMetadataInternal } from "../../Interfaces/Metadata/ICommandMetadata";
 import { MetadataKeys } from "../Constants";
 
 /**
  * The command decorator. Provides a way of decorating a class with the command attribute and providing metadata to it.
- * @param metadata The metadata to attach to the command.
+ * @param metadata The command metadata to attach to the command.
  */
 export function CommandDecorator(metadata: ICommandMetadata): (target: Function) => void {
     return (target: Function) => {
         // Create the internal metadata for this command - its constructor
         const thisCommandMetadata = <ICommandMetadataInternal>{
-            names: metadata.names,
+            metadata: {
+                names: metadata.names,
+            },
             target: target,
         };
 
