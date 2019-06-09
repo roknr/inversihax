@@ -1,5 +1,5 @@
 {
-    "name": "types-haxframework-tests",
+    "name": "inversihax-tests",
     "description": "The test project for Haxball headless API TypeScript framework.",
     "version": "1.0.0",
     "scripts": {
@@ -24,6 +24,6 @@
         "inversify": "^5.0.1",
         "reflect-metadata": "^0.1.13",
         "types-haxball-headless-api": "file:../HeadlessAPI",
-        "types-haxframework": "file:../Framework"
+        "inversihax": "file:../Framework"
     }
 }

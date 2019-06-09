@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import { StartupBase, Types } from "types-haxframework";
+import { StartupBase, Types } from "inversihax";
 import { ICustomTestRoom } from "../Rooms/CustomTestRoom";
 
 export class StartupTest extends StartupBase {

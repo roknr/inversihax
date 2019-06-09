@@ -1,5 +1,5 @@
+import { Player, RoomBase } from "inversihax";
 import { IRoomObject } from "types-haxball-headless-api";
-import { Player, RoomBase } from "types-haxframework";
 
 export class TestRoom extends RoomBase<Player> {
 

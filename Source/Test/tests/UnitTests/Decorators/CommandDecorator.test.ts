@@ -1,11 +1,13 @@
+// tslint:disable
+import "reflect-metadata";
 import { expect } from "chai";
 import { Container } from "inversify";
+import { CommandBase, CommandDecorator, ICommand, Player, Types } from "inversihax";
+import { ICommandMetadataInternal } from "inversihax/lib/Core/Interfaces/Metadata/ICommandMetadata";
+import { MetadataKeys } from "inversihax/lib/Core/Utility/Constants";
+import { DecoratorsHelper } from "inversihax/lib/Core/Utility/Helpers/DecoratorsHelper";
 import "mocha";
-import "reflect-metadata";
-import { CommandBase, CommandDecorator, ICommand, Player, Types } from "types-haxframework";
-import { ICommandMetadataInternal } from "types-haxframework/lib/Core/Interfaces/Metadata/ICommandMetadata";
-import { MetadataKeys } from "types-haxframework/lib/Core/Utility/Constants";
-import { DecoratorsHelper } from "types-haxframework/lib/Core/Utility/Helpers/DecoratorsHelper";
+// tslint:enable
 
 const ConstantsLocal = {
     CommandName1: "test",

@@ -1,11 +1,13 @@
+// tslint:disable
+import "reflect-metadata";
 import { expect } from "chai";
 import { ContainerModule } from "inversify";
+import { IPlayerService, IRoom, Player, PlayerService, RoomHostBuilder, StartupBase, Types } from "inversihax";
 import "mocha";
-import "reflect-metadata";
 import { IRoomConfigObject } from "types-haxball-headless-api";
-import { IPlayerService, IRoom, Player, PlayerService, RoomHostBuilder, StartupBase, Types } from "types-haxframework";
 import { CustomTestRoom, ICustomTestRoom } from "./Rooms/CustomTestRoom";
 import { StartupTest } from "./Startups/StartupTest";
+// tslint:enable
 
 // TODO: improve this test...
 

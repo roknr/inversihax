@@ -1,7 +1,7 @@
 import { expect } from "chai";
+import { EmojiService, IEmojiService } from "inversihax";
+import { EmojiOptions } from "inversihax/lib/Core/Models/EmojiOptions";
 import "mocha";
-import { EmojiService, IEmojiService } from "types-haxframework";
-import { EmojiOptions } from "types-haxframework/lib/Core/Models/EmojiServiceOptions";
 
 const emojis: Map<string, string> = new Map([
     [":)", "🙂"],

@@ -1,9 +1,11 @@
-import { expect } from "chai";
-import "mocha";
+// tslint:disable
 import "reflect-metadata";
-import { CommandBase, CommandDecorator, Player } from "types-haxframework";
-import { MetadataKeys } from "types-haxframework/lib/Core/Utility/Constants";
-import { DecoratorsHelper } from "types-haxframework/lib/Core/Utility/Helpers/DecoratorsHelper";
+import { expect } from "chai";
+import { CommandBase, CommandDecorator, Player } from "inversihax";
+import { MetadataKeys } from "inversihax/lib/Core/Utility/Constants";
+import { DecoratorsHelper } from "inversihax/lib/Core/Utility/Helpers/DecoratorsHelper";
+import "mocha";
+// tslint:enable
 
 const ConstantsLocal = {
     TestSymbol: Symbol.for("TestSymbol"),

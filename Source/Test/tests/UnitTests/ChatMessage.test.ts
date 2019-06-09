@@ -1,6 +1,6 @@
 import { expect } from "chai";
+import { ChatMessage, Player } from "inversihax";
 import "mocha";
-import { ChatMessage, Player } from "types-haxframework";
 
 describe("ChatMessage", function () {
     it("Should correctly set initial property values on construction", function () {

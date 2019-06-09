@@ -1,6 +1,6 @@
 import { expect } from "chai";
+import { TypedEvent } from "inversihax";
 import "mocha";
-import { TypedEvent } from "types-haxframework";
 
 describe("TypedEvent", function () {
     describe("#addHandler()", function () {

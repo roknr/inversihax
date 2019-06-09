@@ -17,6 +17,7 @@
             "haxframework",
             "injectable",
             "inversify",
+            "inversihax",
             "recaptcha",
             "transpiled",
             "tsify",

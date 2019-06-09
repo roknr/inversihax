@@ -1,5 +1,5 @@
 {
-    "name": "types-haxframework",
+    "name": "inversihax",
     "description": "The Haxball headless API TypeScript framework.",
     "version": "1.0.0",
     "scripts": {
