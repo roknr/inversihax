@@ -1,12 +1,13 @@
 // tslint:disable
 import "reflect-metadata";
 import { expect } from "chai";
-import { ContainerModule } from "inversify";
+import { ContainerModule, Container } from "inversify";
 import { IPlayerService, IRoom, Player, PlayerService, RoomHostBuilder, StartupBase, Types } from "inversihax";
 import "mocha";
 import { IRoomConfigObject } from "types-haxball-headless-api";
 import { CustomTestRoom, ICustomTestRoom } from "./Rooms/CustomTestRoom";
 import { StartupTest } from "./Startups/StartupTest";
+import { getContainer } from "../Utilities";
 // tslint:enable
 
 // TODO: improve this test...
@@ -27,7 +28,9 @@ describe("RoomHostBuilder", function () {
             const testPlayer1 = { id: 1 };
             const testPlayer2 = { id: 3 };
 
-            const room = builder.container.get<IRoom<Player>>(Types.IRoom);
+            const container = getContainer(builder);
+
+            const room = container.get<IRoom<Player>>(Types.IRoom);
             results.push(room.onPlayerChat(testPlayer1 as any, null));
             results.push(room.onPlayerChat(testPlayer2 as any, null));
 
@@ -39,7 +42,9 @@ describe("RoomHostBuilder", function () {
             const builder = new RoomHostBuilder(StartupTest, CustomTestRoom, services);
             builder.buildAndRun();
 
-            const room = builder.container.get<ICustomTestRoom>(Types.IRoom);
+            const container = getContainer(builder);
+
+            const room = container.get<ICustomTestRoom>(Types.IRoom);
 
             expect(room.isGameInProgress).to.be.false;
 

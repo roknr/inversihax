@@ -13,6 +13,7 @@ export const Types = {
     IRoomConfigObject: Symbol.for("IRoomConfigObject"),
     ICommand: Symbol.for("ICommand"),
     IChatMessageInterceptor: Symbol.for("IChatMessageInterceptor"),
+    IBackgroundTask: Symbol.for("IBackgroundTask"),
 
     // Services
     IEmojiService: Symbol.for("IEmojiService"),

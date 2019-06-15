@@ -3,6 +3,8 @@
 // ----------------
 // -Interfaces
 export { IRoom } from "./Core/Interfaces/IRoom";
+//  --BackgroundTask
+export { IBackgroundTask } from "./Core/Interfaces/BackgroundTask/IBackgroundTask";
 //  --Commands
 export { ICommand } from "./Core/Interfaces/Commands/ICommand";
 //  --Interceptors

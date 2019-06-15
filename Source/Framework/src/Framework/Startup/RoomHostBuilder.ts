@@ -1,4 +1,5 @@
 import { interfaces, Container, ContainerModule } from "inversify";
+import { IBackgroundTask } from "../../Core/Interfaces/BackgroundTask/IBackgroundTask";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
 import { IRoom } from "../../Core/Interfaces/IRoom";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
@@ -53,10 +54,8 @@ export class RoomHostBuilder {
 
     /**
      * The room's dependency injection container.
-     *
-     * TODO: make this private, no need to publicly expose... tests will have to change
      */
-    public readonly container: Container = new Container();
+    private readonly container: Container = new Container();
 
     //#endregion
 
@@ -140,6 +139,9 @@ export class RoomHostBuilder {
         // Configure the room using the startup class
         startup.configure();
 
+        // Start the background tasks
+        this.startBackgroundTasks();
+
         // Unbind the Startup type since it is only used for startup
         this.container.unbind(Types.Startup);
     }
@@ -147,6 +149,24 @@ export class RoomHostBuilder {
     //#endregion
 
     //#region Private helpers
+
+    /**
+     * Starts running the background tasks that were bound to the container, if any.
+     */
+    private startBackgroundTasks(): void {
+        // If there are no bound background tasks, do nothing
+        if (!this.container.isBound(Types.IBackgroundTask)) {
+            return;
+        }
+
+        // Otherwise get all the background tasks bound to the container
+        const tasks = this.container.getAll<IBackgroundTask>(Types.IBackgroundTask);
+
+        // And start each one
+        tasks.forEach((task) => {
+            task.start();
+        });
+    }
 
     /**
      * Binds commands to the container and returns the name to command mapping.
