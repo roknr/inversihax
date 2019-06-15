@@ -11,6 +11,9 @@ export { ICommand } from "./Core/Interfaces/Commands/ICommand";
 export { IChatMessageInterceptor } from "./Core/Interfaces/Interceptors/IChatMessageInterceptor";
 //  --Metadata
 export { ICommandMetadata } from "./Core/Interfaces/Metadata/ICommandMetadata";
+//  --Parsers
+export { IChatMessageParser } from "./Core/Interfaces/Parsers/IChatMessageParser";
+export { IParser } from "./Core/Interfaces/Parsers/IParser";
 //  --Services
 export { ICommandService } from "./Core/Interfaces/Services/ICommandService";
 export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
@@ -38,6 +41,9 @@ export { CommandDecorator } from "./Core/Utility/Decorators/CommandDecorator";
 // ----------------
 // -Commands
 export { CommandBase } from "./Framework/Commands/CommandBase";
+// -Parsers
+export { ChatMessageParser } from "./Framework/Parsers/ChatMessageParser";
+export { ParserBase } from "./Framework/Parsers/ParserBase";
 // -Startup
 export { StartupBase } from "./Framework/Startup/StartupBase";
 export { RoomHostBuilder } from "./Framework/Startup/RoomHostBuilder";

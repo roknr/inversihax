@@ -2,7 +2,7 @@
  * The metadata keys. Used for accessing metadata through the Reflect API.
  */
 export const MetadataKeys = {
-    Command: Symbol.for("hax-framework:command"),
+    Command: Symbol.for("inversihax:command"),
 };
 
 /**

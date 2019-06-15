@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import { IPlayerObject, IPosition, IRoomConfigObject, IRoomObject, IScoresObject, TeamID } from "types-haxball-headless-api";
 import { IRoom } from "../../Core/Interfaces/IRoom";
+import { IChatMessageParser } from "../../Core/Interfaces/Parsers/IChatMessageParser";
 import { IPlayerService } from "../../Core/Interfaces/Services/IPlayerService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { Player } from "../../Core/Models/Player";
@@ -12,8 +13,8 @@ import { IChatMessageInterceptorFactoryType } from "../../Core/Utility/Types";
  * The base room abstraction. Provides all of the functionality that the base Headless API room object provides, along with
  * events that support multiple handlers.
  *
- * NOTE: you must inject the IRoomConfigObject, IPlayerService<TPlayer> and the IChatMessageInterceptor factory to the derived class and
- * pass it manually to the base's constructor.
+ * NOTE: you must inject the IRoomConfigObject, IPlayerService<TPlayer>, IChatMessageInterceptor factory and the
+ * ChatMessage parser to the derived class and pass it manually to the base's constructor.
  *
  * Is injectable.
  * @type {TPlayer} The type of player to use with the room.
@@ -46,6 +47,11 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      * The room's player service.
      */
     protected readonly mPlayerService: IPlayerService<TPlayer>;
+
+    /**
+     * The chat message parser.
+     */
+    protected readonly mChatMessageParser: IChatMessageParser<ChatMessage<TPlayer>>;
 
     /**
      * Indicates whether the room has been initialized.
@@ -562,13 +568,16 @@ export class CustomRoom extends RoomBase<Player> {
 
     /**
      * The onPlayerChat event handler.
+     * @param player The player that sent the message.
+     * @param message The message being sent.
      */
     private onPlayerChatHandler(player: TPlayer, message: string): boolean {
         // Get all the registered chat message interceptors
         const interceptors = this.mChatMessageInterceptorFactory();
 
-        // Create the initial chat message object
-        let chatMessage = new ChatMessage<TPlayer>(player, message);
+        // Use the chat message parser to parse and create the chat message and set the player that sent the message
+        const chatMessage = this.mChatMessageParser.parse(message);
+        chatMessage.sentBy = player;    // TODO: maybe find a different way of setting the sentBy (through the parser and constructor)
 
         // Go through all the interceptors in the order they were registered to the container
         for (let i = 0; i < interceptors.length; i++) {

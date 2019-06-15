@@ -3,6 +3,7 @@ import { IBackgroundTask } from "../../Core/Interfaces/BackgroundTask/IBackgroun
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
 import { IRoom } from "../../Core/Interfaces/IRoom";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
+import { IChatMessageParser } from "../../Core/Interfaces/Parsers/IChatMessageParser";
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { IPlayerService } from "../../Core/Interfaces/Services/IPlayerService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
@@ -15,6 +16,7 @@ import { CommandBase } from "../Commands/CommandBase";
 import { createChatMessageInterceptorFactory } from "../Factories/ChatMessageInterceptorFactory";
 import { createCommandFactory } from "../Factories/CommandFactory";
 import { CommandInterceptor } from "../Interceptors/CommandInterceptor";
+import { ChatMessageParser } from "../Parsers/ChatMessageParser";
 import { CommandService } from "../Services/CommandService";
 import { PlayerService } from "../Services/PlayerService";
 import { StartupBase } from "./StartupBase";
@@ -248,6 +250,14 @@ export class RoomHostBuilder {
             this.container
                 .bind<IPlayerService<Player>>(Types.IPlayerService)
                 .to(PlayerService);
+        }
+
+        // ChatMessage parser is needed, so bind it to the framework's default one if user did not
+        if (!this.container.isBound(Types.IChatMessageParser)) {
+            this.container
+                .bind<IChatMessageParser<ChatMessage<Player>>>(Types.IChatMessageParser)
+                .to(ChatMessageParser)
+                .inTransientScope();
         }
     }
 

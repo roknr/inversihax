@@ -15,6 +15,11 @@ export class ChatMessage<TPlayer extends Player> {
      */
     private mOriginalMessage = null;
 
+    /**
+     * The message represented as words.
+     */
+    private mWords: string[];
+
     //#endregion
 
     //#region Protected members
@@ -27,11 +32,6 @@ export class ChatMessage<TPlayer extends Player> {
     //#endregion
 
     //#region Public properties
-
-    /**
-     * The player that sent the message.
-     */
-    public readonly sentBy: TPlayer = null;
 
     /**
      * The actual whole message that is being sent. Can be modified.
@@ -66,6 +66,12 @@ export class ChatMessage<TPlayer extends Player> {
     public broadcastForward: boolean = true;
 
     /**
+     * The player that sent the message.
+     */
+    // TODO: maybe change this back to readonly and make the creator of the message take care of it
+    public sentBy: TPlayer = null;
+
+    /**
      * The player to which to send the message as a personal message. The value will by default be equal to the player that the personal
      * message is meant for, if personal messages have been configured in the RoomHostBuilder, undefined otherwise.
      */
@@ -85,13 +91,16 @@ export class ChatMessage<TPlayer extends Player> {
     }
 
     /**
-     * The message split by whitespace characters - represented as words.
+     * The message represented as words. Set on construction - usually supposed to be set by the parser. If not defined,
+     * this will be the message split by whitespace characters.
+     *
+     * In case of it being split by whitespace characters:
      * @example
      * const message: string = "The message    being  sent";
      * const messageAsWords: string[] = [ "The", "message", "being", "sent" ];
      */
     public get words(): string[] {
-        return this.message.split(RegExp("\\s+"));
+        return this.mWords;
     }
 
     /**
@@ -120,12 +129,19 @@ export class ChatMessage<TPlayer extends Player> {
 
     /**
      * Initializes a new instance of the ChatMessage class.
-     * @param sentBy The player that sent the message.
      * @param message The actual message.
+     * @param words The message represented as words.
      */
-    public constructor(sentBy: TPlayer, message: string) {
-        this.sentBy = sentBy;
+    public constructor(message: string, words: string[] = null) {
         this.message = message;
+
+        // If words have not been set, split the message by whitespace characters by default
+        if (!words || words.length === 0) {
+            this.mWords = this.message.split(RegExp("\\s+"));
+        }
+        else {
+            this.mWords = words;
+        }
     }
 
     //#endregion

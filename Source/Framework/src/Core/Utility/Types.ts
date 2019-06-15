@@ -14,6 +14,7 @@ export const Types = {
     ICommand: Symbol.for("ICommand"),
     IChatMessageInterceptor: Symbol.for("IChatMessageInterceptor"),
     IBackgroundTask: Symbol.for("IBackgroundTask"),
+    IChatMessageParser: Symbol.for("IChatMessageParser"),
 
     // Services
     IEmojiService: Symbol.for("IEmojiService"),
