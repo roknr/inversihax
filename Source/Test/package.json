@@ -4,8 +4,8 @@
     "version": "1.0.0",
     "scripts": {
         "test": "mocha --require ts-node/register tests/**/*.test.ts",
-        "build": "browserify src/Main.ts -p [tsify] > dist/bundle.js",
-        "build-uglify": "browserify src/Main.ts -p [tsify] | uglifyjs > dist/bundle_ugly.js"
+        "build": "browserify tests/TestBot/Main.ts -p [tsify] > dist/bundle.js",
+        "build-uglify": "browserify tests/TestBot/Main.ts -p [tsify] | uglifyjs > dist/bundle_ugly.js"
     },
     "devDependencies": {
         "@types/chai": "^4.1.7",

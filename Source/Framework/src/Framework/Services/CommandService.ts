@@ -76,7 +76,7 @@ export class CommandService implements ICommandService {
         const commandName = this.options.namesToCommands.get(name);
 
         // If it doesn't exist, return undefined as a command by this name does not exist
-        if (commandName != null) {
+        if (commandName == null) {
             return undefined;
         }
 

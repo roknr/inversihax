@@ -200,15 +200,18 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      * @param roomConfig The base Headless API room object's configuration.
      * @param playerService The player service.
      * @param chatMessageInterceptorFactory The chat message interceptor factory.
+     * @param chatMessageParser The chat message parser.
      */
     public constructor(
         roomConfig: IRoomConfigObject,
         playerService: IPlayerService<TPlayer>,
         chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
+        chatMessageParser: IChatMessageParser<ChatMessage<TPlayer>>,
     ) {
         this.mRoomConfig = roomConfig;
         this.mPlayerService = playerService;
         this.mChatMessageInterceptorFactory = chatMessageInterceptorFactory;
+        this.mChatMessageParser = chatMessageParser;
 
         // Initialize the room
         this.mRoom = this.initialize();

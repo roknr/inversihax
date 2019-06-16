@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import { IPlayerService, IRoom, Player, RoomBase, Types } from "inversihax";
+import { ChatMessage, IChatMessageParser, IPlayerService, IRoom, Player, RoomBase, Types } from "inversihax";
 import { IChatMessageInterceptorFactoryType } from "inversihax/lib/Core/Utility/Types";
 import { IRoomConfigObject, IRoomObject } from "types-haxball-headless-api";
 
@@ -25,8 +25,9 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
         @inject(Types.IPlayerService) PlayerService: IPlayerService<Player>,
         @inject(Types.IChatMessageInterceptorFactory) chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
+        @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser<ChatMessage<Player>>,
     ) {
-        super(roomConfig, PlayerService, chatMessageInterceptorFactory);
+        super(roomConfig, PlayerService, chatMessageInterceptorFactory, chatMessageParser);
 
         this.onGameStart.addHandler((byPlayer) => {
             this.mIsGameInProgress = true;
