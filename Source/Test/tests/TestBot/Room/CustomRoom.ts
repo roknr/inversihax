@@ -1,6 +1,6 @@
 import { inject } from "inversify";
 import { IChatMessageInterceptorFactoryType, IChatMessageParser, IPlayerService, RoomBase, Types } from "inversihax";
-import { IRoomConfigObject } from "../../../../HeadlessAPI/lib";
+import { IRoomConfigObject } from "types-haxball-headless-api";
 import { CustomPlayer } from "../Models/CustomPlayer";
 import { ICustomRoom } from "./ICustomRoom";
 
