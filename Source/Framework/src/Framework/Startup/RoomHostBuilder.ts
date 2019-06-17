@@ -255,7 +255,7 @@ export class RoomHostBuilder {
         // ChatMessage parser is needed, so bind it to the framework's default one if user did not
         if (!this.container.isBound(Types.IChatMessageParser)) {
             this.container
-                .bind<IChatMessageParser<ChatMessage<Player>>>(Types.IChatMessageParser)
+                .bind<IChatMessageParser>(Types.IChatMessageParser)
                 .to(ChatMessageParser)
                 .inTransientScope();
         }

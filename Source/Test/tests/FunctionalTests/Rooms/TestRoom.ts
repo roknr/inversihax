@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import { ChatMessage, IChatMessageInterceptorFactoryType, IChatMessageParser, IPlayerService, Player, RoomBase, Types } from "inversihax";
+import { IChatMessageInterceptorFactoryType, IChatMessageParser, IPlayerService, Player, RoomBase, Types } from "inversihax";
 import { IRoomConfigObject, IRoomObject } from "types-haxball-headless-api";
 
 export class TestRoom extends RoomBase<Player> {
@@ -8,7 +8,7 @@ export class TestRoom extends RoomBase<Player> {
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
         @inject(Types.IPlayerService) PlayerService: IPlayerService<Player>,
         @inject(Types.IChatMessageInterceptorFactory) chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
-        @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser<ChatMessage<Player>>,
+        @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
     ) {
         super(roomConfig, PlayerService, chatMessageInterceptorFactory, chatMessageParser);
     }

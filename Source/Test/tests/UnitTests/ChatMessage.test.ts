@@ -7,8 +7,7 @@ describe("ChatMessage", function () {
         const player = new Player(null, null, null, null, null, null, null);
         const message = "This is a test message";
 
-        const chatMessage = new ChatMessage(message);
-        chatMessage.sentBy = player;
+        const chatMessage = new ChatMessage(player, message);
 
         expect(chatMessage.sentBy).to.equal(player);
         expect(chatMessage.sentTo).to.be.undefined;
@@ -26,8 +25,7 @@ describe("ChatMessage", function () {
         const newMessage = "This is a new modified message";
         const player = new Player(1, "TestPlayer", null, true, null, null, null);
 
-        const chatMessage = new ChatMessage(orgMessage);
-        chatMessage.sentBy = player;
+        const chatMessage = new ChatMessage(player, orgMessage);
         expect(chatMessage.message).to.equal(orgMessage);
 
         chatMessage.message = newMessage;
@@ -38,7 +36,7 @@ describe("ChatMessage", function () {
         const orgMessage = "This is a test message.";
         const newMessage = "This is a new modified message";
 
-        const chatMessage = new ChatMessage(orgMessage);
+        const chatMessage = new ChatMessage(null, orgMessage);
         expect(chatMessage.originalMessage).to.equal(orgMessage);
 
         chatMessage.message = newMessage;
@@ -48,7 +46,7 @@ describe("ChatMessage", function () {
     it("Should split the message by whitespace characters to get the message words if not specified explicitly", function () {
         const message = "This is  a   message    split by  whitespace";
 
-        const chatMessage = new ChatMessage(message);
+        const chatMessage = new ChatMessage(null, message);
         expect(chatMessage.words).to.have.all.members(["This", "is", "a", "message", "split", "by", "whitespace"]);
     });
 
@@ -56,7 +54,7 @@ describe("ChatMessage", function () {
         const message = "This is  a   message    split by  whitespace";
         const words = ["This", "is testing", "of explicitly specified", "words"];
 
-        const chatMessage = new ChatMessage(message, words);
+        const chatMessage = new ChatMessage(null, message, words);
         expect(chatMessage.words).to.have.all.members(["This", "is testing", "of explicitly specified", "words"]);
     });
 });

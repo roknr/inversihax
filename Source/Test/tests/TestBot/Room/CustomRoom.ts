@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import { ChatMessage, IChatMessageInterceptorFactoryType, IChatMessageParser, IPlayerService, RoomBase, Types } from "inversihax";
+import { IChatMessageInterceptorFactoryType, IChatMessageParser, IPlayerService, RoomBase, Types } from "inversihax";
 import { IRoomConfigObject } from "../../../../HeadlessAPI/lib";
 import { CustomPlayer } from "../Models/CustomPlayer";
 import { ICustomRoom } from "./ICustomRoom";
@@ -16,7 +16,7 @@ export class CustomRoom extends RoomBase<CustomPlayer> implements ICustomRoom {
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
         @inject(Types.IPlayerService) playerService: IPlayerService<CustomPlayer>,
         @inject(Types.IChatMessageInterceptorFactory) chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
-        @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser<ChatMessage<CustomPlayer>>,
+        @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
     ) {
         super(roomConfig, playerService, chatMessageInterceptorFactory, chatMessageParser);
 

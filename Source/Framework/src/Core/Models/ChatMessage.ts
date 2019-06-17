@@ -68,8 +68,7 @@ export class ChatMessage<TPlayer extends Player> {
     /**
      * The player that sent the message.
      */
-    // TODO: maybe change this back to readonly and make the creator of the message take care of it
-    public sentBy: TPlayer = null;
+    public readonly sentBy: TPlayer = null;
 
     /**
      * The player to which to send the message as a personal message. The value will by default be equal to the player that the personal
@@ -129,10 +128,12 @@ export class ChatMessage<TPlayer extends Player> {
 
     /**
      * Initializes a new instance of the ChatMessage class.
+     * @param sentBy The player that sent the message.
      * @param message The actual message.
      * @param words The message represented as words.
      */
-    public constructor(message: string, words: string[] = null) {
+    public constructor(sentBy: TPlayer, message: string, words: string[] = null) {
+        this.sentBy = sentBy;
         this.message = message;
 
         // If words have not been set, split the message by whitespace characters by default

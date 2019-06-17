@@ -14,7 +14,7 @@ import { IChatMessageInterceptorFactoryType } from "../../Core/Utility/Types";
  * events that support multiple handlers.
  *
  * NOTE: you must inject the IRoomConfigObject, IPlayerService<TPlayer>, IChatMessageInterceptor factory and the
- * ChatMessage parser to the derived class and pass it manually to the base's constructor.
+ * IChatMessageParser to the derived class and pass it manually to the base's constructor.
  *
  * Is injectable.
  * @type {TPlayer} The type of player to use with the room.
@@ -51,7 +51,7 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
     /**
      * The chat message parser.
      */
-    protected readonly mChatMessageParser: IChatMessageParser<ChatMessage<TPlayer>>;
+    protected readonly mChatMessageParser: IChatMessageParser;
 
     /**
      * Indicates whether the room has been initialized.
@@ -206,7 +206,7 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
         roomConfig: IRoomConfigObject,
         playerService: IPlayerService<TPlayer>,
         chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
-        chatMessageParser: IChatMessageParser<ChatMessage<TPlayer>>,
+        chatMessageParser: IChatMessageParser,
     ) {
         this.mRoomConfig = roomConfig;
         this.mPlayerService = playerService;
@@ -578,9 +578,9 @@ export class CustomRoom extends RoomBase<Player> {
         // Get all the registered chat message interceptors
         const interceptors = this.mChatMessageInterceptorFactory();
 
-        // Use the chat message parser to parse and create the chat message and set the player that sent the message
-        const chatMessage = this.mChatMessageParser.parse(message);
-        chatMessage.sentBy = player;    // TODO: maybe find a different way of setting the sentBy (through the parser and constructor)
+        // Use the chat message parser to parse the original message into words and create the chat message object
+        const words = this.mChatMessageParser.parse(message);
+        const chatMessage = new ChatMessage(player, message, words);
 
         // Go through all the interceptors in the order they were registered to the container
         for (let i = 0; i < interceptors.length; i++) {
