@@ -72,6 +72,11 @@ export class CommandService implements ICommandService {
             name = name.substr(this.options.prefix.length, name.length);
         }
 
+        // If case sensitivity doesn't matter, convert the name to lowercase as lowercase was used on initialization of command names
+        if (!this.options.caseSensitive) {
+            name = name.toLowerCase();
+        }
+
         // Get the map between the specified name and a command name
         const commandName = this.options.namesToCommands.get(name);
 

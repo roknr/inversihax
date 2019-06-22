@@ -9,10 +9,11 @@ export const MetadataKeys = {
  * The error message and function constants.
  */
 export const Errors = {
-    DuplicateCommand: (commandName: string) => `Duplicate command ${commandName}. Commands must not have duplicate names (class names).`,
-    DuplicateCommandName: (name: string) => `Duplicate command name ${name}. Command names must be unique.`,
-    MissingCommandNames: (commandName: string) => `Missing names for command ${commandName}. A command must have at least one name.`,
-    InvalidCommandType: (commandType: string) => `Invalid command type ${commandType}. All commands must inherit from CommandBase class.`,
+    DuplicateCommand: (commandName: string) => `Duplicate command '${commandName}'. Commands must not have duplicate names (class names).`,
+    DuplicateCommandName: (name: string) => `Duplicate command name '${name}'. Command names must be unique.`,
+    MissingCommandNames: (commandName: string) => `Missing names for command '${commandName}'. A command must have at least one name.`,
+    InvalidCommandType: (commandType: string) => `Invalid command type '${commandType}'. All commands must inherit from CommandBase class.`,
+    InvalidCommandPrefix: (prefix: string) => `Invalid command prefix '${prefix}'. Command prefix must be a valid string value.`,
 };
 
 /**

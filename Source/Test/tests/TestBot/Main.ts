@@ -39,5 +39,5 @@ const services = new ContainerModule((bind) => {
 });
 
 new RoomHostBuilder(Startup, CustomRoom, services)
-    .useCommands()
+    .useCommands(true)
     .buildAndRun();

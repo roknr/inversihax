@@ -85,20 +85,27 @@ export class RoomHostBuilder {
 
     /**
      * Configures the room to use commands.
+     * @param caseSensitive Flag indicating whether command name checks should be case sensitive.
      * @param prefix The command prefix to use. If not specified, uses the framework default which is '!'.
      * @param customCommandServiceType The custom command service type to use. If not specified, uses the
      * framework's default CommandService type.
      */
     public useCommands(
+        caseSensitive: boolean = false,
         prefix: string = Constants.DefaultCommandPrefix,
         customCommandServiceType?: ConstructorType<ICommandService>,
     ): RoomHostBuilder {
+        // Check the prefix and throw an error if invalid
+        if (!prefix) {
+            throw new Error(Errors.InvalidCommandPrefix(prefix));
+        }
+
         // Bind commands and the command factory to the container
-        const namesToCommands = this.bindCommands();
+        const namesToCommands = this.bindCommands(caseSensitive);
         this.bindCommandFactory();
 
         // Setup the command options and bind them to the container
-        const commandOptions = new CommandOptions(prefix, namesToCommands);
+        const commandOptions = new CommandOptions(prefix, namesToCommands, caseSensitive);
         this.container
             .bind<CommandOptions>(Types.CommandOptions)
             .toConstantValue(commandOptions);
@@ -172,8 +179,9 @@ export class RoomHostBuilder {
 
     /**
      * Binds commands to the container and returns the name to command mapping.
+     * @param caseSensitive Flag indicating whether command name checks should be case sensitive.
      */
-    private bindCommands(): Map<string, string> {
+    private bindCommands(caseSensitive: boolean): Map<string, string> {
         // Get all registered command metadata for classes decorated with @CommandDecorator
         const commands = DecoratorsHelper.getCommandsMetadata();
 
@@ -200,6 +208,11 @@ export class RoomHostBuilder {
 
             // Go through all the names of the command
             commandMetadata.metadata.names.forEach((name) => {
+                // If case sensitivity doesn't matter, convert the name to lowercase
+                if (!caseSensitive) {
+                    name = name.toLowerCase();
+                }
+
                 // Only allow unique command names/identifiers (different to the above check, that's the actual class name)
                 if (namesToCommands.has(name)) {
                     throw new Error(Errors.DuplicateCommandName(name));
