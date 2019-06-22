@@ -153,7 +153,7 @@ export interface IRoom<TPlayer extends Player> {
     setPlayerAdmin(playerID: number, admin: boolean): void;
 
     /**
-     *  Moves the specified player to a team.
+     * Moves the specified player to a team.
      * @param playerID The id of the player whose team to change.
      * @param team The team in which to move the player to.
      */
