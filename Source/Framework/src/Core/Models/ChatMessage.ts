@@ -61,7 +61,7 @@ export class ChatMessage<TPlayer extends Player> {
 
     /**
      * Flag indicating whether the message should be broadcasted forward to everyone in the room. The value will by default be equal to
-     * true or the one configured in the RoomHostBuilder.
+     * true.
      */
     public broadcastForward: boolean = true;
 
