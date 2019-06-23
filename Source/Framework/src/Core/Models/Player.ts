@@ -1,10 +1,11 @@
 import { IPlayerObject, IPosition, TeamID } from "types-haxball-headless-api";
+import { Role } from "./Role";
 
 /**
  * The base player class that implements the Headless API's IPlayerObject interface. Inherit from this class to implement custom
  * functionality.
  */
-export class Player implements IPlayerObject {
+export class Player<TRole extends Role = Role> implements IPlayerObject {
 
     //#region Public properties
 
@@ -43,6 +44,11 @@ export class Player implements IPlayerObject {
      */
     public readonly conn: string;
 
+    /**
+     * The player's roles.
+     */
+    public readonly roles: Set<TRole> = new Set();
+
     //#endregion
 
     //#region Constructor
@@ -56,6 +62,7 @@ export class Player implements IPlayerObject {
      * @param position The player's position.
      * @param conn The string that uniquely identifies the player's connection.
      * @param auth The player's public id.
+     * @param roles The player's roles.
      */
     public constructor(
         id: number,
@@ -65,6 +72,7 @@ export class Player implements IPlayerObject {
         position: IPosition,
         conn: string,
         auth: string = null,
+        roles: Set<TRole> = null,
     ) {
         this.id = id;
         this.name = name;
@@ -72,7 +80,14 @@ export class Player implements IPlayerObject {
         this.admin = admin;
         this.position = position;
         this.conn = conn;
-        this.auth = auth;
+
+        if (auth != null) {
+            this.auth = auth;
+        }
+
+        if (roles != null) {
+            this.roles = roles;
+        }
     }
 
     //#endregion

@@ -20,6 +20,9 @@ export { ICommandService } from "./Core/Interfaces/Services/ICommandService";
 export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
 export { IPlayerService } from "./Core/Interfaces/Services/IPlayerService";
 // -Models
+export { ChatMessage } from "./Core/Models/ChatMessage";
+export { Player } from "./Core/Models/Player";
+export { Role } from "./Core/Models/Role";
 //  --Stadium
 export { Background } from "./Core/Models/Stadium/Background";
 export { Disc } from "./Core/Models/Stadium/Disc";
@@ -30,9 +33,6 @@ export { Segment } from "./Core/Models/Stadium/Segment";
 export { Stadium } from "./Core/Models/Stadium/Stadium";
 export { Traits, Trait } from "./Core/Models/Stadium/Traits";
 export { Vertex } from "./Core/Models/Stadium/Vertex";
-export { CommandOptions } from "./Core/Models/CommandOptions";
-export { Player } from "./Core/Models/Player";
-export { ChatMessage } from "./Core/Models/ChatMessage";
 // -Utility
 export { TypedEvent } from "./Core/Utility/TypedEvent";
 export {
@@ -44,8 +44,6 @@ export {
 export { Constants } from "./Core/Utility/Constants";
 //  --Decorators
 export { CommandDecorator } from "./Core/Utility/Decorators/CommandDecorator";
-//  --Helpers
-// export { DecoratorsHelper } from "./Core/Utility/Helpers/DecoratorsHelper";
 
 // ----------------
 // -   FRAMEWORK  -
