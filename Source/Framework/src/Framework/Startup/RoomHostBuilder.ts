@@ -262,7 +262,8 @@ export class RoomHostBuilder {
         if (!this.container.isBound(Types.IPlayerService)) {
             this.container
                 .bind<IPlayerService<Player>>(Types.IPlayerService)
-                .to(PlayerService);
+                .to(PlayerService)
+                .inRequestScope();
         }
 
         // ChatMessage parser is needed, so bind it to the framework's default one if user did not
