@@ -1,6 +1,14 @@
 import { inject } from "inversify";
-import { IChatMessageInterceptorFactoryType, IChatMessageParser, IPlayerService, Player, RoomBase, Types } from "inversihax";
-import { IRoomConfigObject, IRoomObject } from "types-haxball-headless-api";
+import {
+    IChatMessageInterceptorFactoryType,
+    IChatMessageParser,
+    IPlayerService,
+    IRoomConfigObject,
+    IRoomObject,
+    Player,
+    RoomBase,
+    Types,
+} from "inversihax";
 
 export class TestRoom extends RoomBase<Player> {
 

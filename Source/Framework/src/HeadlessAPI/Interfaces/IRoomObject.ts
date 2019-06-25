@@ -33,7 +33,8 @@ export interface IRoomObject {
     /**
      * Event called when a player sends a chat message.
      *
-     * The event function can return false in order to filter the chat message. This prevents the chat message from reaching other players in the room.
+     * The event function can return false in order to filter the chat message. This prevents the chat message from
+     * reaching other players in the room.
      * @param player The player that sent the message.
      * @param message The message that the player sent.
      */
@@ -186,7 +187,8 @@ export interface IRoomObject {
     setScoreLimit(limit: number): void;
 
     /**
-     * Sets the time limit of the room - the limit must be specified in number of minutes (If a game is in progress this method does nothing).
+     * Sets the time limit of the room - the limit must be specified in number of minutes (If a game is in progress
+     * this method does nothing).
      * @param limitInMinutes The time limit in minutes.
      */
     setTimeLimit(limitInMinutes: number): void;

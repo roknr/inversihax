@@ -2,9 +2,19 @@
 import "reflect-metadata";
 import { expect } from "chai";
 import { ContainerModule, injectable } from "inversify";
-import { IPlayerService, IRoom, Player, PlayerService, RoomHostBuilder, StartupBase, Types, CommandBase, CommandDecorator, IChatMessageInterceptor, ChatMessage } from "inversihax";
+import {
+    IRoomConfigObject,
+    IPlayerService,
+    IRoom,
+    Player,
+    PlayerService,
+    RoomHostBuilder,
+    Types, CommandBase,
+    CommandDecorator,
+    IChatMessageInterceptor,
+    ChatMessage
+} from "inversihax";
 import "mocha";
-import { IRoomConfigObject } from "types-haxball-headless-api";
 import { CustomTestRoom, ICustomTestRoom } from "./Rooms/CustomTestRoom";
 import { StartupTest } from "./Startups/StartupTest";
 import { getContainer } from "../Utilities";

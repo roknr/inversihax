@@ -63,3 +63,34 @@ export { RoomBase } from "./Framework/Room/RoomBase";
 export { CommandService } from "./Framework/Services/CommandService";
 export { EmojiService } from "./Framework/Services/EmojiService";
 export { PlayerService } from "./Framework/Services/PlayerService";
+
+// ----------------
+// - HEADLESS API -
+// ----------------
+import { IRoomConfigObject } from "./HeadlessAPI/Interfaces/IRoomConfigObject";
+import { IRoomObject } from "./HeadlessAPI/Interfaces/IRoomObject";
+// -Enums
+export { TeamID } from "./HeadlessAPI/Enums/TeamID";
+// -Interfaces
+export { IGeo } from "./HeadlessAPI/Interfaces/IGeo";
+export { IPlayerObject } from "./HeadlessAPI/Interfaces/IPlayerObject";
+export { IPosition } from "./HeadlessAPI/Interfaces/IPosition";
+export { IRoomConfigObject } from "./HeadlessAPI/Interfaces/IRoomConfigObject";
+export { IRoomObject } from "./HeadlessAPI/Interfaces/IRoomObject";
+export { IScoresObject } from "./HeadlessAPI/Interfaces/IScoresObject";
+
+// Declare the HBInit function on the global (window), so that it can be used from dependent
+// modules and correctly transpiled into JS code when building for the browser.
+declare global {
+
+    interface Window {  // tslint:disable-line
+
+        /**
+         * Declaration of the global window.HBInit function available in the Headless host API.
+         *
+         * Should only be called once, when initializing the room.
+         * @param roomConfig The room configuration object.
+         */
+        HBInit: (roomConfig: IRoomConfigObject) => IRoomObject;
+    }
+}

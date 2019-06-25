@@ -1,4 +1,6 @@
-import { IPosition, IScoresObject, TeamID } from "types-haxball-headless-api";
+import { TeamID } from "../../HeadlessAPI/Enums/TeamID";
+import { IPosition } from "../../HeadlessAPI/Interfaces/IPosition";
+import { IScoresObject } from "../../HeadlessAPI/Interfaces/IScoresObject";
 import { Player } from "../Models/Player";
 import { TypedEvent } from "../Utility/TypedEvent";
 

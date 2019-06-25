@@ -2,9 +2,8 @@
 import "reflect-metadata";
 import { expect } from "chai";
 import { ContainerModule, injectable, inject } from "inversify";
-import { RoomHostBuilder, Types, IBackgroundTask } from "inversihax";
+import { RoomHostBuilder, Types, IBackgroundTask, IRoomConfigObject } from "inversihax";
 import "mocha";
-import { IRoomConfigObject } from "types-haxball-headless-api";
 import { StartupTest } from "./Startups/StartupTest";
 import { getContainer } from "../Utilities";
 import { TestRoom } from "./Rooms/TestRoom";

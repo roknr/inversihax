@@ -1,4 +1,4 @@
-import { IPlayerObject } from "types-haxball-headless-api";
+import { IPlayerObject } from "../../../HeadlessAPI/Interfaces/IPlayerObject";
 import { Player } from "../../Models/Player";
 
 /**

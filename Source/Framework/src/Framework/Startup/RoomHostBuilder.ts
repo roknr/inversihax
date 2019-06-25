@@ -22,14 +22,7 @@ import { PlayerService } from "../Services/PlayerService";
 import { StartupBase } from "./StartupBase";
 
 /**
- * The room builder.
- *
- * TODO: Make this more generic, e.g. so that no special container bindings will be needed by the user to use the default room, maybe only
- * method calls with configuration lambdas etc.
- * Options:
- *  - make a separate builder for the default room
- *  - make a base builder and a derived one for the default room
- *  - use interfaces instead of strictly typed builder class
+ * The room builder. Use it to create, configure and start hosting the room.
  */
 export class RoomHostBuilder {
 

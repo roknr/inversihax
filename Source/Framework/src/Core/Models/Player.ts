@@ -1,4 +1,6 @@
-import { IPlayerObject, IPosition, TeamID } from "types-haxball-headless-api";
+import { TeamID } from "../../HeadlessAPI/Enums/TeamID";
+import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
+import { IPosition } from "../../HeadlessAPI/Interfaces/IPosition";
 import { Role } from "./Role";
 
 /**

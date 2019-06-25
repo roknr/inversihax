@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
-import { IPlayerObject } from "types-haxball-headless-api";
 import { IPlayerService } from "../../Core/Interfaces/Services/IPlayerService";
 import { Player } from "../../Core/Models/Player";
+import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
 
 /**
  * The default player service. Provides functionality for dealing with default player types.
