@@ -23,6 +23,9 @@ export { IPlayerService } from "./Core/Interfaces/Services/IPlayerService";
 export { ChatMessage } from "./Core/Models/ChatMessage";
 export { Player } from "./Core/Models/Player";
 export { Role } from "./Core/Models/Role";
+//  --Options
+export { CommandOptions } from "./Core/Models/CommandOptions";
+export { EmojiOptions } from "./Core/Models/EmojiOptions";
 //  --Stadium
 export { Background } from "./Core/Models/Stadium/Background";
 export { Disc } from "./Core/Models/Stadium/Disc";
