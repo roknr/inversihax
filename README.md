@@ -23,7 +23,7 @@ As a prerequisite for being able to build the code, you must allow the use of `e
 {
     "compilerOptions": {
         "experimentalDecorators": true,
-        // ...
+        ...
     }
 }
 ```
