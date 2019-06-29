@@ -1,16 +1,22 @@
 {
     "name": "inversihax",
-    "description": "The Haxball headless API TypeScript framework.",
+    "description": "The Haxball headless API TypeScript framework supporting dependency injection.",
     "version": "0.1.0",
     "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/roknr/inversihax"
     },
+    "keywords": [
+        "haxball",
+        "haxball-headless-api",
+        "inversihax"
+    ],
     "scripts": {
         "lint": "tslint --project .",
         "build": "tsc",
-        "build-watch": "tsc --watch"
+        "build-watch": "tsc --watch",
+        "prepublish": "npm run build"
     },
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
