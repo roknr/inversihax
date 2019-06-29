@@ -1,4 +1,3 @@
-import { deserialize } from "json-typescript-mapper";
 import { IStadiumParser } from "../../Core/Interfaces/Parsers/IStadiumParser";
 import { Stadium } from "../../Core/Models/Stadium/Stadium";
 import { ParserBase } from "./ParserBase";
@@ -15,7 +14,7 @@ export class StadiumParser extends ParserBase<Stadium> implements IStadiumParser
      */
     public parse(content: string): Stadium {
         // This is the default stadium parser, deserialize the JSON based on property names on models
-        const stadium = deserialize(Stadium, JSON.parse(content));
+        const stadium = JSON.parse(content) as Stadium;
         return stadium;
     }
 }

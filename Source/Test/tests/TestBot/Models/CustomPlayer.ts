@@ -1,5 +1,4 @@
-import { Player } from "inversihax";
-import { IPosition, TeamID } from "../../../../HeadlessAPI/lib";
+import { IPosition, Player, TeamID } from "inversihax";
 
 export class CustomPlayer extends Player {
 

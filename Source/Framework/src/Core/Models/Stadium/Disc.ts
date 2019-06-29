@@ -1,5 +1,3 @@
-import { JsonProperty } from "json-typescript-mapper";
-
 /**
  * The stadium disc model.
  */
@@ -8,27 +6,25 @@ export class Disc {
     /**
      * The position of the disc. An array of two numbers that represent coordinates.
      */
-    @JsonProperty("pos")
-    public position: number[] = undefined;
+    public pos: number[];
 
     /**
      * The disc trait.
      */
-    public trait: string = undefined;
+    public trait: string;
 
     /**
      * The color of the disc.
      */
-    public color: string | number[] = undefined;
+    public color: string | number[];
 
     /**
      * The radius of the disc.
      */
-    public radius: number = undefined;
+    public radius: number;
 
     /**
      * The inverse of the mass for the disc.
      */
-    @JsonProperty("invMass")
-    public inverseMass: number = undefined;
+    public invMass: number;
 }

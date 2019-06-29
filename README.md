@@ -17,6 +17,17 @@ npm install inversihax --save
 ## Getting started
 This "getting started" guide provides a quick overview of the API and simple scenarios. Individual features are further explained in the [documentation](Docs/README.md). The acronym "DI" in later uses refers to "dependency injection".
 
+As a prerequisite for being able to build the code, you must allow the use of `experimentalDecorators` in your project's `tsconfig.json` under the `compilerOptions` settings like so:
+
+```json
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        // ...
+    }
+}
+```
+
 ### 1 Creating a room
 Let's look at how to quickly set up a very simple room.
 
