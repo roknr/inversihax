@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { IEmojiService } from "../../Core/Interfaces/Services/IEmojiService";
-import { EmojiOptions } from "../../Core/Models/EmojiOptions";
+import { EmojiOptions } from "../../Core/Models/Options/EmojiOptions";
 
 /**
  * The emoji service. Offers methods for working with emojis.

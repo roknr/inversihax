@@ -7,7 +7,7 @@ import { IChatMessageParser } from "../../Core/Interfaces/Parsers/IChatMessagePa
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { IPlayerService } from "../../Core/Interfaces/Services/IPlayerService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
-import { CommandOptions } from "../../Core/Models/CommandOptions";
+import { CommandOptions } from "../../Core/Models/Options/CommandOptions";
 import { Player } from "../../Core/Models/Player";
 import { Constants, Errors } from "../../Core/Utility/Constants";
 import { DecoratorsHelper } from "../../Core/Utility/Helpers/DecoratorsHelper";

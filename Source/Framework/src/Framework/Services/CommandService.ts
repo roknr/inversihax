@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
-import { CommandOptions } from "../../Core/Models/CommandOptions";
+import { CommandOptions } from "../../Core/Models/Options/CommandOptions";
 import { Player } from "../../Core/Models/Player";
 import { ICommandFactoryType, Types } from "../../Core/Utility/Types";
 
