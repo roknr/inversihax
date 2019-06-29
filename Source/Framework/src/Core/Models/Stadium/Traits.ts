@@ -1,5 +1,3 @@
-import { JsonProperty } from "json-typescript-mapper";
-
 /**
  * The stadium traits model.
  */
@@ -8,22 +6,22 @@ export class Traits {
     /**
      * The ball area trait.
      */
-    public ballArea: Trait = undefined;
+    public ballArea: Trait;
 
     /**
      * The goal post trait.
      */
-    public goalPost: Trait = undefined;
+    public goalPost: Trait;
 
     /**
      * The goal net trait.
      */
-    public goalNet: Trait = undefined;
+    public goalNet: Trait;
 
     /**
      * The kick off barrier trait.
      */
-    public kickOffBarrier: Trait = undefined;
+    public kickOffBarrier: Trait;
 }
 
 /**
@@ -34,35 +32,30 @@ export class Trait {
     /**
      * Indicates whether the object with this trait is visible or not.
      */
-    @JsonProperty("vis")
-    public visible: boolean = undefined;
+    public vis: boolean;
 
     /**
      * The bounce coefficient.
      */
-    @JsonProperty("bCoef")
-    public bounceCoefficient: number = undefined;
+    public bCoef: number;
 
     /**
      * The collision mask.
      */
-    @JsonProperty("cMask")
-    public collisionMask: string[] = undefined;
+    public cMask: string[];
 
     /**
      * The radius.
      */
-    public radius: number = undefined;
+    public radius: number;
 
     /**
      * The group that the object belongs to.
      */
-    @JsonProperty("cGroup")
-    public group: string[] = undefined;
+    public cGroup: string[];
 
     /**
      * The inverse mass of the object.
      */
-    @JsonProperty("invMass")
-    public inverseMass: number = undefined;
+    public invMass: number;
 }

@@ -1,4 +1,3 @@
-import { JsonProperty } from "json-typescript-mapper";
 import { Background } from "./Background";
 import { Disc } from "./Disc";
 import { Goal } from "./Goal";
@@ -16,66 +15,65 @@ export class Stadium {
     /**
      * The stadium name.
      */
-    public name: string = undefined;
+    public name: string;
 
     /**
      * The stadium width.
      */
-    public width: number = undefined;
+    public width: number;
 
     /**
      * The stadium height.
      */
-    public height: number = undefined;
+    public height: number;
 
     /**
      * The spawn distance - how far from the ball the teams will spawn.
      */
-    public spawnDistance: number = undefined;
+    public spawnDistance: number;
 
     /**
      * The stadium background.
      */
-    @JsonProperty("bg")
-    public background: Background = undefined;
+    public bg: Background;
 
     /**
      * The collection of vertexes in the stadium.
      */
-    public vertexes: Vertex[] = undefined;
+    public vertexes: Vertex[];
 
     /**
      * The collection of segments in the stadium.
      */
-    public segments: Segment[] = undefined;
+    public segments: Segment[];
 
     /**
      * The goals in the stadium.
      */
-    public goals: Goal[] = undefined;
+    public goals: Goal[];
 
     /**
      * The collection of discs in the stadium.
      */
-    public discs: Disc[] = undefined;
+    public discs: Disc[];
 
     /**
      * The collection of planes in the stadium.
      */
-    public planes: Plane[] = undefined;
+    public planes: Plane[];
 
     /**
      * The stadium traits.
      */
-    public traits: Traits = undefined;
+    public traits: Traits;
 
     /**
      * The player physics in the stadium.
      */
-    public playerPhysics: PlayerPhysics = undefined;
+    public playerPhysics: PlayerPhysics;
 
     /**
      * The ball physics in the stadium.
      */
-    public ballPhysics: BallPhysics = undefined;
+    public ballPhysics: BallPhysics;
 }

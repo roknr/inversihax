@@ -1,5 +1,3 @@
-import { JsonProperty } from "json-typescript-mapper";
-
 /**
  * The stadium plane model.
  */
@@ -8,27 +6,25 @@ export class Plane {
     /**
      * The plane's normal (direction vector).
      */
-    public normal: number[] = undefined;
+    public normal: number[];
 
     /**
      * The distance to point (0, 0);
      */
-    public distanceTo0: number = undefined;
+    public distanceTo0: number;
 
     /**
      * The trait of the plane.
      */
-    public trait: string = undefined;
+    public trait: string;
 
     /**
      * The bounce coefficient of the plane.
      */
-    @JsonProperty("bCoef")
-    public bounceCoefficient: number = undefined;
+    public bCoef: number;
 
     /**
      * The collision mask of the plane - collection of collision layers.
      */
-    @JsonProperty("cMask")
-    public collisionMask: string[] = undefined;
+    public cMask: string[];
 }

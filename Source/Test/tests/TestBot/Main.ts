@@ -1,8 +1,7 @@
 // tslint:disable
 import "reflect-metadata";
 import { ContainerModule } from "inversify";
-import { IPlayerService, RoomHostBuilder, Types, IBackgroundTask, IChatMessageInterceptor, ChatMessage } from "inversihax";
-import { IRoomConfigObject } from "../../../HeadlessAPI/lib";
+import { IPlayerService, IRoomConfigObject, RoomHostBuilder, Types, IBackgroundTask, IChatMessageInterceptor, ChatMessage } from "inversihax";
 import { CustomPlayer } from "./Models/CustomPlayer";
 import { CustomRoom } from "./Room/CustomRoom";
 import { CustomPlayerService } from "./Services/CustomPlayerService";

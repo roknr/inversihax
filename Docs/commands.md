@@ -81,6 +81,7 @@ export class TestCommand extends CommandBase<Player> {
         @inject(Types.IRoom) room: IRoom<Player>,
         @inject(MyTypes.IMyService) myService: IMyService,
     ) {
+        super();
         this.mRoom = room;
         this.mMyService = myService;
     }
@@ -118,6 +119,7 @@ export class CustomCommand extends CommandBase<CustomPlayer, CustomRole> {
     public constructor(
         @inject(Types.IRoom) room: IRoom<CustomPlayer>,
     ) {
+        super();
         this.mRoom = room;
     }
 

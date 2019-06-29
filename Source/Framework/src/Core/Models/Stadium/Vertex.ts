@@ -1,5 +1,3 @@
-import { JsonProperty } from "json-typescript-mapper";
-
 /**
  * The stadium vertex model.
  */
@@ -8,27 +6,25 @@ export class Vertex {
     /**
      * The vertex's X coordinate.
      */
-    public x: number = undefined;
+    public x: number;
 
     /**
      * The vertex's Y coordinate.
      */
-    public y: number = undefined;
+    public y: number;
 
     /**
      * The trait of the vertex.
      */
-    public trait: string = undefined;
+    public trait: string;
 
     /**
      * The collision mask - collection of collision layers.
      */
-    @JsonProperty("cMask")
-    public collisionMask: string[] = undefined;
+    public cMask: string[];
 
     /**
      * The bouncing coefficient.
      */
-    @JsonProperty("bCoef")
-    public bounceCoefficient: number = undefined;
+    public bCoef: number;
 }

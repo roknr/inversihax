@@ -23,18 +23,27 @@ export class Player<TRole extends Role = Role> implements IPlayerObject {
 
     /**
      * The player's team id.
+     *
+     * Is modifiable, but be careful where you modify it! Changes won't affect the
+     * player in the room and you can cause an un-synced state between your code and the actual haxball room.
      */
-    public readonly team: TeamID;
+    public team: TeamID;
 
     /**
      * The flag indicating whether the player is an admin in the room.
+     *
+     * Is modifiable, but be careful where you modify it! Changes won't affect the
+     * player in the room and you can cause an un-synced state between your code and the actual haxball room.
      */
-    public readonly admin: boolean;
+    public admin: boolean;
 
     /**
      * The player's position in the room.
+     *
+     * Is modifiable, but be careful where you modify it! Changes won't affect the
+     * player in the room and you can cause an un-synced state between your code and the actual haxball room.
      */
-    public readonly position: IPosition;
+    public position: IPosition;
 
     /**
      * The player's public id.

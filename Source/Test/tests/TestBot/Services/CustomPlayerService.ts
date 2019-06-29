@@ -1,6 +1,5 @@
 import { injectable } from "inversify";
-import { IPlayerService } from "inversihax";
-import { IPlayerObject } from "../../../../HeadlessAPI/lib";
+import { IPlayerObject, IPlayerService } from "inversihax";
 import { CustomPlayer } from "../Models/CustomPlayer";
 import { newGuid } from "../Utilities";
 
