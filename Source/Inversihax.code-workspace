@@ -1,8 +1,5 @@
 {
-	"folders": [
-        {
-            "path": "HeadlessAPI"
-        },
+    "folders": [
         {
             "path": "Framework"
         },
