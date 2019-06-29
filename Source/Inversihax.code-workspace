@@ -1,0 +1,29 @@
+{
+    "folders": [
+        {
+            "path": "Framework"
+        },
+        {
+            "path": "Test"
+        }
+    ],
+    "settings": {
+        "cSpell.words": [
+            "API's",
+            "b",
+            "coef",
+            "deserialize",
+            "haxball",
+            "haxframework",
+            "injectable",
+            "inversify",
+            "inversihax",
+            "recaptcha",
+            "transpiled",
+            "tsify",
+            "typemoq",
+            "uglifyjs"
+        ],
+        "typescript.tsdk": "Framework\\node_modules\\typescript\\lib"
+    }
+}
