@@ -65,6 +65,23 @@ describe("TypedEvent", function () {
 
             expect(testVariable).to.equal(7);
         });
+
+        it("Should invoke all registered handlers with correct parameters", function () {
+            const event = new TypedEvent<(id: number, name: string) => void>();
+
+            let idTest: number;
+            let nameTest: string;
+
+            event.addHandler((id, name) => {
+                idTest = id;
+                nameTest = name;
+            });
+
+            event.invoke([1, "test"]);
+
+            expect(idTest).to.equal(1);
+            expect(nameTest).to.equal("test");
+        });
     });
 
     describe("#removeHandler()", function () {

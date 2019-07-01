@@ -18,7 +18,7 @@ export class InversihaxPlayer extends Player<InversihaxRole> {
         position: IPosition,
         conn: string,
         auth: string,
-        roles: Set<InversihaxRole>,
+        roles: Set<InversihaxRole> = null,
     ) {
         super(id, name, team, admin, position, conn, auth, roles);
 

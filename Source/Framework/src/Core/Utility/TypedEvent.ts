@@ -47,7 +47,7 @@ export class TypedEvent<THandler extends (...args: any[]) => any> {
      */
     public invoke(parameters: Parameters<THandler>): void {
         this.mHandlers.forEach((handler) => {
-            handler(parameters);
+            handler(...parameters);
         });
     }
 

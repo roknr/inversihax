@@ -76,7 +76,7 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      * The event that gets fired when a player joins the room.
      * @param player The player that joined.
      */
-    public readonly onPlayerJoin: TypedEvent<(player: TPlayer) => void> = new TypedEvent();
+    public readonly onPlayerJoin: TypedEvent<(player: IPlayerObject) => void> = new TypedEvent();
 
     /**
      * The event that gets fired when a player leaves the room.
@@ -373,10 +373,18 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     public getPlayer(playerId: number = Constants.HostPlayerId): TPlayer {
         // Get the base player object, cast it into the correct player type and return it
-        const playerBase = this.mRoom.getPlayer(playerId);
+        const playerBase = this.getPlayerBase(playerId);
         const player = this.mPlayerService.cast(playerBase);
 
         return player;
+    }
+
+    /**
+     * Return the player of the base type with the specified id. Returns null if the player doesn't exist.
+     * @param playerId The id of the player to get. If not specified, returns the room's host player.
+     */
+    public getPlayerBase(playerId: number = Constants.HostPlayerId): IPlayerObject {
+        return this.mRoom.getPlayer(playerId);
     }
 
     /**
@@ -384,12 +392,19 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     public getPlayerList(): TPlayer[] {
         // Get the base player objects, cast them to the correct player types and return them
-        const playersBase = this.mRoom.getPlayerList();
+        const playersBase = this.getPlayerListBase();
         const players = playersBase.map((playerBase) => {
             return this.mPlayerService.cast(playerBase);
         }, this);
 
         return players;
+    }
+
+    /**
+     * Returns the current list of players of the base type.
+     */
+    public getPlayerListBase(): IPlayerObject[] {
+        return this.mRoom.getPlayerList();
     }
 
     /**
@@ -479,8 +494,7 @@ export class CustomRoom extends RoomBase<Player> {
      */
     private configureEvents(): void {
         this.mRoom.onPlayerJoin = (player) => {
-            const typedPlayer = this.mPlayerService.cast(player);
-            this.onPlayerJoin.invoke([typedPlayer]);
+            this.onPlayerJoin.invoke([player]);
         };
 
         this.mRoom.onPlayerLeave = (player) => {

@@ -16,6 +16,6 @@
         "uglify-es": "^3.3.9"
     },
     "dependencies": {
-        "inversihax": "^0.1.0"
+        "inversihax": "^0.1.1"
     }
 }

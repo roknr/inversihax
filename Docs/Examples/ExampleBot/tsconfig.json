@@ -7,14 +7,10 @@
         "declaration": true,
         "sourceMap": true,
         "experimentalDecorators": true,
-        // "emitDecoratorMetadata": true
         "lib": [
             "es2018",
             "dom"
         ]
-        // "types": [
-        //     "reflect-metadata"
-        // ]
     },
     "include": [
         "src/**/*"

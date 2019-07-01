@@ -1,6 +1,7 @@
 import { IBackgroundTask, Types } from "inversihax";
 import { injectable, inject } from "inversify";
 import { IInversihaxRoom } from "../Interfaces/IInversihaxRoom";
+import { throws } from "assert";
 
 /**
  * A background task that provides information every 60 seconds.
@@ -22,6 +23,19 @@ export class InfoBackgroundTask implements IBackgroundTask {
         setInterval(() => {
             this.mRoom.sendChat("A message from the info background task... next message in 60 seconds...");
         }, 60000);
+
+        // setInterval(() => {
+        //     const players = this.mRoom.getPlayerList();
+        //     players.forEach((player) => {
+        //         let message = "";
+        //         if (player.position != null)
+        //             message = `POSITION ${player.name} (${player.position.x}, ${player.position.y})`;
+        //         else
+        //             message = `POSITION ${player.name} N/A`;
+
+        //         this.mRoom.sendChat(message);
+        //     });
+        // }, 5000);
     }
 
     /**
