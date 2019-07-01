@@ -16,7 +16,7 @@
         "lint": "tslint --project .",
         "build": "tsc",
         "build-watch": "tsc --watch",
-        "prepublish": "npm run build"
+        "prepublishOnly": "npm run build"
     },
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",

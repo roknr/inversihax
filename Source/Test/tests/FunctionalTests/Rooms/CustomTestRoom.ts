@@ -44,9 +44,9 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
      */
     protected initialize(): IRoomObject {
         return {
-            startGame: () => { this.onGameStart.invoke(null); },
-            pauseGame: () => { this.onGamePause.invoke(null); },
-            stopGame: () => { this.onGameStop.invoke(null); },
+            startGame: () => { this.onGameStart.invoke([null]); },
+            pauseGame: () => { this.onGamePause.invoke([null]); },
+            stopGame: () => { this.onGameStop.invoke([null]); },
         } as any;
     }
 }

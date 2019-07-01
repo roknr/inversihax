@@ -1,4 +1,5 @@
 import { TeamID } from "../../HeadlessAPI/Enums/TeamID";
+import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
 import { IPosition } from "../../HeadlessAPI/Interfaces/IPosition";
 import { IScoresObject } from "../../HeadlessAPI/Interfaces/IScoresObject";
 import { Player } from "../Models/Player";
@@ -18,7 +19,7 @@ export interface IRoom<TPlayer extends Player> {
      * The event that gets fired when a player joins the room.
      * @param player The player that joined.
      */
-    readonly onPlayerJoin: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerJoin: TypedEvent<(player: IPlayerObject) => void>;
 
     /**
      * The event that gets fired when a player leaves the room.
@@ -251,9 +252,20 @@ export interface IRoom<TPlayer extends Player> {
     getPlayer(playerId: number): TPlayer;
 
     /**
+     * Return the player of the base type with the specified id. Returns null if the player doesn't exist.
+     * @param playerId The id of the player to get. If not specified, returns the room's host player.
+     */
+    getPlayerBase(playerId?: number): IPlayerObject;
+
+    /**
      * Returns the current list of players.
      */
     getPlayerList(): TPlayer[];
+
+    /**
+     * Returns the current list of players of the base type.
+     */
+    getPlayerListBase(): IPlayerObject[];
 
     /**
      * If a game is in progress it returns the current score information, otherwise it returns null.

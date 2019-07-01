@@ -16,6 +16,8 @@ event.addHandler(() => console.log("Handler 1"));
 event.addHandler(() => console.log("Handler 2"));
 
 // Invoke all registered handlers
+// Note - pass an array of parameters of the same type as the handler's (empty array in this case
+// as no expected parameters)
 event.invoke([]);
 
 // Remove all handlers
@@ -24,6 +26,29 @@ event.removeAllHandlers();
 // Expected output:
 //  "Handler 1"
 //  "Handler 2"
+```
+
+This was an example for a type of handler that takes no parameters. If we would like to use parameters, we just need to pass them in an array to the `invoke` call:
+
+```ts
+import { TypedEvent } from "inversihax";
+
+const event = new TypedEvent<(x: number, str: string) => void>();
+
+let orgX = 5;
+let orgStr = "test";
+
+event.addHandler((x, str) => {
+    orgX += x;
+    orgStr += str;
+});
+
+// Pass an ARRAY of parameters, they must be of the same types as expected parameters and in the same order
+event.invoke([10, "_test"]);
+
+// Expected values:
+// orgX == 10
+// orgStr == "test_test"
 ```
 
 All room events are of the `TypedEvent<THandler>` type and therefore provide support for multiple handler registrations.

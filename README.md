@@ -8,11 +8,24 @@ The primary focus of Inversihax is on inversion of control and dependency inject
 ## Prerequisites
 To use the Inversihax framework, it is highly recommended to understand the fundamentals of the dependency injection principle itself and the [InversifyJS](https://github.com/inversify/InversifyJS) API, since it is used in the core of the framework.
 
-## Installation
+## Installation and configuration
 To include Inversihax in your project, run:
 ```shell
 npm install inversihax --save
 ```
+
+As a prerequisite for being able to build the code, you must allow the use of `experimentalDecorators` in your project's `tsconfig.json` under the `compilerOptions` settings like so:
+
+```json
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        ...
+    }
+}
+```
+
+For the code to run successfully (not throw a runtime error) you will need to `import "reflect-metadata"` at the very beginning of your code. This is a mandatory import as it is needed for dependency injection to work. Code example of where to include the statement will follow.
 
 ## Getting started
 This "getting started" guide provides a quick overview of the API and simple scenarios. Individual features are further explained in the [documentation](Docs/README.md). The acronym "DI" in later uses refers to "dependency injection".
@@ -101,6 +114,7 @@ This will make the DI container resolve a type of `IRoomConfigObject` to a confi
 Now that we have defined the two necessary classes and the services module, we can use them to create the actual room/bot. This is done by passing them to an instance of the `RoomHostBuilder` class and then using the builder to build and run the room.
 
 ```ts
+import "reflect-metadata" // This is the before mentioned import statement - it must be at the very top of your code
 import { RoomHostBuilder } from "inversihax";
 import { Startup } from "./Startup";
 import { Room } from "./Room";
@@ -317,4 +331,14 @@ Recommended scope is singleton, as you can later access the object and stop the 
 ---
 This was a quick overview of the Inversihax framework and its features. For more information take a look at [the documentation](Docs/README.md);
 
+## Contributions
 Feel free to contribute by making your own enhancements through pull requests or creating new feature request and suggestions in the issues section.
+
+### A word regarding development
+If you want to develop, Visual Studio Code editor is recommended. Inversihax consists of two projects - the Framework and the Tests project. The Framework one contains all the framework features while the test one provides tests for it. Both can be open simultaneously with VS Code by opening the `Inversihax.code-workspace`.
+
+#### The Framework project
+The framework project contains a `tasks.json` file in the `.vscode` folder. The file contains a `Lint` task and a `Build-Watch` task. You can run the `Lint` task to lint the project or run the `Build-Watch` task to start the build/watch. This task also has has an `auto` property set to true - this is used by the [AutoLaunch](https://marketplace.visualstudio.com/items?itemName=philfontaine.autolaunch) VS Code extension which starts up the tasks that have the `auto` property set to true by default when you launch the VS Code editor - so you don't have to run the task manually.
+
+#### The Test project
+This project contains the tests for the framework and references it locally. It contains scripts for running all the tests (all files that end with `.test.ts`) inside the `package.json` and building a test bot using `browserify` (if running the script to build this bot, make sure the `dist` folder exists inside the same directory as the `package.json` as it is not registered to source control). The project also contains a `launch.json` script inside the `.vscode` folder. This file provides test debugging functionality inside VS Code - so you can set a breakpoint inside the editor and debug the tests themselves.
