@@ -34,6 +34,11 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     private readonly mChatMessageInterceptorFactory: IChatMessageInterceptorFactoryType;
 
+    /**
+     * The room's player service.
+     */
+    private readonly mPlayerService: IPlayerService<TPlayer>;
+
     //#endregion
 
     //#region Protected members
@@ -47,11 +52,6 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      * The base Headless API room object's configuration.
      */
     protected readonly mRoomConfig: IRoomConfigObject;
-
-    /**
-     * The room's player service.
-     */
-    protected readonly mPlayerService: IPlayerService<TPlayer>;
 
     /**
      * The chat message parser.

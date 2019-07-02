@@ -36,8 +36,8 @@ export class GiveAdminCommand extends CommandBase<InversihaxPlayer> {
     execute(player: InversihaxPlayer, args: string[]): void {
         // If player provided correct password
         if (args[0] === "password") {
-            // And game is not in progress, set the status and role
-            if (this.mRoom.isGameInProgress) {
+            // And game is not in progress and he is in spectators, set the status and role
+            if (this.mRoom.isGameInProgress && player.position != null) {
                 this.mRoom.sendChat("Don't write during the game!");
                 return;
             }

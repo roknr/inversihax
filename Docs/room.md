@@ -47,7 +47,7 @@ event.addHandler((x, str) => {
 event.invoke([10, "_test"]);
 
 // Expected values:
-// orgX == 10
+// orgX == 15
 // orgStr == "test_test"
 ```
 
@@ -59,7 +59,7 @@ The `RoomBase<TPlayer extends Player>` class is a base room class that implement
 ### The constructor parameters
 Here is a brief explanation of the constructor parameters that the `RoomBase` expects:
 1. *`roomConfig`* - the base Headless API's room configuration - the `IRoomConfigObject`.
-2. *`playerService`* - an `IPlayerService<TPlayer extends Player>`. This is a base player service that provides a method: `cast(player: IPlayerObject>): TPlayer`. This method is used for converting an `IPlayerObject` into the player type used by the room. By default, Inversihax uses its own implementation which just returns a new instance of the `Player` class with the same properties as the passed in player. It is also available in the derived room as it is marked as `protected`.
+2. *`playerService`* - an `IPlayerService<TPlayer extends Player>`. This is a base player service that provides a method: `cast(player: IPlayerObject>): TPlayer`. This method is used for converting an `IPlayerObject` into the player type used by the room. By default, Inversihax uses its own implementation which just returns a new instance of the `Player` class with the same properties as the passed in player. It is not available in the derived room as it is marked as `private`. You can however keep a reference to it in your room and also specify it as a more specific type (if you implemented your own) to be able to access it in your room.
 3. *`chatMessageInterceptorFactory`* - a chat message interceptor factory. This is a method that is used for instantiation of `IChatMessageInterceptor`s. It is used internally by the `RoomBase` so it is not available in the derived class.
 4. *`chatMessageParser`* - an `IChatMessageParser`, which provides parsing logic for the chat messages. It is used internally when parsing chat messages, but it is also available in the derived class, if needed.
 

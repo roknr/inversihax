@@ -1,4 +1,4 @@
-import { IRoom, IPlayerObject } from "inversihax";
+import { IRoom } from "inversihax";
 import { InversihaxPlayer } from "../Models/InversihaxPlayer";
 
 /**
@@ -12,16 +12,4 @@ export interface IInversihaxRoom extends IRoom<InversihaxPlayer> {
      * Flag indicating whether the game is in progress.
      */
     readonly isGameInProgress: boolean;
-
-    /**
-     * Method that returns the players in the room as the base Headless API player type.
-     * Check implementation and player service for more detail on why we need it.
-     */
-    getPlayerListBase(): IPlayerObject[];
-
-    /**
-     * Method that returns the player in the room as the base Headless API player type.
-     * Similar to above method.
-     */
-    getPlayerBase(id: number): IPlayerObject;
 }
