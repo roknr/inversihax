@@ -1,7 +1,12 @@
 import "reflect-metadata";  // This MUST be the first import - it is mandatory for dependency injection to work
 import {
-    RoomHostBuilder, IRoomConfigObject, Types, IChatMessageInterceptor,
-    ChatMessage, IBackgroundTask, IPlayerService,
+    RoomHostBuilder,
+    IRoomConfigObject,
+    Types,
+    IChatMessageInterceptor,
+    ChatMessage,
+    IBackgroundTask,
+    IPlayerService,
 } from "inversihax";
 import { Startup } from "./Startup";
 import { InversihaxRoom } from "./InversihaxRoom";

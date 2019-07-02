@@ -1,12 +1,14 @@
 import {
-    RoomBase, Types, IRoomConfigObject,
-    IChatMessageInterceptorFactoryType, IChatMessageParser, IPlayerObject,
+    RoomBase,
+    Types,
+    IRoomConfigObject,
+    IChatMessageInterceptorFactoryType,
+    IChatMessageParser,
 } from "inversihax";
 import { InversihaxPlayer } from "./Models/InversihaxPlayer";
 import { inject } from "inversify";
 import { InversihaxRole } from "./Models/InversihaxRole";
 import { IInversihaxPlayerService } from "./Interfaces/IInversihaxPlayerService";
-import { InversihaxPlayerService } from "./Services/InversihaxPlayerService";
 
 /**
  * Our room class. For simplicity, we derive from the RoomBase, as recommended.
@@ -47,6 +49,11 @@ export class InversihaxRoom extends RoomBase<InversihaxPlayer> {
         this.onGamePause.addHandler((byPlayer) => this.mIsGameInProgress = false);
         this.onGameUnpause.addHandler((byPlayer) => this.mIsGameInProgress = true);
 
+        // Add another handler for when the game ends so we can reset our custom player types positions
+        this.onGameStop.addHandler((byPlayer) => {
+            this.getPlayerList().forEach((player) => player.position = null);
+        });
+
         this.onPlayerKicked.addHandler((kickedPlayer, reason, ban, byPlayer) => {
             // Let's kick the player who kicked a player if he is not a super admin
             if (!byPlayer.roles.has(InversihaxRole.SuperAdmin)) {
@@ -54,44 +61,26 @@ export class InversihaxRoom extends RoomBase<InversihaxPlayer> {
             }
         });
 
+        // Handle our player types - hook up the player service handle methods
         this.onPlayerJoin.addHandler((player) => {
-            console.log(player);
             this.playerService.handlePlayerJoin(player);
         });
+
         this.onPlayerLeave.addHandler((player) => this.playerService.handlePlayerLeave(player));
 
         this.onPlayerAdminChange.addHandler((changedPlayer, byPlayer) => {
             const playerBase = this.getPlayerBase(changedPlayer.id);
             this.playerService.handlePlayerAdminChange(playerBase);
-            this.sendChat(`Admin change for ${changedPlayer.name}: ${changedPlayer.admin.toString()}`);
         });
 
         this.onPlayerTeamChange.addHandler((changedPlayer, byPlayer) => {
             const playerBase = this.getPlayerBase(changedPlayer.id);
             this.playerService.handlePlayerTeamChange(playerBase);
-            this.sendChat(`New team for ${changedPlayer.name}: ${changedPlayer.team.toString()}`);
         });
 
         this.onGameTick.addHandler(() => {
             const players = this.getPlayerListBase();
             this.playerService.handlePlayerPositions(players);
         });
-    }
-
-    /**
-     * Let's make a method that will return the base Headless API players. We will need this for keeping
-     * track of players of our own type - to update their position properties.
-     */
-    public getPlayerListBase(): IPlayerObject[] {
-        // We have access to the base Headless API room as it is a protected property
-        // so let's use it to get the base players
-        return this.mRoom.getPlayerList();
-    }
-
-    /**
-     * Similar to above.
-     */
-    public getPlayerBase(id: number): IPlayerObject {
-        return this.mRoom.getPlayer(id);
     }
 }
