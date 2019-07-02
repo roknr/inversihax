@@ -1,0 +1,21 @@
+{
+    "name": "very-simple-inversihax-example-bot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "Main.ts",
+    "scripts": {
+        "build": "browserify src/Main.ts -p [tsify] > dist/bundle.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "browserify": "^16.2.3",
+        "tsify": "^4.0.1",
+        "tslint": "^5.18.0",
+        "typescript": "^3.5.2",
+        "uglify-es": "^3.3.9"
+    },
+    "dependencies": {
+        "inversihax": "^0.1.3"
+    }
+}
