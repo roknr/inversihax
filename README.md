@@ -1,7 +1,7 @@
 # Inversihax
 
 ## About
-Inversihax is a Haxball Headless API framework written in Typescript that simplifies Haxball bot projects development. Instead of working with the base Headless API features and types, Inversihax provides you with its own API, which is easily extendable, configurable and fully supporting dependency injection. The API provides all of the base functionality alongside custom features, such as commands, chat message interceptors, roles and more.
+Inversihax is a [Haxball Headless API](https://github.com/haxball/haxball-issues/wiki/Headless-Host#api) framework written in Typescript that simplifies Haxball bot projects development. Instead of working with the base Headless API features and types, Inversihax provides you with its own API, which is easily extendable, configurable and fully supporting dependency injection. The API provides all of the base functionality alongside custom features, such as commands, chat message interceptors, roles and more.
 
 The primary focus of Inversihax is on inversion of control and dependency injection. To achieve this, the popular [InversifyJS](https://github.com/inversify/InversifyJS) inversion of control container is used to provide dependency injection functionality.
 
@@ -28,7 +28,7 @@ As a prerequisite for being able to build the code, you must allow the use of `e
 For the code to run successfully (not throw a runtime error) you will need to `import "reflect-metadata"` at the very beginning of your code. This is a mandatory import as it is needed for dependency injection to work. Code example of where to include the statement will follow.
 
 ## Getting started
-This "getting started" guide provides a quick overview of the API and simple scenarios. Individual features are further explained in the [documentation](Docs/README.md). The acronym "DI" in later uses refers to "dependency injection".
+This "getting started" guide provides a quick overview of the API and simple scenarios. Individual features are further explained in the [documentation](Docs/README.md) while you can find examples in the [Examples](Docs/Examples) folder. The acronym "DI" in later uses refers to "dependency injection".
 
 ### 1 Creating a room
 Let's look at how to quickly set up a very simple room.
