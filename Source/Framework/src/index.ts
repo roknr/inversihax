@@ -28,10 +28,12 @@ export { CommandOptions } from "./Core/Models/Options/CommandOptions";
 export { EmojiOptions } from "./Core/Models/Options/EmojiOptions";
 //  --Stadium
 export { Background } from "./Core/Models/Stadium/Background";
+export { Color } from "./Core/Models/Stadium/Color";
 export { Disc } from "./Core/Models/Stadium/Disc";
 export { Goal } from "./Core/Models/Stadium/Goal";
-export { BallPhysics, PlayerPhysics } from "./Core/Models/Stadium/Physics";
+export { Joint } from "./Core/Models/Stadium/Joint";
 export { Plane } from "./Core/Models/Stadium/Plane";
+export { PlayerPhysics } from "./Core/Models/Stadium/PlayerPhysics";
 export { Segment } from "./Core/Models/Stadium/Segment";
 export { Stadium } from "./Core/Models/Stadium/Stadium";
 export { Traits, Trait } from "./Core/Models/Stadium/Traits";
@@ -73,8 +75,11 @@ export { PlayerService } from "./Framework/Services/PlayerService";
 import { IRoomConfigObject } from "./HeadlessAPI/Interfaces/IRoomConfigObject";
 import { IRoomObject } from "./HeadlessAPI/Interfaces/IRoomObject";
 // -Enums
+export { CollisionFlag } from "./HeadlessAPI/Enums/CollisionFlag";
 export { TeamID } from "./HeadlessAPI/Enums/TeamID";
 // -Interfaces
+export { ICollisionFlagsObject } from "./HeadlessAPI/Interfaces/ICollisionFlagsObject";
+export { IDiscPropertiesObject } from "./HeadlessAPI/Interfaces/IDiscPropertiesObject";
 export { IGeo } from "./HeadlessAPI/Interfaces/IGeo";
 export { IPlayerObject } from "./HeadlessAPI/Interfaces/IPlayerObject";
 export { IPosition } from "./HeadlessAPI/Interfaces/IPosition";

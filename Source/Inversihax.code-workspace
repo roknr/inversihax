@@ -12,18 +12,32 @@
             "API's",
             "b",
             "coef",
+            "coeff",
             "deserialize",
             "haxball",
             "haxframework",
             "injectable",
             "inversify",
             "inversihax",
+            "kickable",
             "recaptcha",
             "transpiled",
             "tsify",
             "typemoq",
-            "uglifyjs"
+            "uglifyjs",
+            "xgravity",
+            "xspeed",
+            "ygravity",
+            "yspeed"
         ],
-        "typescript.tsdk": "Framework\\node_modules\\typescript\\lib"
+        "typescript.tsdk": "Framework\\node_modules\\typescript\\lib",
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "node_modules/": true
+        }
     }
 }

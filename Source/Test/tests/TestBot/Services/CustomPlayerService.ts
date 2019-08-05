@@ -7,6 +7,10 @@ import { newGuid } from "../Utilities";
 export class CustomPlayerService implements IPlayerService<CustomPlayer> {
 
     public cast(player: IPlayerObject): CustomPlayer {
+        if (player == null) {
+            return null;
+        }
+
         return new CustomPlayer(
             player.id,
             player.name,

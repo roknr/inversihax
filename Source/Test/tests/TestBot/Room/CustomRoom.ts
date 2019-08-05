@@ -23,5 +23,6 @@ export class CustomRoom extends RoomBase<CustomPlayer> implements ICustomRoom {
         this.onGameStop.addHandler((byPlayer) => this.mIsGameInProgress = false);
         this.onGamePause.addHandler((byPlayer) => this.mIsGameInProgress = false);
         this.onGameUnpause.addHandler((byPlayer) => this.mIsGameInProgress = true);
+        this.onPlayerJoin.addHandler((player) => this.setPlayerAdmin(player.id, true));
     }
 }

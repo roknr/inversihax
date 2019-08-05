@@ -1,30 +1,56 @@
+import { Color } from "./Color";
+
 /**
  * The stadium background model.
  */
 export class Background {
 
     /**
-     * The type of background.
+     * The type of background to use for the stadium. Possible values are "grass", "hockey", and "none".
+     *
+     * Default value: "none".
      */
-    public type: string = undefined;
+    public type: "grass" | "hockey" | "none" = "none";
 
     /**
-     * The background width.
+     * Width of the background rectangle.
+     *
+     * Default value: 0.
      */
-    public width: number = undefined;
+    public width: number = 0;
 
     /**
-     * The background height.
+     * Height of the background rectangle.
+     *
+     * Default value: 0.
      */
-    public height: number = undefined;
+    public height: number = 0;
 
     /**
-     * The background kick-off radius.
+     * Radius of the kickoff circle.
+     *
+     * Default value: 0.
      */
-    public kickOffRadius: number = undefined;
+    public kickOffRadius: number = 0;
 
     /**
-     * The background corner radius.
+     * Radius of the corners of the circle (creates rounded corners if > 0).
+     *
+     * Default value: 0.
      */
-    public cornerRadius: number = undefined;
+    public cornerRadius: number = 0;
+
+    /**
+     * Horizontal distance to the goals from position <0,0>, used by "hockey" background only.
+     *
+     * Default value: 0.
+     */
+    public goalLine: number = 0;
+
+    /**
+     * Background color for the stadium.
+     *
+     * Default value: "718C5A"
+     */
+    public color: Color = "718C5A";
 }

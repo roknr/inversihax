@@ -42,4 +42,13 @@ export interface IRoomConfigObject {
      * These tokens will expire after a few minutes.
      */
     token?: string;
+
+    /**
+     * If set to true the room player list will be empty, the playerName setting will be ignored.
+     *
+     * Default value is false for backwards compatibility reasons but it's recommended to set this to true.
+     *
+     * Warning! events will have null as the byPlayer argument when the event is caused by the host, so make sure to check for null values!
+     */
+    noPlayer?: boolean;
 }

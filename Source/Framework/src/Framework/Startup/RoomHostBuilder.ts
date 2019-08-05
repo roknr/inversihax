@@ -183,7 +183,7 @@ export class RoomHostBuilder {
 
         // Go through all the command constructors
         commands.forEach((commandMetadata) => {
-            const commandName = commandMetadata.target.constructor.name;
+            const commandName = commandMetadata.target.name;
 
             // Validate for:
             // - duplicate command-class names (not allowed)

@@ -1,5 +1,7 @@
 /**
  * The stadium vertex model.
+ *
+ * A vertex is a point which can collide with discs but cannot move and is not visible.
  */
 export class Vertex {
 
@@ -19,12 +21,17 @@ export class Vertex {
     public trait: string;
 
     /**
-     * The collision mask - collection of collision layers.
+     * The bouncing coefficient.
+     */
+    public bCoef: number;
+
+    /**
+     * A list of flags that represent this object's collision mask.
      */
     public cMask: string[];
 
     /**
-     * The bouncing coefficient.
+     * A list of flags that represent this object's collision group.
      */
-    public bCoef: number;
+    public cGroup: string[];
 }

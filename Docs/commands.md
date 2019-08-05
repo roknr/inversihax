@@ -208,6 +208,19 @@ const builder = new RoomHostBuilder(Startup, Room, services);
 builder.useCommands().buildAndRun();
 ```
 
+or so:
+
+```ts
+import { RoomHostBuilder } from "inversihax";
+import { Startup } from "./Startup";
+import { Room } from "./Room";
+import { services } from "./Services";
+import "./TestCommand";  // Import-declaration here
+
+const builder = new RoomHostBuilder(Startup, Room, services);
+builder.useCommands().buildAndRun();
+```
+
 This is because your command is not explicitly referenced anywhere. It is discovered, registered to the DI container and used by Inversihax through the decorator. The decorator registers it to the global `Reflect` object and Inversihax reads the command metadata from that object - this is why it has to run (be declared) at the very beginning - so that the decorator can do its job before Inversihax.
 
 ## Using commands

@@ -60,6 +60,16 @@ class TestCommand extends CommandBase<Player> {
     }
 }
 
+// Another test command
+@CommandDecorator({
+    names: ["another"],
+})
+class AnotherTestCommand extends CommandBase<Player> {
+
+    canExecute(player: Player): boolean { return true; }
+    execute(player: Player, args: string[]): void { }
+}
+
 const services = new ContainerModule((bind) => {
     bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({});
     bind<IPlayerService<Player>>(Types.IPlayerService).to(PlayerService).inSingletonScope();

@@ -8,6 +8,7 @@ import { Constants } from "../../Core/Utility/Constants";
 import { TypedEvent } from "../../Core/Utility/TypedEvent";
 import { IChatMessageInterceptorFactoryType } from "../../Core/Utility/Types";
 import { TeamID } from "../../HeadlessAPI/Enums/TeamID";
+import { IDiscPropertiesObject } from "../../HeadlessAPI/Interfaces/IDiscPropertiesObject";
 import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
 import { IPosition } from "../../HeadlessAPI/Interfaces/IPosition";
 import { IRoomConfigObject } from "../../HeadlessAPI/Interfaces/IRoomConfigObject";
@@ -194,6 +195,17 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     public readonly onRoomLink: TypedEvent<(url: string) => void> = new TypedEvent();
 
+    /**
+     * The event that gets raised when the kick rate is set.
+     * @param min The minimum amount of frames between two kicks by the same player. Players wont be able to kick more frequently
+     * than this number of frames.
+     * @param rate The allowed amount of frames between two kicks, but unlike min rate it lets a player save up more kicks and spend
+     * them later all at once depending on the burst value.
+     * @param burst Determines how many extra kicks the player is able to save up.
+     * @param byPlayer The player that changed the kick rate limit.
+     */
+    public readonly onKickRateLimitSet: TypedEvent<(min: number, rate: number, burst: number, byPlayer: TPlayer) => void>;
+
     //#endregion
 
     //#endregion
@@ -240,6 +252,23 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     public sendChat(message: string, targetId?: number): void {
         this.mRoom.sendChat(message, targetId);
+    }
+
+    /**
+     * Sends a host announcement with msg as contents. Unlike sendChat, announcements will work without a host player and has a larger
+     * limit on the number of characters.
+     * @param msg The message content to send.
+     * @param targetId The id of the target to send the announcement to. If null or undefined the message is sent to all players, otherwise
+     * it's sent only to the player with matching targetId.
+     * @param color Will set the color of the announcement text. It's encoded as an integer
+     * (0xFF0000 is red, 0x00FF00 is green, 0x0000FF is blue). If null or undefined the text will use the default chat color.
+     * @param style Will set the style of the announcement text, it must be one of the following strings:
+     * "normal","bold","italic", "small", "small-bold", "small-italic". If null or undefined "normal" style will be used.
+     * @param sound If set to 0 the announcement will produce no sound. If set to 1 the announcement will produce a normal chat sound.
+     * If set to 2 it will produce a notification sound.
+     */
+    public sendAnnouncement(msg: string, targetId?: number, color?: number, style?: string, sound?: number): void {
+        this.mRoom.sendAnnouncement(msg, targetId, color, style, sound);
     }
 
     /**
@@ -369,7 +398,8 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
 
     /**
      * Returns the player with the specified id. Returns null if the player doesn't exist.
-     * @param playerId The id of the player to get. If not specified, returns the room's host player.
+     * @param playerId The id of the player to get. If not specified, returns the room's host player. If room was configured to
+     * use no host player, the return value will be null.
      */
     public getPlayer(playerId: number = Constants.HostPlayerId): TPlayer {
         // Get the base player object, cast it into the correct player type and return it
@@ -381,7 +411,8 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
 
     /**
      * Return the player of the base type with the specified id. Returns null if the player doesn't exist.
-     * @param playerId The id of the player to get. If not specified, returns the room's host player.
+     * @param playerId The id of the player to get. If not specified, returns the room's host player. If room was configured to
+     * use no host player, the return value will be null.
      */
     public getPlayerBase(playerId: number = Constants.HostPlayerId): IPlayerObject {
         return this.mRoom.getPlayer(playerId);
@@ -437,6 +468,94 @@ export abstract class RoomBase<TPlayer extends Player> implements IRoom<TPlayer>
      */
     public stopRecording(): Uint8Array {
         return this.mRoom.stopRecording();
+    }
+
+    /**
+     * Changes the password of the room.
+     * @param pass The password. If null, password will be cleared.
+     */
+    public setPassword(pass: string): void {
+        this.mRoom.setPassword(pass);
+    }
+
+    /**
+     * Overrides the avatar of the target player. If avatar is set to null the override is cleared and the
+     * player will be able to use his own avatar again.
+     */
+    public setPlayerAvatar(playerId: number, avatar: string): void {
+        this.mRoom.setPlayerAvatar(playerId, avatar);
+    }
+
+    /**
+     * Reorders the player list. First all players listed are removed, then they are reinserted in the same order
+     * they appear in the playerIdList.
+     * @param playerIdList The list of players to reorder.
+     * @param moveToTop If true players are inserted at the top of the list, otherwise they are inserted at the bottom of the list.
+     */
+    public reorderPlayers(playerIdList: number[], moveToTop: boolean): void {
+        this.mRoom.reorderPlayers(playerIdList, moveToTop);
+    }
+
+    /**
+     * Gets the number of discs in the game including the ball and player discs.
+     */
+    public getDiscCount(): number {
+        return this.mRoom.getDiscCount();
+    }
+
+    /**
+     * Gets the properties of the disc at discIndex. Returns null if discIndex is out of bounds.
+     * @param discIndex The index of the disc whose properties to get.
+     */
+    public getDiscProperties(discIndex: number): IDiscPropertiesObject {
+        return this.mRoom.getDiscProperties(discIndex);
+    }
+
+    /**
+     * Sets properties of the target disc.
+     *
+     * Properties that are null or undefined will not be set and therefor will preserve whatever value the disc already had.
+     * @param discIndex The index of the target disc.
+     * @param properties The disc properties to set.
+     */
+    public setDiscProperties(discIndex: number, properties: IDiscPropertiesObject): void {
+        this.mRoom.setDiscProperties(discIndex, properties);
+    }
+
+    /**
+     * Gets the properties of the specified player's disc.
+     * @param playerId The id of the player whose disc properties to get.
+     */
+    public getPlayerDiscProperties(playerId: number): IDiscPropertiesObject {
+        return this.mRoom.getPlayerDiscProperties(playerId);
+    }
+
+    /**
+     * Sets properties of the target player's disc.
+     *
+     * Properties that are null or undefined will not be set and therefor will preserve whatever value the disc already had.
+     * @param playerId The id of the player whose disc properties to set.
+     * @param properties The disc properties to set.
+     */
+    public setPlayerDiscProperties(playerId: number, properties: IDiscPropertiesObject): void {
+        this.mRoom.setPlayerDiscProperties(playerId, properties);
+    }
+
+    /**
+     * Sets the room's kick rate limits.
+     * @param min The minimum amount of frames between two kicks by the same player. Players wont be able to kick more frequently
+     * than this number of frames. Default is 2.
+     * @param rate The allowed amount of frames between two kicks, but unlike min rate it lets a player save up more kicks and spend
+     * them later all at once depending on the burst value. Default is 0.
+     * @param burst Determines how many extra kicks the player is able to save up. Default is 0.
+     *
+     * Example for setting values to min = 2, rate = 15 and burst = 3:
+     *
+     * If a player spams kick he'll kick every 2 frames for the first 4 kicks and after that he'll be limited to one kick every 15
+     * frames (which is 4 kicks per second). If the player doesn't kick for 1 second he'll save enough for another burst of 4 kicks.
+     */
+    public setKickRateLimit(min?: number, rate?: number, burst?: number): void {
+        this.mRoom.setKickRateLimit(min, rate, burst);
     }
 
     //#endregion
@@ -585,6 +704,16 @@ export class CustomRoom extends RoomBase<Player> {
             const typedByPlayer = this.mPlayerService.cast(byPlayer);
 
             this.onStadiumChange.invoke([newStadiumName, typedByPlayer]);
+        };
+
+        this.mRoom.onRoomLink = (url) => {
+            this.onRoomLink.invoke([url]);
+        };
+
+        this.mRoom.onKickRateLimitSet = (min, rate, burst, byPlayer) => {
+            const typedByPlayer = this.mPlayerService.cast(byPlayer);
+
+            this.onKickRateLimitSet.invoke([min, rate, burst, typedByPlayer]);
         };
     }
 

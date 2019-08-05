@@ -8,12 +8,14 @@ import { CustomPlayerService } from "./Services/CustomPlayerService";
 import { Startup } from "./Startup";
 import { InfoBackgroundTask } from "./BackgroundTasks/InfoBackgroundTask";
 import { ExecuteCommandInterceptor } from "./Interceptors/ExecuteCommandInterceptor";
+import { PhysicsCommand } from "./Commands/PhysicsCommand";
 import { InfoCommand } from "./Commands/InfoCommand";
 // tslint:enable
 
 // List of all commands, must be here because using browserify to bundle everything for the browser and it needs the commands
 // to be referenced at the very beginning in order for the command decorator to be able to apply the metadata to them
 // TODO: maybe find a better way of bundling everything up for the browser, however, this is up to the user of the framework...
+PhysicsCommand;
 InfoCommand;
 
 const services = new ContainerModule((bind) => {
@@ -22,6 +24,7 @@ const services = new ContainerModule((bind) => {
             playerName: "Host",
             roomName: "Test room",
             public: false,
+            noPlayer: true,
         });
 
     bind<IPlayerService<CustomPlayer>>(Types.IPlayerService)

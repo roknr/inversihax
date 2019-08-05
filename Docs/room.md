@@ -157,3 +157,40 @@ export class StatsCommand extends CommandBase<Player> {
 ```
 
 In this example, we allow command execution only in the case when the game is not in progress, which we read from our room's custom property. As you can see, this makes it possible to access properties of your custom room. This would not be possible in case you were to inject an `IRoom<Player>` instead, as the custom property doesn't exist on it.
+
+### Collision flags
+The Haxball Headless API provides a property on the `IRoomObject` called `CollisionFlags` of type `ICollisionFlagsObject`. Inversihax's `IRoom` ignores this property and provides the `CollisionFlag` enum instead. The following table shows the comparison between the Inversihax enum and the original Headless API `CollisionFlags` object's properties, alongside their values.
+
+| Inversihax `CollisionFlag` enum | Headless API `CollisionFlags` object property | Value       |
+| ------------------------------- | --------------------------------------------- | ----------- |
+| `CollisionFlag.ball`            | `room.CollisionFlags.ball`                    | 1           |
+| `CollisionFlag.red`             | `room.CollisionFlags.red`                     | 2           |
+| `CollisionFlag.blue`            | `room.CollisionFlags.blue`                    | 4           |
+| `CollisionFlag.redKO`           | `room.CollisionFlags.redKO`                   | 8           |
+| `CollisionFlag.blueKO`          | `room.CollisionFlags.blueKO`                  | 16          |
+| `CollisionFlag.wall`            | `room.CollisionFlags.wall`                    | 32          |
+| `CollisionFlag.all`             | `room.CollisionFlags.all`                     | 63          |
+| `CollisionFlag.kick`            | `room.CollisionFlags.kick`                    | 64          |
+| `CollisionFlag.score`           | `room.CollisionFlags.score`                   | 128         |
+| `CollisionFlag.c0`              | `room.CollisionFlags.c0`                      | 268435456   |
+| `CollisionFlag.c1`              | `room.CollisionFlags.c1`                      | 536870912   |
+| `CollisionFlag.c2`              | `room.CollisionFlags.c2`                      | 107374182   |
+| `CollisionFlag.c3`              | `room.CollisionFlags.c3`                      | -2147483648 |
+
+The following Headless API example (taken from [here](https://github.com/haxball/haxball-issues/wiki/Headless-Host#collisionflags)):
+
+```js
+// Check if disc 4 belongs to collision group "ball":
+var discProps = room.getDiscProperties(4);
+var hasBallFlag = (discProps.cGroup & room.CollisionFlags.ball) != 0;
+```
+
+is equivalent written with the `CollisionFlag` enum like so:
+
+```ts
+import { CollisionGroup } from "Inversihax";
+
+// Check if disc 4 belongs to collision group "ball":
+var discProps = room.getDiscProperties(4);
+var hasBallFlag = (discProps.cGroup & CollisionFlag.ball) != 0;
+```

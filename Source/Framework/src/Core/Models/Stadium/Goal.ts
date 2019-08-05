@@ -4,17 +4,19 @@
 export class Goal {
 
     /**
-     * The first point of the goal. An array of two numbers that represent coordinates.
+     * The coordinates of the fist point of the line in an array form [x, y].
      */
-    public point1: number[] = undefined;
+    public p0: number[];
 
     /**
-     * The second point of the goal. An array of two numbers that represent coordinates.
+     * The coordinates of the second point of the line in an array form [x, y].
      */
-    public point2: number[] = undefined;
+    public p1: number[];
 
     /**
-     * The team whose goal this is.
+     * The team the goal belongs to.
+     *
+     * Possible values: "red" or "blue".
      */
-    public team: "red" | "blue" = undefined;
+    public team: "red" | "blue";
 }
