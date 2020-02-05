@@ -1,5 +1,10 @@
 # Inversihax changelog
 
+## 5/2/2020
+Version 1.1.1
+- Fixed bug that removed a command parameter every time when accessing `chatMessage.commandParameters`
+- Added missing *lodash* dependency
+
 ## 5/8/2019
 Version 1.1.0:
 - Fixed bug with using multiple commands (error: *`Duplicate command 'Function'. Commands must not have duplicate names (class names).`*)
