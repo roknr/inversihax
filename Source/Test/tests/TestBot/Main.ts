@@ -24,7 +24,7 @@ const services = new ContainerModule((bind) => {
             playerName: "Host",
             roomName: "Test room",
             public: false,
-            noPlayer: true,
+            noPlayer: false,
         });
 
     bind<IPlayerService<CustomPlayer>>(Types.IPlayerService)

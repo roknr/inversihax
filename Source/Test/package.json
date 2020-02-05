@@ -21,8 +21,10 @@
         "uglify-es": "^3.3.9"
     },
     "dependencies": {
+        "@types/lodash": "^4.14.149",
         "inversify": "^5.0.1",
         "inversihax": "file:../Framework",
+        "lodash": "^4.17.15",
         "reflect-metadata": "^0.1.13"
     }
 }

@@ -20,6 +20,12 @@ export class ChatMessage<TPlayer extends Player> {
      */
     private mWords: string[];
 
+    /**
+     * The extracted command arguments from the sent message - basically the message as words excluding the first word, which denotes the
+     * command name. Undefined if the message does not represent a command invocation.
+     */
+    private mCommandParameters: string[] = null;
+
     //#endregion
 
     //#region Protected members
@@ -112,14 +118,21 @@ export class ChatMessage<TPlayer extends Player> {
             return undefined;
         }
 
-        // Otherwise get the message as words
-        const commandArguments = this.words;
+        // If command arguments were already accessed, return them
+        if (this.mCommandParameters != null) {
+            return this.mCommandParameters;
+        }
+
+        // Otherwise get the message as words (slice to make a copy)
+        const commandArguments = this.words.slice();
 
         // Remove the first word which represents the command name by shifting the words array
         commandArguments.shift();
 
-        // The remaining words are command arguments, so return them
-        return commandArguments;
+        // The remaining words are command arguments, so set and return them
+        this.mCommandParameters = commandArguments;
+
+        return this.mCommandParameters;
     }
 
     //#endregion
