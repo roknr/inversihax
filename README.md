@@ -323,7 +323,7 @@ const services = new ContainerModule((bind) => {
 Recommended scope is singleton, as you can later access the object and stop the task.
 
 ---
-This was a quick overview of the Inversihax framework and its features. For more information take a look at [the documentation](Docs/README.md);
+This was a quick overview of the Inversihax framework and its features. For more information take a look at [the documentation](Docs/README.md).
 
 ## Contributions
 Feel free to contribute by making your own enhancements through pull requests or creating new feature request and suggestions in the issues section.

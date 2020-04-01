@@ -16,10 +16,10 @@ To use roles you must create a class that inherits from the `Role` class, as it 
 import { Role } from "inversihax";
 
 export class CustomRole extends Role {
-    public static readonly Player = new MyRole(1, "player", 10);
-    public static readonly Admin = new MyRole(2, "admin", 50);
-    public static readonly SuperAdmin = new MyRole(3, "super-admin", 90);
-    public static readonly Owner = new MyRole(4, "owner", 100);
+    public static readonly Player = new CustomRole(1, "player", 10);
+    public static readonly Admin = new CustomRole(2, "admin", 50);
+    public static readonly SuperAdmin = new CustomRole(3, "super-admin", 90);
+    public static readonly Owner = new CustomRole(4, "owner", 100);
 
     public readonly weight: number;
 
@@ -103,7 +103,7 @@ import { Room } from "./Room";
 import { CustomPlayerService } from "./CustomPlayerService";
 
 const services = new ContainerModule((bind) => {
-    bind<IPlayerService>(Types.IPlayerService)
+    bind<IPlayerService<Player>>(Types.IPlayerService)
         .to(CustomPlayerService)
         .inSingletonScope();
 });
