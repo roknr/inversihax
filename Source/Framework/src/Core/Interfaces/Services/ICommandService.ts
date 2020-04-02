@@ -1,4 +1,3 @@
-import { Player } from "../../Models/Player";
 import { ICommand } from "../Commands/ICommand";
 
 /**
@@ -18,5 +17,5 @@ export interface ICommandService {
      * Gets a command by name. Returns undefined if command for the name does not exist.
      * @param name The name of the command to get.
      */
-    getCommandByName(name: string): ICommand<Player>;
+    getCommandByName(name: string): ICommand;
 }

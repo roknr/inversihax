@@ -1,7 +1,6 @@
 import { ICommand } from "../Interfaces/Commands/ICommand";
 import { IChatMessageInterceptor } from "../Interfaces/Interceptors/IChatMessageInterceptor";
 import { ChatMessage } from "../Models/ChatMessage";
-import { Player } from "../Models/Player";
 
 /**
  * The symbols that identify the corresponding objects (classes, interfaces etc.).
@@ -18,7 +17,7 @@ export const Types = {
 
     // Services
     IEmojiService: Symbol.for("IEmojiService"),
-    IPlayerService: Symbol.for("IPlayerService"),
+    IPlayerMetadataService: Symbol.for("IPlayerMetadataService"),
     ICommandService: Symbol.for("ICommandService"),
 
     // Options
@@ -32,7 +31,7 @@ export const Types = {
 
 /**
  * The type shorthand that represents a constructor.
- * @type The type we want to work with.
+ * @type {T} The type we want to work with.
  */
 export type ConstructorType<T> = { new(...args: any[]): T };
 
@@ -41,11 +40,11 @@ export type ConstructorType<T> = { new(...args: any[]): T };
 /**
  * The IChatMessageInterceptor factory type. Instantiates all registered IChatMessage interceptors.
  */
-export type IChatMessageInterceptorFactoryType = () => Array<IChatMessageInterceptor<ChatMessage<Player>>>;
+export type IChatMessageInterceptorFactoryType = () => Array<IChatMessageInterceptor<ChatMessage>>;
 
 /**
  * The ICommand factory type. Instantiates a command based on the specified name.
  */
-export type ICommandFactoryType = (commandName: string) => ICommand<Player>;
+export type ICommandFactoryType = (commandName: string) => ICommand;
 
 //#endregion

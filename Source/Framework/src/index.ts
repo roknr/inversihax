@@ -18,10 +18,10 @@ export { IStadiumParser } from "./Core/Interfaces/Parsers/IStadiumParser";
 //  --Services
 export { ICommandService } from "./Core/Interfaces/Services/ICommandService";
 export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
-export { IPlayerService } from "./Core/Interfaces/Services/IPlayerService";
+export { IPlayerMetadataService } from "./Core/Interfaces/Services/IPlayerMetadataService";
 // -Models
 export { ChatMessage } from "./Core/Models/ChatMessage";
-export { Player } from "./Core/Models/Player";
+export { PlayerMetadata } from "./Core/Models/PlayerMetadata";
 export { Role } from "./Core/Models/Role";
 //  --Options
 export { CommandOptions } from "./Core/Models/Options/CommandOptions";
@@ -67,7 +67,7 @@ export { RoomBase } from "./Framework/Room/RoomBase";
 // -Services
 export { CommandService } from "./Framework/Services/CommandService";
 export { EmojiService } from "./Framework/Services/EmojiService";
-export { PlayerService } from "./Framework/Services/PlayerService";
+export { PlayerMetadataService } from "./Framework/Services/PlayerMetadataService";
 
 // ----------------
 // - HEADLESS API -

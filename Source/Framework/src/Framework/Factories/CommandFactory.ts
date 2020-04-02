@@ -1,6 +1,5 @@
 import { interfaces } from "inversify";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
-import { Player } from "../../Core/Models/Player";
 import { ICommandFactoryType, Types } from "../../Core/Utility/Types";
 
 /**
@@ -17,7 +16,7 @@ export function createCommandFactory(context: interfaces.Context): ICommandFacto
         // Otherwise create the command from the context's container and return it
         const command = context
             .container
-            .getNamed<ICommand<Player>>(Types.ICommand, commandName);
+            .getNamed<ICommand>(Types.ICommand, commandName);
 
         return command;
     };

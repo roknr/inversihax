@@ -5,10 +5,9 @@ import { IRoom } from "../../Core/Interfaces/IRoom";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
 import { IChatMessageParser } from "../../Core/Interfaces/Parsers/IChatMessageParser";
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
-import { IPlayerService } from "../../Core/Interfaces/Services/IPlayerService";
+import { IPlayerMetadataService } from "../../Core/Interfaces/Services/IPlayerMetadataService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { CommandOptions } from "../../Core/Models/Options/CommandOptions";
-import { Player } from "../../Core/Models/Player";
 import { Constants, Errors } from "../../Core/Utility/Constants";
 import { DecoratorsHelper } from "../../Core/Utility/Helpers/DecoratorsHelper";
 import { ConstructorType, Types } from "../../Core/Utility/Types";
@@ -18,7 +17,7 @@ import { createCommandFactory } from "../Factories/CommandFactory";
 import { CommandInterceptor } from "../Interceptors/CommandInterceptor";
 import { ChatMessageParser } from "../Parsers/ChatMessageParser";
 import { CommandService } from "../Services/CommandService";
-import { PlayerService } from "../Services/PlayerService";
+import { PlayerMetadataService } from "../Services/PlayerMetadataService";
 import { StartupBase } from "./StartupBase";
 
 /**
@@ -36,7 +35,7 @@ export class RoomHostBuilder {
     /**
      * The room class type.
      */
-    private readonly mRoomType: ConstructorType<IRoom<Player>>;
+    private readonly mRoomType: ConstructorType<IRoom>;
 
     /**
      * The user's container module that contains service configuration bindings.
@@ -64,7 +63,7 @@ export class RoomHostBuilder {
      */
     public constructor(
         startupType: ConstructorType<StartupBase>,
-        roomType: ConstructorType<IRoom<Player>>,
+        roomType: ConstructorType<IRoom>,
         servicesModule: ContainerModule,
     ) {
         this.mStartupType = startupType;
@@ -112,7 +111,7 @@ export class RoomHostBuilder {
 
         // And the command interceptor
         this.container
-            .bind<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor)
+            .bind<IChatMessageInterceptor<ChatMessage>>(Types.IChatMessageInterceptor)
             .to(CommandInterceptor)
             .inRequestScope();
 
@@ -238,7 +237,7 @@ export class RoomHostBuilder {
             .bind<StartupBase>(Types.Startup)
             .to(this.mStartupType);
         this.container
-            .bind<IRoom<Player>>(Types.IRoom)
+            .bind<IRoom>(Types.IRoom)
             .to(this.mRoomType)
             .inSingletonScope();
 
@@ -251,11 +250,11 @@ export class RoomHostBuilder {
      * bound by the user but are needed.
      */
     private bindAfterUserServices(): void {
-        // PlayerService is needed in the Room, so bind it to the framework's default one if user did not
-        if (!this.container.isBound(Types.IPlayerService)) {
+        // PlayerMetadataService is needed in the Room, so bind it to the framework's default one if user did not
+        if (!this.container.isBound(Types.IPlayerMetadataService)) {
             this.container
-                .bind<IPlayerService<Player>>(Types.IPlayerService)
-                .to(PlayerService)
+                .bind<IPlayerMetadataService>(Types.IPlayerMetadataService)
+                .to(PlayerMetadataService)
                 .inSingletonScope();
         }
 
@@ -275,7 +274,7 @@ export class RoomHostBuilder {
      */
     private bindChatMessageInterceptorFactory(): void {
         this.container
-            .bind<interfaces.Factory<Array<IChatMessageInterceptor<ChatMessage<Player>>>>>(Types.IChatMessageInterceptorFactory)
+            .bind<interfaces.Factory<Array<IChatMessageInterceptor<ChatMessage>>>>(Types.IChatMessageInterceptorFactory)
             .toFactory((context: interfaces.Context) => {
                 return createChatMessageInterceptorFactory(context);
             });
@@ -286,7 +285,7 @@ export class RoomHostBuilder {
      */
     private bindCommandFactory(): void {
         this.container
-            .bind<interfaces.Factory<ICommand<Player>>>(Types.ICommandFactory)
+            .bind<interfaces.Factory<ICommand>>(Types.ICommandFactory)
             .toFactory((context: interfaces.Context) => {
                 return createCommandFactory(context);
             });

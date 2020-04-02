@@ -1,6 +1,5 @@
 import { injectable } from "inversify";
 import { IRoom } from "../../Core/Interfaces/IRoom";
-import { Player } from "../../Core/Models/Player";
 
 /**
  * The base startup class. Derive from this class to inject any dependencies, configured in the RoomHostBuilder
@@ -8,7 +7,9 @@ import { Player } from "../../Core/Models/Player";
  *
  * Inject needed dependencies through the constructor and configure the room in the configure method.
  *
- * NOTE: you must inject the IRoom<TPlayer> class to the derived class and pass it manually to the base's constructor.
+ * Is injectable.
+ *
+ * NOTE: you must inject the IRoom class to the derived class and pass it manually to the base's constructor.
  */
 @injectable()
 export abstract class StartupBase {
@@ -18,7 +19,7 @@ export abstract class StartupBase {
     /**
      * The room.
      */
-    protected readonly mRoom: IRoom<Player>;
+    protected readonly mRoom: IRoom;
 
     //#endregion
 
@@ -28,7 +29,7 @@ export abstract class StartupBase {
      * Initializes a new instance of the StartupBase class.
      * @param room The room.
      */
-    public constructor(room: IRoom<Player>) {
+    public constructor(room: IRoom) {
         this.mRoom = room;
     }
 

@@ -2,7 +2,6 @@ import { inject, injectable } from "inversify";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { CommandOptions } from "../../Core/Models/Options/CommandOptions";
-import { Player } from "../../Core/Models/Player";
 import { ICommandFactoryType, Types } from "../../Core/Utility/Types";
 
 /**
@@ -32,7 +31,7 @@ export class CommandService implements ICommandService {
     /**
      * Initializes a new instance of the CommandService class.
      * @param options The command options.
-     * @param container The dependency injection container.
+     * @param commandFactory The command factory.
      */
     public constructor(
         @inject(Types.CommandOptions) options: CommandOptions,
@@ -66,7 +65,7 @@ export class CommandService implements ICommandService {
      * Gets a command by name (ignores the command prefix if it's in the name). Returns undefined if command for the name does not exist.
      * @param name The name of the command to get.
      */
-    public getCommandByName(name: string): ICommand<Player> {
+    public getCommandByName(name: string): ICommand {
         // Check if the name includes the command prefix, in which case remove it
         if (name.startsWith(this.options.prefix)) {
             name = name.substr(this.options.prefix.length, name.length);

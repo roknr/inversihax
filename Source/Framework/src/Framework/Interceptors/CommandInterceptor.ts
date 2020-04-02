@@ -2,14 +2,13 @@ import { inject, injectable } from "inversify";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
-import { Player } from "../../Core/Models/Player";
 import { Types } from "../../Core/Utility/Types";
 
 /**
  * The command chat message interceptor that always gets invoked and sets up the chat message's command.
  */
 @injectable()
-export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage<Player>> {
+export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage> {
 
     /**
      * The room's command service.
@@ -30,7 +29,7 @@ export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage<P
      * Intercepts and sets the chat message properties based on the RoomHostBuilder configuration.
      * @param message The chat message being sent.
      */
-    public intercept(message: ChatMessage<Player>): boolean {
+    public intercept(message: ChatMessage): boolean {
         // Handle command data
         this.setCommand(message);
 
@@ -42,7 +41,7 @@ export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage<P
      * Sets the command data for the message.
      * @param message The chat message being sent.
      */
-    private setCommand(message: ChatMessage<Player>): void {
+    private setCommand(message: ChatMessage): void {
         // If the message does not represent a command (check by checking the first word of the message), do nothing
         if (!this.mCommandService.isCommand(message.words[0])) {
             return;

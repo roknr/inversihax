@@ -3,14 +3,12 @@ import { IDiscPropertiesObject } from "../../HeadlessAPI/Interfaces/IDiscPropert
 import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
 import { IPosition } from "../../HeadlessAPI/Interfaces/IPosition";
 import { IScoresObject } from "../../HeadlessAPI/Interfaces/IScoresObject";
-import { Player } from "../Models/Player";
 import { TypedEvent } from "../Utility/TypedEvent";
 
 /**
  * Defines the room abstraction functionality.
- * @type {TPlayer} The type of player to use with the room.
  */
-export interface IRoom<TPlayer extends Player> {
+export interface IRoom {
 
     //#region Members
 
@@ -26,7 +24,7 @@ export interface IRoom<TPlayer extends Player> {
      * The event that gets fired when a player leaves the room.
      * @param player The player that left.
      */
-    readonly onPlayerLeave: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerLeave: TypedEvent<(player: IPlayerObject) => void>;
 
     /**
      * The event that gets fired when a team wins.
@@ -42,13 +40,13 @@ export interface IRoom<TPlayer extends Player> {
      * @param player The player that sent the message.
      * @param message The message.
      */
-    readonly onPlayerChat: (player: TPlayer, message: string) => boolean;
+    readonly onPlayerChat: (player: IPlayerObject, message: string) => boolean;
 
     /**
      * The event that gets fired when a player kicks the ball.
      * @param player The player that kicked the ball.
      */
-    readonly onPlayerBallKick: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerBallKick: TypedEvent<(player: IPlayerObject) => void>;
 
     /**
      * The event that gets fired when a team scores a goal.
@@ -60,27 +58,27 @@ export interface IRoom<TPlayer extends Player> {
      * The event that gets fired when the game is started.
      * @param byPlayer The player that started the game (can be null if the event wasn't caused by a player).
      */
-    readonly onGameStart: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGameStart: TypedEvent<(byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets fired when the game is stopped.
      * @param byPlayer The player that stopped the game (can be null if the event wasn't caused by a player).
      */
-    readonly onGameStop: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGameStop: TypedEvent<(byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets fired when the player's admin rights change.
      * @param changedPlayer The player whose rights changed.
      * @param byPlayer The player who changed the rights (can be null if the event wasn't caused by a player).
      */
-    readonly onPlayerAdminChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
+    readonly onPlayerAdminChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets fired when the player is moved to a different team.
      * @param changedPlayer The player whose team changed.
      * @param byPlayer The player who changed the other player's team (can be null if the event wasn't caused by a player).
      */
-    readonly onPlayerTeamChange: TypedEvent<(changedPlayer: TPlayer, byPlayer: TPlayer) => void>;
+    readonly onPlayerTeamChange: TypedEvent<(changedPlayer: IPlayerObject, byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets raised when a player is kicked or banned. This is always called after the onPlayerLeave event.
@@ -89,7 +87,7 @@ export interface IRoom<TPlayer extends Player> {
      * @param ban True if it was a ban, false if it was a kick.
      * @param byPlayer The player that kicked/banned the other player (can be null if the event wasn't caused by a player).
      */
-    readonly onPlayerKicked: TypedEvent<(kickedPlayer: TPlayer, reason: string, ban: boolean, byPlayer: TPlayer) => void>;
+    readonly onPlayerKicked: TypedEvent<(kickedPlayer: IPlayerObject, reason: string, ban: boolean, byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets raised once for every game tick (happens 60 times per second).
@@ -102,7 +100,7 @@ export interface IRoom<TPlayer extends Player> {
      * The event that gets raised when the game is paused.
      * @param byPlayer The player that paused the game.
      */
-    readonly onGamePause: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGamePause: TypedEvent<(byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets raised when the game is paused.
@@ -111,7 +109,7 @@ export interface IRoom<TPlayer extends Player> {
      * to detect when the game has really resumed you can listen for the first onGameTick event after this event is called.
      * @param byPlayer The player that un-paused the game.
      */
-    readonly onGameUnpause: TypedEvent<(byPlayer: TPlayer) => void>;
+    readonly onGameUnpause: TypedEvent<(byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets raised when the players and ball positions are reset after a goal happens.
@@ -122,14 +120,14 @@ export interface IRoom<TPlayer extends Player> {
      * The event that gets raised when a player provides an activity, such as key press.
      * @param player The player that gave the activity.
      */
-    readonly onPlayerActivity: TypedEvent<(player: TPlayer) => void>;
+    readonly onPlayerActivity: TypedEvent<(player: IPlayerObject) => void>;
 
     /**
      * The event that gets raised when a player changes the stadium.
      * @param newStadiumName The new stadium name.
      * @param byPlayer The player that changed the stadium.
      */
-    readonly onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: TPlayer) => void>;
+    readonly onStadiumChange: TypedEvent<(newStadiumName: string, byPlayer: IPlayerObject) => void>;
 
     /**
      * The event that gets raised when the room link is obtained.
@@ -146,7 +144,7 @@ export interface IRoom<TPlayer extends Player> {
      * @param burst Determines how many extra kicks the player is able to save up.
      * @param byPlayer The player that changed the kick rate limit.
      */
-    readonly onKickRateLimitSet: TypedEvent<(min: number, rate: number, burst: number, byPlayer: TPlayer) => void>;
+    readonly onKickRateLimitSet: TypedEvent<(min: number, rate: number, burst: number, byPlayer: IPlayerObject) => void>;
 
     //#endregion
 
@@ -276,23 +274,12 @@ export interface IRoom<TPlayer extends Player> {
      * Returns the player with the specified id. Returns null if the player doesn't exist.
      * @param playerId The id of the player to get. If not specified, returns the room's host player.
      */
-    getPlayer(playerId?: number): TPlayer;
-
-    /**
-     * Return the player of the base type with the specified id. Returns null if the player doesn't exist.
-     * @param playerId The id of the player to get. If not specified, returns the room's host player.
-     */
-    getPlayerBase(playerId?: number): IPlayerObject;
+    getPlayer(playerId?: number): IPlayerObject;
 
     /**
      * Returns the current list of players.
      */
-    getPlayerList(): TPlayer[];
-
-    /**
-     * Returns the current list of players of the base type.
-     */
-    getPlayerListBase(): IPlayerObject[];
+    getPlayerList(): IPlayerObject[];
 
     /**
      * If a game is in progress it returns the current score information, otherwise it returns null.

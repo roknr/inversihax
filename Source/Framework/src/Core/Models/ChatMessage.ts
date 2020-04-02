@@ -1,12 +1,10 @@
+import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
 import { ICommand } from "../Interfaces/Commands/ICommand";
-import { Player } from "./Player";
 
 /**
  * The chat message that encapsulates the actual message and the player that sent it, alongside other information.
- *
- * @type {TPlayer} The type of player sending and receiving the message.
  */
-export class ChatMessage<TPlayer extends Player> {
+export class ChatMessage {
 
     //#region Private members
 
@@ -74,19 +72,19 @@ export class ChatMessage<TPlayer extends Player> {
     /**
      * The player that sent the message.
      */
-    public readonly sentBy: TPlayer = null;
+    public readonly sentBy: IPlayerObject = null;
 
     /**
      * The player to which to send the message as a personal message. The value will by default be equal to the player that the personal
      * message is meant for, if personal messages have been configured in the RoomHostBuilder, undefined otherwise.
      */
-    public sentTo: TPlayer = undefined;
+    public sentTo: IPlayerObject = undefined;
 
     /**
      * The command for this message. Will be set if the room was configured to use commands and the message represents a command invocation,
      * undefined otherwise.
      */
-    public command: ICommand<TPlayer> = undefined;
+    public command: ICommand = undefined;
 
     /**
      * Flag indicating whether this message represents a command invocation.
@@ -145,7 +143,7 @@ export class ChatMessage<TPlayer extends Player> {
      * @param message The actual message.
      * @param words The message represented as words.
      */
-    public constructor(sentBy: TPlayer, message: string, words: string[] = null) {
+    public constructor(sentBy: IPlayerObject, message: string, words: string[] = null) {
         this.sentBy = sentBy;
         this.message = message;
 

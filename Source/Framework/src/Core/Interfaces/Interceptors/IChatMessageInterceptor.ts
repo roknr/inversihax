@@ -1,12 +1,11 @@
 import { ChatMessage } from "../../Models/ChatMessage";
-import { Player } from "../../Models/Player";
 
 /**
  * Intercepts and handles chat messages.
  *
  * @type {TChatMessage} The type of chat messages to intercept.
  */
-export interface IChatMessageInterceptor<TChatMessage extends ChatMessage<Player>> {
+export interface IChatMessageInterceptor<TChatMessage extends ChatMessage> {
 
     /**
      * Intercepts and handles the sent chat message. Returns true to indicate that the next interceptor should be invoked or false to
