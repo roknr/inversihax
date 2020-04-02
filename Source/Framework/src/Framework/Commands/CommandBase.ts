@@ -86,7 +86,7 @@ export abstract class CommandBase<
                 return true;
             }
 
-            role = iterator.next().value;
+            role = <TRole>iterator.next().value;
         }
 
         return false;
