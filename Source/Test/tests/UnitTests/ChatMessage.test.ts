@@ -1,10 +1,11 @@
 import { expect } from "chai";
-import { ChatMessage, Player } from "inversihax";
+import { ChatMessage, IPlayerObject } from "inversihax";
 import "mocha";
 
 describe("ChatMessage", function () {
     it("Should correctly set initial property values on construction", function () {
-        const player = new Player(null, null, null, null, null, null, null);
+        const player = <IPlayerObject>
+            { "admin": null, "auth": null, "conn": null, "id": null, "name": null, "position": null, "team": null };
         const message = "This is a test message";
 
         const chatMessage = new ChatMessage(player, message);
@@ -23,7 +24,8 @@ describe("ChatMessage", function () {
     it("Should be able to modify the message", function () {
         const orgMessage = "This is a test message.";
         const newMessage = "This is a new modified message";
-        const player = new Player(1, "TestPlayer", null, true, null, null, null);
+        const player = <IPlayerObject>
+            { "admin": null, "auth": null, "conn": null, "id": 1, "name": "TestPlayer", "position": null, "team": null };
 
         const chatMessage = new ChatMessage(player, orgMessage);
         expect(chatMessage.message).to.equal(orgMessage);

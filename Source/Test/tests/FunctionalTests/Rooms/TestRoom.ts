@@ -2,19 +2,18 @@ import { inject } from "inversify";
 import {
     IChatMessageInterceptorFactoryType,
     IChatMessageParser,
-    IPlayerService,
+    IPlayerMetadataService,
     IRoomConfigObject,
     IRoomObject,
-    Player,
     RoomBase,
     Types,
 } from "inversihax";
 
-export class TestRoom extends RoomBase<Player> {
+export class TestRoom extends RoomBase {
 
     public constructor(
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
-        @inject(Types.IPlayerService) PlayerService: IPlayerService<Player>,
+        @inject(Types.IPlayerMetadataService) PlayerService: IPlayerMetadataService,
         @inject(Types.IChatMessageInterceptorFactory) chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
         @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
     ) {

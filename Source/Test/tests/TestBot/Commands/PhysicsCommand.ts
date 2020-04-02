@@ -1,28 +1,28 @@
 import { inject } from "inversify";
-import { CommandBase, CommandDecorator, IDiscPropertiesObject, Types } from "inversihax";
-import { CustomPlayer } from "../Models/CustomPlayer";
+import { CommandBase, CommandDecorator, IDiscPropertiesObject, IPlayerMetadataService, IPlayerObject, Types } from "inversihax";
 import { ICustomRoom } from "../Room/ICustomRoom";
 
 @CommandDecorator({
     names: ["p"],
 })
-export class PhysicsCommand extends CommandBase<CustomPlayer> {
+export class PhysicsCommand extends CommandBase {
 
     private readonly mRoom: ICustomRoom;
 
     public constructor(
         @inject(Types.IRoom) room: ICustomRoom,
+        @inject(Types.IPlayerMetadataService) playerMetadataService: IPlayerMetadataService,
     ) {
-        super();
+        super(playerMetadataService);
 
         this.mRoom = room;
     }
 
-    public canExecute(player: CustomPlayer): boolean {
+    public canExecute(player: IPlayerObject): boolean {
         return true;
     }
 
-    public execute(player: CustomPlayer, args: string[]): void {
+    public execute(player: IPlayerObject, args: string[]): void {
         let increase: boolean;
         if (args[0] === "+") {
             increase = true;

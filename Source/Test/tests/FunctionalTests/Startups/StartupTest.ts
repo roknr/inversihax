@@ -1,5 +1,5 @@
 import { inject } from "inversify";
-import { Player, StartupBase, Types } from "inversihax";
+import { IPlayerObject, StartupBase, Types } from "inversihax";
 import { ICustomTestRoom } from "../Rooms/CustomTestRoom";
 
 export class StartupTest extends StartupBase {
@@ -12,7 +12,7 @@ export class StartupTest extends StartupBase {
 
     configure(): void {
         // Cast to any to be able to mock the method, only for testing
-        (this.mRoom.onPlayerChat as any) = (player: Player, message: string) => {
+        (this.mRoom.onPlayerChat as any) = (player: IPlayerObject, message: string) => {
             if (player.id === 3) {
                 return true;
             }

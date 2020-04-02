@@ -1,18 +1,18 @@
 import { inject } from "inversify";
-import { IChatMessageParser, IPlayerService, IRoom, IRoomConfigObject, IRoomObject, Player, RoomBase, Types } from "inversihax";
+import { IChatMessageParser, IPlayerMetadataService, IRoom, IRoomConfigObject, IRoomObject, RoomBase, Types } from "inversihax";
 import { IChatMessageInterceptorFactoryType } from "inversihax/lib/Core/Utility/Types";
 
 /**
  * Custom IRoom interface.
  */
-export interface ICustomTestRoom extends IRoom<Player> {
+export interface ICustomTestRoom extends IRoom {
     isGameInProgress: boolean;
 }
 
 /**
  * Custom room that implements a custom IRoom interface.
  */
-export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom {
+export class CustomTestRoom extends RoomBase implements ICustomTestRoom {
 
     private mIsGameInProgress: boolean = false;
 
@@ -22,7 +22,7 @@ export class CustomTestRoom extends RoomBase<Player> implements ICustomTestRoom 
 
     public constructor(
         @inject(Types.IRoomConfigObject) roomConfig: IRoomConfigObject,
-        @inject(Types.IPlayerService) PlayerService: IPlayerService<Player>,
+        @inject(Types.IPlayerMetadataService) PlayerService: IPlayerMetadataService,
         @inject(Types.IChatMessageInterceptorFactory) chatMessageInterceptorFactory: IChatMessageInterceptorFactoryType,
         @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
     ) {

@@ -2,7 +2,7 @@
 import "reflect-metadata";
 import { expect } from "chai";
 import { Container } from "inversify";
-import { CommandBase, CommandDecorator, ICommand, Player, Types } from "inversihax";
+import { CommandBase, CommandDecorator, ICommand, Types, IPlayerObject, IPlayerMetadataService } from "inversihax";
 import { ICommandMetadataInternal } from "inversihax/lib/Core/Interfaces/Metadata/ICommandMetadata";
 import { MetadataKeys } from "inversihax/lib/Core/Utility/Constants";
 import { DecoratorsHelper } from "inversihax/lib/Core/Utility/Helpers/DecoratorsHelper";
@@ -27,11 +27,11 @@ describe("CommandDecorator", function () {
         @CommandDecorator({
             names: [ConstantsLocal.CommandName1, ConstantsLocal.CommandName2, ConstantsLocal.CommandName3],
         })
-        class TestCommand extends CommandBase<Player> {
+        class TestCommand extends CommandBase {
 
-            public execute(player: Player, args: string[]): void { }
+            public execute(player: IPlayerObject, args: string[]): void { }
 
-            public canExecute(player: Player): boolean {
+            public canExecute(player: IPlayerObject): boolean {
                 return true;
             }
         }
@@ -49,13 +49,13 @@ describe("CommandDecorator", function () {
         @CommandDecorator({
             names: [ConstantsLocal.CommandName1, ConstantsLocal.CommandName2],
         })
-        class TestCommand1 extends CommandBase<Player> {
+        class TestCommand1 extends CommandBase<IPlayerObject> {
 
-            public execute(player: Player, args: string[]): void {
+            public execute(player: IPlayerObject, args: string[]): void {
                 throw new Error();
             }
 
-            public canExecute(player: Player): boolean {
+            public canExecute(player: IPlayerObject): boolean {
                 return true;
             }
         }
@@ -63,13 +63,13 @@ describe("CommandDecorator", function () {
         @CommandDecorator({
             names: [ConstantsLocal.CommandName3],
         })
-        class TestCommand2 extends CommandBase<Player> {
+        class TestCommand2 extends CommandBase {
 
-            public execute(player: Player, args: string[]): void {
+            public execute(player: IPlayerObject, args: string[]): void {
                 throw new Error();
             }
 
-            public canExecute(player: Player): boolean {
+            public canExecute(player: IPlayerObject): boolean {
                 return true;
             }
         }
@@ -78,16 +78,22 @@ describe("CommandDecorator", function () {
 
         const container = new Container();
 
+        // We need to bind something to IPlayerMetadataService because it is required in the CommandBase constructor
+        // but not needed in this test so it can be null
+        container
+            .bind<IPlayerMetadataService>(Types.IPlayerMetadataService)
+            .toConstantValue(null);
+
         const commandsMetadata = DecoratorsHelper.getCommandsMetadata();
 
         commandsMetadata.forEach((commandMetadata) => {
             const commandName = commandMetadata.target.name;
-            container.bind<ICommand<Player>>(Types.ICommand).to(commandMetadata.target as any).whenTargetNamed(commandName);
+            container.bind<ICommand>(Types.ICommand).to(commandMetadata.target as any).whenTargetNamed(commandName);
 
             // Assert that the commands are of type CommandBase
             expect(commandMetadata.target.prototype).to.be.an.instanceOf(CommandBase);
 
-            const command = container.getNamed<ICommand<Player>>(Types.ICommand, commandName);
+            const command = container.getNamed<ICommand>(Types.ICommand, commandName);
 
             // Assert that canExecute returns true and execute throws an error, like defined in the commands
             expect(command.canExecute(null)).to.be.true;

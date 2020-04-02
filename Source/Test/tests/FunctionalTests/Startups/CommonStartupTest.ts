@@ -1,10 +1,10 @@
 import { inject } from "inversify";
-import { IRoom, Player, StartupBase, Types } from "inversihax";
+import { IRoom, StartupBase, Types } from "inversihax";
 
 export class CommonStartupTest extends StartupBase {
 
     constructor(
-        @inject(Types.IRoom) room: IRoom<Player>,
+        @inject(Types.IRoom) room: IRoom,
     ) {
         super(room);
     }

@@ -4,15 +4,15 @@ import { expect } from "chai";
 import { ContainerModule, injectable } from "inversify";
 import {
     IRoomConfigObject,
-    IPlayerService,
+    IPlayerMetadataService,
     IRoom,
-    Player,
-    PlayerService,
+    PlayerMetadataService,
     RoomHostBuilder,
     Types, CommandBase,
     CommandDecorator,
     IChatMessageInterceptor,
-    ChatMessage
+    ChatMessage,
+    IPlayerObject
 } from "inversihax";
 import "mocha";
 import { CustomTestRoom, ICustomTestRoom } from "./Rooms/CustomTestRoom";
@@ -25,8 +25,8 @@ import { CommonStartupTest } from "./Startups/CommonStartupTest";
 
 // A test interceptor that executes commands
 @injectable()
-class CommandExecutionInterceptor implements IChatMessageInterceptor<ChatMessage<Player>> {
-    intercept(message: ChatMessage<Player>): boolean {
+class CommandExecutionInterceptor implements IChatMessageInterceptor<ChatMessage> {
+    intercept(message: ChatMessage): boolean {
         if (message.isCommand && message.command.canExecute(message.sentBy)) {
             message.command.execute(message.sentBy, message.commandParameters);
         }
@@ -38,13 +38,13 @@ class CommandExecutionInterceptor implements IChatMessageInterceptor<ChatMessage
 @CommandDecorator({
     names: ["TeSt", "T"],
 })
-class TestCommand extends CommandBase<Player> {
+class TestCommand extends CommandBase {
     public static checkNameTestCI: boolean = false;
     public static checkNameTCI: boolean = false;
     public static checkNameTestCS: boolean = false;
     public static checkNameTCS: boolean = false;
-    canExecute(player: Player): boolean { return true; }
-    execute(player: Player, args: string[]): void {
+    canExecute(player: IPlayerObject): boolean { return true; }
+    execute(player: IPlayerObject, args: string[]): void {
         if (args[0] === "test") {
             TestCommand.checkNameTestCI = true;
         }
@@ -64,16 +64,15 @@ class TestCommand extends CommandBase<Player> {
 @CommandDecorator({
     names: ["another"],
 })
-class AnotherTestCommand extends CommandBase<Player> {
+class AnotherTestCommand extends CommandBase {
 
-    canExecute(player: Player): boolean { return true; }
-    execute(player: Player, args: string[]): void { }
+    canExecute(player: IPlayerObject): boolean { return true; }
+    execute(player: IPlayerObject, args: string[]): void { }
 }
 
 const services = new ContainerModule((bind) => {
     bind<IRoomConfigObject>(Types.IRoomConfigObject).toConstantValue({});
-    bind<IPlayerService<Player>>(Types.IPlayerService).to(PlayerService).inSingletonScope();
-    bind<IChatMessageInterceptor<ChatMessage<Player>>>(Types.IChatMessageInterceptor).to(CommandExecutionInterceptor).inRequestScope();
+    bind<IChatMessageInterceptor<ChatMessage>>(Types.IChatMessageInterceptor).to(CommandExecutionInterceptor).inRequestScope();
 });
 
 describe("RoomHostBuilder", function () {
@@ -89,7 +88,7 @@ describe("RoomHostBuilder", function () {
 
             const container = getContainer(builder);
 
-            const room = container.get<IRoom<Player>>(Types.IRoom);
+            const room = container.get<IRoom>(Types.IRoom);
             results.push(room.onPlayerChat(testPlayer1 as any, null));
             results.push(room.onPlayerChat(testPlayer2 as any, null));
 
@@ -123,7 +122,7 @@ describe("RoomHostBuilder", function () {
 
             const container = getContainer(builder);
 
-            const room = container.get<IRoom<Player>>(Types.IRoom);
+            const room = container.get<IRoom>(Types.IRoom);
 
             room.onPlayerChat(null, "!test test");
             room.onPlayerChat(null, "!t t");
@@ -143,7 +142,7 @@ describe("RoomHostBuilder", function () {
 
                 const container = getContainer(builder);
 
-                const room = container.get<IRoom<Player>>(Types.IRoom);
+                const room = container.get<IRoom>(Types.IRoom);
 
                 room.onPlayerChat(null, "!TeSt TeSt");
                 room.onPlayerChat(null, "!t t");

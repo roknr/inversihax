@@ -1,7 +1,7 @@
 // tslint:disable
 import "reflect-metadata";
 import { expect } from "chai";
-import { CommandBase, CommandDecorator, Player } from "inversihax";
+import { CommandBase, CommandDecorator, IPlayerObject } from "inversihax";
 import { MetadataKeys } from "inversihax/lib/Core/Utility/Constants";
 import { DecoratorsHelper } from "inversihax/lib/Core/Utility/Helpers/DecoratorsHelper";
 import "mocha";
@@ -59,29 +59,29 @@ describe("DecoratorsHelper", function () {
             //#region Test commands
 
             @CommandDecorator({ names: [ConstantsLocal.TestCommand1] })
-            class TestCommand1 extends CommandBase<Player> {
-                canExecute(player: Player): boolean {
+            class TestCommand1 extends CommandBase {
+                canExecute(player: IPlayerObject): boolean {
                     throw new Error("Method not implemented.");
                 }
-                execute(player: Player, args: string[]): void {
+                execute(player: IPlayerObject, args: string[]): void {
                     throw new Error("Method not implemented.");
                 }
             }
             @CommandDecorator({ names: [ConstantsLocal.TestCommand2] })
-            class TestCommand2 extends CommandBase<Player> {
-                canExecute(player: Player): boolean {
+            class TestCommand2 extends CommandBase {
+                canExecute(player: IPlayerObject): boolean {
                     throw new Error("Method not implemented.");
                 }
-                execute(player: Player, args: string[]): void {
+                execute(player: IPlayerObject, args: string[]): void {
                     throw new Error("Method not implemented.");
                 }
             }
             @CommandDecorator({ names: [ConstantsLocal.TestCommand3] })
-            class TestCommand3 extends CommandBase<Player> {
-                canExecute(player: Player): boolean {
+            class TestCommand3 extends CommandBase<IPlayerObject> {
+                canExecute(player: IPlayerObject): boolean {
                     throw new Error("Method not implemented.");
                 }
-                execute(player: Player, args: string[]): void {
+                execute(player: IPlayerObject, args: string[]): void {
                     throw new Error("Method not implemented.");
                 }
             }

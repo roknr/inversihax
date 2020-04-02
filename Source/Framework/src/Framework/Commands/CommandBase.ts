@@ -8,6 +8,8 @@ import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
 /**
  * The base command class. Derive from it to implement a custom command.
  *
+ * NOTE: you must inject the IPlayerMetadataService<TPlayerMetadata> to the derived class and pass it manually to the base's constructor.
+ *
  * Is injectable.
  * @type {TRole} The type of roles to use with the command.
  * @type {TPlayerMetadataService} The type of player metadata service to use with the room and command.
