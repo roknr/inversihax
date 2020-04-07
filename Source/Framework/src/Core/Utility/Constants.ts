@@ -29,4 +29,9 @@ export const Constants = {
      * The default prefix for commands.
      */
     DefaultCommandPrefix: "!",
+
+    /**
+     * The player radius.
+     */
+    PlayerRadius: 10,
 };

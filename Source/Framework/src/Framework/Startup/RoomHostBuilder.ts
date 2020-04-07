@@ -1,9 +1,9 @@
 import { interfaces, Container, ContainerModule } from "inversify";
 import { IBackgroundTask } from "../../Core/Interfaces/BackgroundTask/IBackgroundTask";
 import { ICommand } from "../../Core/Interfaces/Commands/ICommand";
-import { IRoom } from "../../Core/Interfaces/IRoom";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
 import { IChatMessageParser } from "../../Core/Interfaces/Parsers/IChatMessageParser";
+import { IRoom } from "../../Core/Interfaces/Room/IRoom";
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { IPlayerMetadataService } from "../../Core/Interfaces/Services/IPlayerMetadataService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";

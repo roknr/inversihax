@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { IRoom } from "../../Core/Interfaces/IRoom";
 import { IChatMessageParser } from "../../Core/Interfaces/Parsers/IChatMessageParser";
+import { IRoom } from "../../Core/Interfaces/Room/IRoom";
 import { IPlayerMetadataService } from "../../Core/Interfaces/Services/IPlayerMetadataService";
 import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { Constants } from "../../Core/Utility/Constants";

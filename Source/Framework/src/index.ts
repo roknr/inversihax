@@ -2,7 +2,8 @@
 // -     CORE     -
 // ----------------
 // -Interfaces
-export { IRoom } from "./Core/Interfaces/IRoom";
+export { IRoom } from "./Core/Interfaces/Room/IRoom";
+export { IUtilityRoom } from "./Core/Interfaces/Room/IUtilityRoom";
 //  --BackgroundTask
 export { IBackgroundTask } from "./Core/Interfaces/BackgroundTask/IBackgroundTask";
 //  --Commands
@@ -64,6 +65,7 @@ export { StartupBase } from "./Framework/Startup/StartupBase";
 export { RoomHostBuilder } from "./Framework/Startup/RoomHostBuilder";
 // -Room
 export { RoomBase } from "./Framework/Room/RoomBase";
+export { UtilityRoomBase } from "./Framework/Room/UtilityRoomBase";
 // -Services
 export { CommandService } from "./Framework/Services/CommandService";
 export { EmojiService } from "./Framework/Services/EmojiService";

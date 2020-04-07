@@ -1,9 +1,9 @@
-import { TeamID } from "../../HeadlessAPI/Enums/TeamID";
-import { IDiscPropertiesObject } from "../../HeadlessAPI/Interfaces/IDiscPropertiesObject";
-import { IPlayerObject } from "../../HeadlessAPI/Interfaces/IPlayerObject";
-import { IPosition } from "../../HeadlessAPI/Interfaces/IPosition";
-import { IScoresObject } from "../../HeadlessAPI/Interfaces/IScoresObject";
-import { TypedEvent } from "../Utility/TypedEvent";
+import { TeamID } from "../../../HeadlessAPI/Enums/TeamID";
+import { IDiscPropertiesObject } from "../../../HeadlessAPI/Interfaces/IDiscPropertiesObject";
+import { IPlayerObject } from "../../../HeadlessAPI/Interfaces/IPlayerObject";
+import { IPosition } from "../../../HeadlessAPI/Interfaces/IPosition";
+import { IScoresObject } from "../../../HeadlessAPI/Interfaces/IScoresObject";
+import { TypedEvent } from "../../Utility/TypedEvent";
 
 /**
  * Defines the room abstraction functionality.

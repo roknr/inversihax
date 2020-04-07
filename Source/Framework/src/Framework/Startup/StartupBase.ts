@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { IRoom } from "../../Core/Interfaces/IRoom";
+import { IRoom } from "../../Core/Interfaces/Room/IRoom";
 
 /**
  * The base startup class. Derive from this class to inject any dependencies, configured in the RoomHostBuilder
