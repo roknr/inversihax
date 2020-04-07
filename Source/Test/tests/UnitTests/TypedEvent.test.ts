@@ -94,6 +94,27 @@ describe("TypedEvent", function () {
 
             expect(removed).to.be.true;
         });
+
+        it("Should remove the specified registered handler by reference", function () {
+            class TestClass {
+                private readonly TWO = 2;
+                public result: number;
+                public timesTWO(param: number): void {
+                    this.result = param * this.TWO;
+                }
+            }
+
+            const testClass = new TestClass();
+            const event = new TypedEvent<(param: number) => void>();
+
+            const handlerReference = testClass.timesTWO.bind(testClass);
+            event.addHandler(handlerReference);
+            event.invoke([3]);
+            const removed = event.removeHandler(handlerReference);
+
+            expect(testClass.result).to.equal(6);
+            expect(removed).to.be.true;
+        });
     });
 
     describe("#removeAllHandlers()", function () {

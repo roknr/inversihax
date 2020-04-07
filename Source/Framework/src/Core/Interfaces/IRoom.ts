@@ -375,5 +375,10 @@ export interface IRoom {
      */
     setKickRateLimit(min?: number, rate?: number, burst?: number): void;
 
+    /**
+     * Activates or deactivates the recaptcha requirement to join the room.
+     */
+    setRequireRecaptcha(required: boolean): void;
+
     //#endregion
 }

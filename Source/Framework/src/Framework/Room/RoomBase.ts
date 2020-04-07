@@ -203,7 +203,8 @@ export abstract class RoomBase<TPlayerMetadataService extends IPlayerMetadataSer
      * @param burst Determines how many extra kicks the player is able to save up.
      * @param byPlayer The player that changed the kick rate limit.
      */
-    public readonly onKickRateLimitSet: TypedEvent<(min: number, rate: number, burst: number, byPlayer: IPlayerObject) => void>;
+    public readonly onKickRateLimitSet: TypedEvent<(min: number, rate: number, burst: number, byPlayer: IPlayerObject) => void>
+        = new TypedEvent();
 
     //#endregion
 
@@ -533,6 +534,13 @@ export abstract class RoomBase<TPlayerMetadataService extends IPlayerMetadataSer
      */
     public setKickRateLimit(min?: number, rate?: number, burst?: number): void {
         this.mRoom.setKickRateLimit(min, rate, burst);
+    }
+
+    /**
+     * Activates or deactivates the recaptcha requirement to join the room.
+     */
+    public setRequireRecaptcha(required: boolean): void {
+        this.mRoom.setRequireRecaptcha(required);
     }
 
     //#endregion
