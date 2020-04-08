@@ -1,5 +1,7 @@
 import { TeamID } from "../../../HeadlessAPI/Enums/TeamID";
 import { IPlayerObject } from "../../../HeadlessAPI/Interfaces/IPlayerObject";
+import { ChatMessageSound } from "../../Enums/Chat/ChatMessageSound";
+import { ChatMessageStyle } from "../../Enums/Chat/ChatMessageStyle";
 import { TypedEvent } from "../../Utility/TypedEvent";
 import { IRoom } from "./IRoom";
 
@@ -76,6 +78,20 @@ export interface IUtilityRoom extends IRoom {
      * @param includeHostPlayer Value indicating whether the host player should be included in the returned list of all players.
      */
     getPlayerList(includeHostPlayer?: boolean): IPlayerObject[];
+
+    /**
+     * Sends a host announcement with msg as contents. Unlike sendChat, announcements will work without a host player and has a larger
+     * limit on the number of characters.
+     * @param msg The message content to send.
+     * @param targetId The id of the target to send the announcement to. If null or undefined the message is sent to all players,
+     * otherwise it's sent only to the player with matching targetId.
+     * @param color Will set the color of the announcement text. It's encoded as an integer (0xFF0000 is red, 0x00FF00 is green,
+     * 0x0000FF is blue). If null or undefined the text will use the default chat color.
+     * @param style Will set the style of the announcement text, If null or undefined normal style will be used.
+     * @param sound If set to ChatMessageSound.None the announcement will produce no sound. If set to ChatMessageSound.Normal
+     * the announcement will produce a normal chat sound. If set to ChatMessageSound.Notification it will produce a notification sound.
+     */
+    sendAnnouncement(msg: string, targetId?: number, color?: number, style?: ChatMessageStyle, sound?: ChatMessageSound): void;
 
     /**
      * Returns the current list of players in the specified teams, excluding the host player.

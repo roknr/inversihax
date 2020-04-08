@@ -1,6 +1,10 @@
 // ----------------
 // -     CORE     -
 // ----------------
+// -Enums
+//  --Chat
+export { ChatMessageSound } from "./Core/Enums/Chat/ChatMessageSound";
+export { ChatMessageStyle } from "./Core/Enums/Chat/ChatMessageStyle";
 // -Interfaces
 //  --BackgroundTask
 export { IBackgroundTask } from "./Core/Interfaces/BackgroundTask/IBackgroundTask";

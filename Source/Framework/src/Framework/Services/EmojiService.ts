@@ -1,10 +1,14 @@
+import { injectable } from "inversify";
 import * as _ from "lodash";
 import { IEmojiService } from "../../Core/Interfaces/Services/IEmojiService";
 import { EmojiOptions } from "../../Core/Models/Options/EmojiOptions";
 
 /**
  * The emoji service. Offers methods for working with emojis.
+ *
+ * Is injectable.
  */
+@injectable()
 export class EmojiService implements IEmojiService {
 
     /**
