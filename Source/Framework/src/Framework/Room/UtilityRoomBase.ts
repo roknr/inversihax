@@ -20,6 +20,13 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
     //#region Private members
 
     /**
+     * The trigger distance that is used in detection of player ball collisions.
+     */
+    private mTouchTriggerDistance: number;
+
+    //#region Property specific
+
+    /**
      * The flag indicating whether the game is currently in progress.
      */
     private mIsGameInProgress: boolean = false;
@@ -28,11 +35,6 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
      * The flag indicating whether the game is currently paused.
      */
     private mIsGamePaused?: boolean = null;
-
-    /**
-     * The trigger distance that is used in calculation of player ball touches.
-     */
-    private mTouchDistance: number;
 
     /**
      * The variable keeping track of the player that touched the ball last.
@@ -49,6 +51,19 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
      * the positions have been reset.
      */
     private mGoalScoredBeforePositionsReset: boolean = false;
+
+    //#endregion
+
+    //#endregion
+
+    //#region Protected members
+
+    /**
+     * The player radius, used in touch trigger distance calculation for player ball detection. Is set to the
+     * default player radius by default. If using custom player radius, set it before the game is started so that
+     * player-ball collision detection will work correctly.
+     */
+    protected mPlayerRadius: number;
 
     //#endregion
 
@@ -98,6 +113,8 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
 
     /**
      * Gets the player that touched the ball last. Resets to null when the game is started or positions are reset.
+     *
+     * Can be null or incorrect if using incorrect mPlayerRadius.
      */
     public get lastTouchBy(): IPlayerObject {
         return this.mLastTouchBy;
@@ -105,6 +122,10 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
 
     /**
      * Gets the player that touched the ball second before last. Resets to null when the game is started or positions are reset.
+     *
+     * Can be null if only one player touched the ball since the positions reset.
+     *
+     * Can also be null or incorrect if using incorrect mPlayerRadius.
      */
     public get penultimateTouchBy(): IPlayerObject {
         return this.mPenultimateTouchBy;
@@ -150,6 +171,9 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
         @inject(Types.IChatMessageParser) chatMessageParser: IChatMessageParser,
     ) {
         super(roomConfig, playerMetadataService, chatMessageInterceptorFactory, chatMessageParser);
+
+        // Set the initial player radius to the default one
+        this.mPlayerRadius = Constants.PlayerRadius;
 
         this.init();
     }
@@ -214,15 +238,15 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
      * Initializes necessary things on startup (e.g. event handlers).
      */
     private init(): void {
-        // Calculate the touch distance used in player-ball touch comparisons
-        this.mTouchDistance = Constants.PlayerRadius + 10 + Number.EPSILON;
-
         this.onGamePause.addHandler((byPlayer) => this.mIsGamePaused = true);
         this.onGameUnpause.addHandler((byPlayer) => this.mIsGamePaused = false);
 
         this.onGameStart.addHandler((byPlayer) => {
             this.mIsGameInProgress = true;
             this.mIsGamePaused = false;
+
+            // Each time the game starts, recalculate the touch trigger distance, since ball radius might have changed
+            this.recalculateTouchTriggerDistance();
 
             // Reset the last player touches when game is started
             this.mLastTouchBy = null;
@@ -282,7 +306,7 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
 
             // If the distance to the ball is less than the touch distance and the last touch player
             // is different from the current one, (check team too because the player might have changed team)
-            if (distanceToBall < this.mTouchDistance &&
+            if (distanceToBall < this.mTouchTriggerDistance &&
                 (this.mLastTouchBy?.id !== player.id ||
                     this.mLastTouchBy?.team !== player.team)) {
                 // Update the players that last touched the ball
@@ -300,10 +324,27 @@ export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMeta
         if (this.mLastTouchBy?.id !== player.id || this.mLastTouchBy?.team !== player.team) {
             this.mPenultimateTouchBy = this.mLastTouchBy;
             this.mLastTouchBy = player;
-
-            console.log(this.mLastTouchBy?.name);
-            console.log(this.penultimateTouchBy?.name);
         }
+    }
+
+    /**
+     * Recalculates the touch trigger distance for player ball collision detection. If mPlayerRadius property is not
+     * set, the default player radius is used.
+     *
+     * Should only be called once every time the game starts.
+     */
+    private recalculateTouchTriggerDistance(): void {
+        // Make sure that the player radius is set
+        if (this.mPlayerRadius == null) {
+            this.mPlayerRadius = Constants.PlayerRadius;
+        }
+
+        // Get the ball radius from the current game's ball disc properties
+        const ballRadius = this.getDiscProperties(Constants.BallDiscIndex).radius;
+
+        // The trigger distance for the player and ball collision detection is the sum of the player and ball radius
+        // along with a very small epsilon value for correct floating point number comparisons
+        this.mTouchTriggerDistance = this.mPlayerRadius + ballRadius + Constants.TouchTriggerDistanceEpsilon;
     }
 
     //#endregion

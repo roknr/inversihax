@@ -43,6 +43,8 @@ export interface IUtilityRoom extends IRoom {
 
     /**
      * Gets the player that touched the ball second before last. Resets to null when the game is started or positions are reset.
+     *
+     * Can be null if only one player touched the ball since the positions reset.
      */
     readonly penultimateTouchBy: IPlayerObject;
 
@@ -58,7 +60,8 @@ export interface IUtilityRoom extends IRoom {
      * The event that gets fired when a goal is scored.
      * @param scoredByTeam The team that scored the goal.
      * @param lastTouchBy The player that touched the ball last, before the goal was scored.
-     * @param penultimateTouchBy The player that touched the ball second before last, before the goal was scored.
+     * @param penultimateTouchBy The player that touched the ball second before last, before the goal was scored. Can be null if only
+     * one player touched the ball before the goal was scored.
      */
     readonly onGoalScored: TypedEvent<(scoredByTeam: TeamID, lastTouchBy: IPlayerObject, penultimateTouchBy: IPlayerObject) => void>;
 

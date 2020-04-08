@@ -44,7 +44,7 @@ export enum CollisionFlag {
     kick = 1 << 6,
 
     /**
-     * The score collision flag.Objects with this flag in their cGroup will score goals if they cross a goal line.
+     * The score collision flag. Objects with this flag in their cGroup will score goals if they cross a goal line.
      */
     score = 1 << 7,
 

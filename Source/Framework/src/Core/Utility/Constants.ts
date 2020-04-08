@@ -31,7 +31,24 @@ export const Constants = {
     DefaultCommandPrefix: "!",
 
     /**
-     * The player radius.
+     * The index of the ball disc - used for accessing the ball disc properties through the room's
+     * getDiscProperties and setDiscProperties methods.
      */
-    PlayerRadius: 10,
+    BallDiscIndex: 0,
+
+    /**
+     * The default player radius.
+     */
+    PlayerRadius: 15,
+
+    /**
+     * The default ball radius (in classic stadium).
+     */
+    BallRadius: 10,
+
+    /**
+     * The epsilon value used in touch trigger distance calculation for player-ball collision detection (the Number.EPSILON is too small to
+     * use - does not always correctly detect player-ball collision).
+     */
+    TouchTriggerDistanceEpsilon: 0.001,
 };
