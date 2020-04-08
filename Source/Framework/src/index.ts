@@ -2,8 +2,6 @@
 // -     CORE     -
 // ----------------
 // -Interfaces
-export { IRoom } from "./Core/Interfaces/Room/IRoom";
-export { IUtilityRoom } from "./Core/Interfaces/Room/IUtilityRoom";
 //  --BackgroundTask
 export { IBackgroundTask } from "./Core/Interfaces/BackgroundTask/IBackgroundTask";
 //  --Commands
@@ -16,6 +14,9 @@ export { ICommandMetadata } from "./Core/Interfaces/Metadata/ICommandMetadata";
 export { IChatMessageParser } from "./Core/Interfaces/Parsers/IChatMessageParser";
 export { IParser } from "./Core/Interfaces/Parsers/IParser";
 export { IStadiumParser } from "./Core/Interfaces/Parsers/IStadiumParser";
+//  -- Room
+export { IRoom } from "./Core/Interfaces/Room/IRoom";
+export { IUtilityRoom } from "./Core/Interfaces/Room/IUtilityRoom";
 //  --Services
 export { ICommandService } from "./Core/Interfaces/Services/ICommandService";
 export { IEmojiService } from "./Core/Interfaces/Services/IEmojiService";
@@ -60,9 +61,6 @@ export { CommandBase } from "./Framework/Commands/CommandBase";
 export { ChatMessageParser } from "./Framework/Parsers/ChatMessageParser";
 export { ParserBase } from "./Framework/Parsers/ParserBase";
 export { StadiumParser } from "./Framework/Parsers/StadiumParser";
-// -Startup
-export { StartupBase } from "./Framework/Startup/StartupBase";
-export { RoomHostBuilder } from "./Framework/Startup/RoomHostBuilder";
 // -Room
 export { RoomBase } from "./Framework/Room/RoomBase";
 export { UtilityRoomBase } from "./Framework/Room/UtilityRoomBase";
@@ -70,6 +68,9 @@ export { UtilityRoomBase } from "./Framework/Room/UtilityRoomBase";
 export { CommandService } from "./Framework/Services/CommandService";
 export { EmojiService } from "./Framework/Services/EmojiService";
 export { PlayerMetadataService } from "./Framework/Services/PlayerMetadataService";
+// -Startup
+export { StartupBase } from "./Framework/Startup/StartupBase";
+export { RoomHostBuilder } from "./Framework/Startup/RoomHostBuilder";
 
 // ----------------
 // - HEADLESS API -

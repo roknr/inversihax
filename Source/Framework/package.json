@@ -1,7 +1,7 @@
 {
     "name": "inversihax",
     "description": "The Haxball headless API TypeScript framework supporting dependency injection.",
-    "version": "2.0.0-alpha1",
+    "version": "2.0.0-alpha2",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -21,8 +21,8 @@
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
     "devDependencies": {
-        "tslint": "^5.14.0",
-        "typescript": "^3.4.1"
+        "tslint": "^5.20.1",
+        "typescript": "^3.8.3"
     },
     "dependencies": {
         "@types/lodash": "^4.14.149",
