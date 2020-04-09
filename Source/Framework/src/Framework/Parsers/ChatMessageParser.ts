@@ -14,7 +14,8 @@ export class ChatMessageParser extends ParserBase<string[]> implements IChatMess
      */
     public parse(content: string): string[] {
         // This is the default chat message parser, no special logic, just split the message by whitespace
-        const words = content.split(RegExp("\\s+"));
+        // and ignore any leading and trailing whitespace
+        const words = content.match(/\S+/g) || [];
         return words;
     }
 }
