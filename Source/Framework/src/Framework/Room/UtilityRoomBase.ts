@@ -19,7 +19,7 @@ import { RoomBase } from "./RoomBase";
  * Is injectable through the RoomBase class.
  */
 export abstract class UtilityRoomBase<TPlayerMetadataService extends IPlayerMetadataService = IPlayerMetadataService>
-    extends RoomBase implements IUtilityRoom {
+    extends RoomBase<TPlayerMetadataService> implements IUtilityRoom {
 
     //#region Private members
 
