@@ -150,6 +150,7 @@ export class ChatMessage {
         // If words have not been set, split the message by whitespace characters by default
         if (!words || words.length === 0) {
             this.mWords = this.message.split(RegExp("\\s+"));
+            this.mWords = this.message.match(/\S+/g) || [];
         }
         else {
             this.mWords = words;

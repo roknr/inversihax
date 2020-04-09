@@ -1,6 +1,5 @@
 import { interfaces } from "inversify";
 import { IChatMessageInterceptor } from "../../Core/Interfaces/Interceptors/IChatMessageInterceptor";
-import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { IChatMessageInterceptorFactoryType, Types } from "../../Core/Utility/Types";
 
 /**
@@ -18,7 +17,7 @@ export function createChatMessageInterceptorFactory(context: interfaces.Context)
         // Otherwise create all the bound interceptors and return them
         const interceptors = context
             .container
-            .getAll<IChatMessageInterceptor<ChatMessage>>(Types.IChatMessageInterceptor);
+            .getAll<IChatMessageInterceptor>(Types.IChatMessageInterceptor);
 
         return interceptors;
     };

@@ -5,7 +5,7 @@ import { ChatMessage } from "../../Models/ChatMessage";
  *
  * @type {TChatMessage} The type of chat messages to intercept.
  */
-export interface IChatMessageInterceptor<TChatMessage extends ChatMessage> {
+export interface IChatMessageInterceptor<TChatMessage extends ChatMessage = ChatMessage> {
 
     /**
      * Intercepts and handles the sent chat message. Returns true to indicate that the next interceptor should be invoked or false to

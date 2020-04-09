@@ -8,7 +8,7 @@ import { Types } from "../../Core/Utility/Types";
  * The command chat message interceptor that always gets invoked and sets up the chat message's command.
  */
 @injectable()
-export class CommandInterceptor implements IChatMessageInterceptor<ChatMessage> {
+export class CommandInterceptor implements IChatMessageInterceptor {
 
     /**
      * The room's command service.

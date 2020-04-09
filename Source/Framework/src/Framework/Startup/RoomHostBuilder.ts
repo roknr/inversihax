@@ -6,7 +6,6 @@ import { IChatMessageParser } from "../../Core/Interfaces/Parsers/IChatMessagePa
 import { IRoom } from "../../Core/Interfaces/Room/IRoom";
 import { ICommandService } from "../../Core/Interfaces/Services/ICommandService";
 import { IPlayerMetadataService } from "../../Core/Interfaces/Services/IPlayerMetadataService";
-import { ChatMessage } from "../../Core/Models/ChatMessage";
 import { CommandOptions } from "../../Core/Models/Options/CommandOptions";
 import { Constants, Errors } from "../../Core/Utility/Constants";
 import { DecoratorsHelper } from "../../Core/Utility/Helpers/DecoratorsHelper";
@@ -111,7 +110,7 @@ export class RoomHostBuilder {
 
         // And the command interceptor
         this.container
-            .bind<IChatMessageInterceptor<ChatMessage>>(Types.IChatMessageInterceptor)
+            .bind<IChatMessageInterceptor>(Types.IChatMessageInterceptor)
             .to(CommandInterceptor)
             .inRequestScope();
 
@@ -274,7 +273,7 @@ export class RoomHostBuilder {
      */
     private bindChatMessageInterceptorFactory(): void {
         this.container
-            .bind<interfaces.Factory<Array<IChatMessageInterceptor<ChatMessage>>>>(Types.IChatMessageInterceptorFactory)
+            .bind<interfaces.Factory<IChatMessageInterceptor[]>>(Types.IChatMessageInterceptorFactory)
             .toFactory((context: interfaces.Context) => {
                 return createChatMessageInterceptorFactory(context);
             });

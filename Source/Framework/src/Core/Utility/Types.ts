@@ -1,6 +1,5 @@
 import { ICommand } from "../Interfaces/Commands/ICommand";
 import { IChatMessageInterceptor } from "../Interfaces/Interceptors/IChatMessageInterceptor";
-import { ChatMessage } from "../Models/ChatMessage";
 
 /**
  * The symbols that identify the corresponding objects (classes, interfaces etc.).
@@ -40,7 +39,7 @@ export type ConstructorType<T> = { new(...args: any[]): T };
 /**
  * The IChatMessageInterceptor factory type. Instantiates all registered IChatMessage interceptors.
  */
-export type IChatMessageInterceptorFactoryType = () => Array<IChatMessageInterceptor<ChatMessage>>;
+export type IChatMessageInterceptorFactoryType = () => IChatMessageInterceptor[];
 
 /**
  * The ICommand factory type. Instantiates a command based on the specified name.

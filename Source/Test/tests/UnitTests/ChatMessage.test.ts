@@ -46,7 +46,7 @@ describe("ChatMessage", function () {
     });
 
     it("Should split the message by whitespace characters to get the message words if not specified explicitly", function () {
-        const message = "This is  a   message    split by  whitespace";
+        const message = " This is  a   message    split by  whitespace  ";
 
         const chatMessage = new ChatMessage(null, message);
         expect(chatMessage.words).to.have.all.members(["This", "is", "a", "message", "split", "by", "whitespace"]);
