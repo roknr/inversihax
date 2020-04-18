@@ -42,8 +42,8 @@ export class CommandInterceptor implements IChatMessageInterceptor {
      * @param message The chat message being sent.
      */
     private setCommand(message: ChatMessage): void {
-        // If the message does not represent a command (check by checking the first word of the message), do nothing
-        if (!this.mCommandService.isCommand(message.words[0])) {
+        // If the message does not represent a command (check by checking the first word of the message, if it exists), do nothing
+        if (message.words.length === 0 || !this.mCommandService.isCommand(message.words[0])) {
             return;
         }
 
